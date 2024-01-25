@@ -1461,8 +1461,8 @@ export class Config {
     public static readonly modCount: number = 6;
     public static readonly maxPitch: number = Config.pitchOctaves * Config.pitchesPerOctave;
     public static readonly maximumTonesPerChannel: number = Config.maxChordSize * 2;
-    public static readonly justIntonationSemitones: number[] = [1.0 / 2.0, 8.0 / 15.0, 9.0 / 16.0, 3.0 / 5.0, 5.0 / 8.0, 2.0 / 3.0, 32.0 / 45.0, 3.0 / 4.0, 4.0 / 5.0, 5.0 / 6.0, 8.0 / 9.0, 15.0 / 16.0, 1.0, 16.0 / 15.0, 9.0 / 8.0, 6.0 / 5.0, 5.0 / 4.0, 4.0 / 3.0, 45.0 / 32.0, 3.0 / 2.0, 8.0 / 5.0, 5.0 / 3.0, 16.0 / 9.0, 15.0 / 8.0, 2.0].map(x => Math.log2(x) * Config.pitchesPerOctave);
-    public static readonly pitchShiftRange: number = Config.justIntonationSemitones.length;
+    public static readonly pitchShiftRange: number = 24 * 2 + 1; // -24 <-> +24, Also work out a way to upconvert to not break old songs.
+    public static readonly justIntonationSemitones: number[] = generateJustIntonationSemitones(Config.pitchShiftRange, Config.pitchesPerOctave);
     public static readonly pitchShiftCenter: number = Config.pitchShiftRange >> 1;
     public static readonly detuneCenter: number = 200;
     public static readonly detuneMax: number = 400;
@@ -1652,6 +1652,23 @@ export class Config {
         ]);
 }
 
+function generateJustIntonationSemitones(pitchShiftRange: number, pitchesPerOctave: number): number[] {
+    const fiveLimitRatios: [number, number][] = [[1.0, 1.0], [16.0, 15.0], [9.0, 8.0], [6.0, 5.0], [5.0, 4.0], [4.0, 3.0], [45.0, 32.0], [3.0, 2.0], [8.0, 5.0], [5.0, 3.0], [16.0, 9.0], [15.0, 8.0], [2.0, 1.0]];
+    const octaves: number = (pitchShiftRange - 1) / (pitchesPerOctave * 2);
+    const semitones: number[] = [];
+    for (let octave: number = 0; octave < octaves; octave++)
+        for (let semitone: number = 0; semitone < pitchesPerOctave; semitone++) {
+            const [numerator, denominator] = fiveLimitRatios[pitchesPerOctave - semitone];
+            semitones.push(Math.log2(denominator / numerator) * pitchesPerOctave - pitchesPerOctave * ((octaves - 1) - octave));
+        }
+    for (let octave: number = 0; octave < octaves; octave++)
+        for (let semitone: number = 0; semitone < pitchesPerOctave; semitone++) {
+            const [numerator, denominator] = fiveLimitRatios[semitone];
+            semitones.push(Math.log2(numerator / denominator) * pitchesPerOctave + pitchesPerOctave * octave);
+        }
+    semitones.push(pitchesPerOctave * octaves);
+    return semitones;
+}
 function centerWave(wave: Array<number>): Float32Array {
     let sum: number = 0.0;
     for (let i: number = 0; i < wave.length; i++) sum += wave[i];
