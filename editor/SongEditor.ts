@@ -926,10 +926,15 @@ export class SongEditor {
     private readonly _pulseWidthDropdownGroup: HTMLElement = div({ class: "editor-controls", style: "display: none;" }, this._decimalOffsetRow);
 
     private readonly _pitchShiftSlider: Slider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.pitchShiftRange - 1, value: "0", step: "1" }), this._doc, (oldValue: number, newValue: number) => new ChangePitchShift(this._doc, oldValue, newValue), true);
+    private readonly _pitchShiftSliderInputBox: HTMLInputElement = input({ style: "width: 4em; font-size: 80%; ", id: "pitchShiftSliderInputBox", type: "number", min: "0", max: Config.pitchShiftRange - 1, value: "0", step: "1" });
+    private readonly _pitchShiftSliderTip: HTMLDivElement = div({ class: "selectRow", style: "height: 1em" }, span({class: "tip", style: "font-size smaller;", onclick: () => this._openPrompt ("pitchShift") }, "pitchShift"))
     private readonly _pitchShiftTonicMarkers: HTMLDivElement[] = [];
     private readonly _pitchShiftFifthMarkers: HTMLDivElement[] = [];
     private readonly _pitchShiftMarkerContainer: HTMLDivElement = div({ style: "display: flex; position: relative;" }, this._pitchShiftSlider.container, div({ class: "pitchShiftMarkerContainer" }, this._pitchShiftTonicMarkers, this._pitchShiftFifthMarkers));
-    private readonly _pitchShiftRow: HTMLDivElement = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("pitchShift") }, "Pitch Shift:"), this._pitchShiftMarkerContainer);
+    private readonly _pitchShiftRow: HTMLDivElement = div({ class: "selectRow" }, div({},
+        div({style: `color: ${ColorConfig.secondaryText};` }, span({ class: "tip" }, this._pitchShiftSliderTip)),
+        div({style: `color: ${ColorConfig.secondaryText}; margin-top: -3px;` }, this._pitchShiftSliderInputBox),
+    ), this._pitchShiftSlider.container);
     private readonly _detuneSlider: Slider = new Slider(input({ style: "margin: 0;", type: "range", min: Config.detuneMin - Config.detuneCenter, max: Config.detuneMax - Config.detuneCenter, value: 0, step: "4" }), this._doc, (oldValue: number, newValue: number) => new ChangeDetune(this._doc, oldValue, newValue), true);
     private readonly _detuneSliderInputBox: HTMLInputElement = input({ style: "width: 4em; font-size: 80%; ", id: "detuneSliderInputBox", type: "number", step: "1", min: Config.detuneMin - Config.detuneCenter, max: Config.detuneMax - Config.detuneCenter, value: 0 });
     private readonly _detuneSliderRow: HTMLDivElement = div({ class: "selectRow" }, div({},
@@ -1368,14 +1373,19 @@ export class SongEditor {
     constructor(private _doc: SongDocument) {
 
         const octaves: number = (Config.pitchShiftRange - 1) / 12;
-for (let tonic: number = 0; tonic < octaves + 1; tonic++) {
-    const percentage: number = tonic / octaves * 100;
-    this._pitchShiftTonicMarkers.push(div({ class: "pitchShiftMarker", style: { color: ColorConfig.tonic, left: percentage + "%" } }));
-}
-for (let fifth: number = 0; fifth < octaves; fifth++) {
-    const percentage: number = (7 + fifth * 12) / (12 * octaves) * 100;
-    this._pitchShiftFifthMarkers.push(div({ class: "pitchShiftMarker", style: { color: ColorConfig.fifthNote, left: percentage + "%" } }));
-}
+        const pitchShiftMarkerContainer: HTMLDivElement = this._pitchShiftMarkerContainer.querySelector(".pitchShiftMarkerContainer")!;
+        for (let tonic: number = 0; tonic < octaves + 1; tonic++) {
+            const percentage: number = tonic / octaves * 100;
+            const element: HTMLDivElement = div({ class: "pitchShiftMarker", style: { color: ColorConfig.tonic, left: percentage + "%" } });
+            this._pitchShiftTonicMarkers.push(element);
+            pitchShiftMarkerContainer.appendChild(element);
+        }
+        for (let fifth: number = 0; fifth < octaves; fifth++) {
+            const percentage: number = (7 + fifth * 12) / (12 * octaves) * 100;
+            const element: HTMLDivElement = div({ class: "pitchShiftMarker", style: { color: ColorConfig.fifthNote, left: percentage + "%" } });
+            this._pitchShiftFifthMarkers.push(element);
+            pitchShiftMarkerContainer.appendChild(element);
+        }
 
         this._doc.notifier.watch(this.whenUpdated);
         this._doc.modRecordingHandler = () => { this.handleModRecording() };
@@ -1643,6 +1653,7 @@ for (let fifth: number = 0; fifth < octaves; fifth++) {
         this._panSliderInputBox.addEventListener("input", () => { this._doc.record(new ChangePan(this._doc, this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()].pan, Math.min(100.0, Math.max(0.0, Math.round(+this._panSliderInputBox.value))))) });
         this._pwmSliderInputBox.addEventListener("input", () => { this._doc.record(new ChangePulseWidth(this._doc, this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()].pulseWidth, Math.min(Config.pulseWidthRange, Math.max(1.0, Math.round(+this._pwmSliderInputBox.value))))) });
         this._detuneSliderInputBox.addEventListener("input", () => { this._doc.record(new ChangeDetune(this._doc, this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()].detune, Math.min(Config.detuneMax - Config.detuneCenter, Math.max(Config.detuneMin - Config.detuneCenter, Math.round(+this._detuneSliderInputBox.value))))) });
+        this._pitchShiftSliderInputBox.addEventListener("input", () => { this._doc.record(new ChangePitchShift(this._doc, this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()].pitchShift, Math.max(0.0, Math.min(Config.pitchShiftRange -1, Math.round(+this._pitchShiftSliderInputBox.value))))) });
         
         this._unisonVoicesInputBox.addEventListener("input", () => { this._doc.record(new ChangeUnisonVoices(this._doc, this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()].unisonVoices, Math.min(2.0, Math.max(1.0, Math.round(+this._unisonVoicesInputBox.value))))) });
         this._unisonSpreadInputBox.addEventListener("input", () => { this._doc.record(new ChangeUnisonSpread(this._doc, this._doc.song.channels[this._doc.channel].instruments[this._doc.getCurrentInstrument()].unisonSpread, Math.min(96.0, Math.max(-96.0, +this._unisonSpreadInputBox.value)))) });
@@ -2532,6 +2543,7 @@ for (let fifth: number = 0; fifth < octaves; fifth++) {
             }
 
             if (effectsIncludePitchShift(instrument.effects)) {
+                this._pitchShiftSliderInputBox.value = "" + (instrument.pitchShift);
                 this._pitchShiftRow.style.display = "";
                 this._pitchShiftSlider.updateValue(instrument.pitchShift);
                 this._pitchShiftSlider.input.title = (instrument.pitchShift - Config.pitchShiftCenter) + " semitone(s)";
