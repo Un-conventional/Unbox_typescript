@@ -1640,6 +1640,11 @@ export class Instrument {
                 this.pulseWidth = Config.pulseWidthRange;
                 this.decimalOffset = 0;
                 break;
+            case InstrumentType.dutyCycle:
+                this.chord = Config.chords.dictionary["arpeggio"].index;
+                this.pulseWidth = Config.pulseWidthRange;
+                this.decimalOffset = 0;
+                break;
             case InstrumentType.pickedString:
                 this.chord = Config.chords.dictionary["strum"].index;
                 this.harmonicsWave.reset();
@@ -1919,6 +1924,9 @@ export class Instrument {
                 instrumentObject["chipWaveStartOffset"] = this.chipWaveStartOffset;
                 // advloop addition
         } else if (this.type == InstrumentType.pwm) {
+            instrumentObject["pulseWidth"] = this.pulseWidth;
+            instrumentObject["decimalOffset"] = this.decimalOffset;
+        } else if (this.type == InstrumentType.dutyCycle) {
             instrumentObject["pulseWidth"] = this.pulseWidth;
             instrumentObject["decimalOffset"] = this.decimalOffset;
         } else if (this.type == InstrumentType.supersaw) {
@@ -3308,6 +3316,9 @@ export class Song {
                 } else if (instrument.type == InstrumentType.pwm) {
                     buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth]);
                     buffer.push(base64IntToCharCode[instrument.decimalOffset >> 6], base64IntToCharCode[instrument.decimalOffset & 0x3f]); 
+                } else if (instrument.type == InstrumentType.dutyCycle) {
+                    buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth]);
+                    buffer.push(base64IntToCharCode[instrument.decimalOffset >> 6], base64IntToCharCode[instrument.decimalOffset & 0x3f]);
                 } else if (instrument.type == InstrumentType.supersaw) {
 					buffer.push(SongTagCode.supersaw, base64IntToCharCode[instrument.supersawDynamism], base64IntToCharCode[instrument.supersawSpread], base64IntToCharCode[instrument.supersawShape]);
 					buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth]);
@@ -4000,7 +4011,7 @@ export class Song {
                 instrument.setTypeAndReset(instrumentType, instrumentChannelIterator >= this.pitchChannelCount && instrumentChannelIterator < this.pitchChannelCount + this.noiseChannelCount, instrumentChannelIterator >= this.pitchChannelCount + this.noiseChannelCount);
 
                 // Anti-aliasing was added in BeepBox 3.0 (v6->v7) and JummBox 1.3 (v1->v2 roughly but some leakage possible)
-                if (((beforeSeven && fromBeepBox) || (beforeTwo && fromJummBox)) && (instrumentType == InstrumentType.chip || instrumentType == InstrumentType.customChipWave || instrumentType == InstrumentType.pwm)) {
+                if (((beforeSeven && fromBeepBox) || (beforeTwo && fromJummBox)) && (instrumentType == InstrumentType.chip || instrumentType == InstrumentType.customChipWave || instrumentType == InstrumentType.pwm || instrumentType == InstrumentType.dutyCycle)) {
                     instrument.aliases = true;
                     instrument.distortion = 0;
                     instrument.effects |= 1 << EffectType.distortion;
@@ -8232,7 +8243,7 @@ export class Synth {
                     // Instrument type specific
                     || ((tgtInstrument.type != InstrumentType.fm && tgtInstrument.type != InstrumentType.fm6op) && (str == "fm slider 1" || str == "fm slider 2" || str == "fm slider 3" || str == "fm slider 4" || str == "fm feedback"))
                     || tgtInstrument.type != InstrumentType.fm6op && (str == "fm slider 5" || str == "fm slider 6")
-                    || ((tgtInstrument.type != InstrumentType.pwm && tgtInstrument.type != InstrumentType.supersaw) && (str == "pulse width" || str == "decimal offset"))
+                    || ((tgtInstrument.type != InstrumentType.pwm && tgtInstrument.type != InstrumentType.dutyCycle && tgtInstrument.type != InstrumentType.supersaw) && (str == "pulse width" || str == "decimal offset"))
                     || ((tgtInstrument.type != InstrumentType.supersaw) && (str == "dynamism" || str == "spread" || str == "saw shape"))
                     // Arp check
                     || (!tgtInstrument.getChord().arpeggiates && (str == "arp speed" || str == "reset arp"))
@@ -10161,6 +10172,8 @@ export class Synth {
             baseExpression = Config.harmonicsBaseExpression;
         } else if (instrument.type == InstrumentType.pwm) {
             baseExpression = Config.pwmBaseExpression;
+        } else if (instrument.type == InstrumentType.dutyCycle) {
+            baseExpression = Config.pwmBaseExpression;
         } else if (instrument.type == InstrumentType.supersaw) {
 			baseExpression = Config.supersawBaseExpression;
         } else if (instrument.type == InstrumentType.pickedString) {
@@ -10758,6 +10771,31 @@ export class Synth {
                 
                 tone.pulseWidth -= (tone.decimalOffset) / 10000;
             }
+            if (instrument.type == InstrumentType.dutyCycle) {
+                const basePulseWidth: number = getPulseWidthRatio(instrument.pulseWidth);
+
+                let pulseWidthModStart: number = basePulseWidth;
+                let pulseWidthModEnd: number = basePulseWidth;
+                if (this.isModActive(Config.modulators.dictionary["pulse width"].index, channelIndex, tone.instrumentIndex)) {
+                    pulseWidthModStart = (this.getModValue(Config.modulators.dictionary["pulse width"].index, channelIndex, tone.instrumentIndex, false)) / (Config.pulseWidthRange * 2);
+                    pulseWidthModEnd = (this.getModValue(Config.modulators.dictionary["pulse width"].index, channelIndex, tone.instrumentIndex, true)) / (Config.pulseWidthRange *2);
+                }
+
+                const pulseWidthStart: number = pulseWidthModStart * envelopeStarts[EnvelopeComputeIndex.pulseWidth];
+                const pulseWidthEnd: number = pulseWidthModEnd * envelopeEnds[EnvelopeComputeIndex.pulseWidth];
+                tone.pulseWidth = pulseWidthStart;
+                tone.pulseWidthDelta = (pulseWidthEnd - pulseWidthStart) / roundedSamplesPerTick;
+
+                let decimalOffsetModStart: number = instrument.decimalOffset;
+                if (this.isModActive(Config.modulators.dictionary["decimal offset"].index, channelIndex, tone.instrumentIndex)) {
+                    decimalOffsetModStart = this.getModValue(Config.modulators.dictionary["decimal offset"].index, channelIndex, tone.instrumentIndex, false);
+                }
+
+                const decimalOffsetStart: number = decimalOffsetModStart * envelopeStarts[EnvelopeComputeIndex.decimalOffset];
+                tone.decimalOffset = decimalOffsetStart;
+                
+                tone.pulseWidth -= (tone.decimalOffset) / 10000;
+            }
             if (instrument.type == InstrumentType.pickedString) {
                 // Check for sustain mods
                 let useSustainStart: number = instrument.stringSustain;
@@ -10776,7 +10814,7 @@ export class Synth {
             }
 
             const startFreq: number = Instrument.frequencyFromPitch(startPitch);
-            if (instrument.type == InstrumentType.chip || instrument.type == InstrumentType.customChipWave || instrument.type == InstrumentType.harmonics || instrument.type == InstrumentType.pickedString) {
+            if (instrument.type == InstrumentType.chip || instrument.type == InstrumentType.customChipWave || instrument.type == InstrumentType.pwm || instrument.type == InstrumentType.dutyCycle || instrument.type == InstrumentType.harmonics || instrument.type == InstrumentType.pickedString) {
                 // These instruments have two waves at different frequencies for the unison feature.
                 //const unison: Unison = Config.unisons[instrument.unison];
                 const unisonVoices: number = instrument.unisonVoices;
@@ -11111,6 +11149,8 @@ export class Synth {
         } else if (instrument.type == InstrumentType.harmonics) {
             return Synth.harmonicsSynth;
         } else if (instrument.type == InstrumentType.pwm) {
+            return Synth.pulseWidthSynth;
+        } else if (instrument.type == InstrumentType.dutyCycle) {
             return Synth.pulseWidthSynth;
         } else if (instrument.type == InstrumentType.supersaw) {
 			return Synth.supersawSynth;

@@ -88,6 +88,7 @@ function buildPresetOptions(isNoise: boolean, idSet: string): HTMLSelectElement 
         menu.appendChild(option({ value: InstrumentType.chip }, EditorConfig.valueToPreset(InstrumentType.chip)!.name));
         menu.appendChild(option({ value: InstrumentType.customChipWave }, EditorConfig.valueToPreset(InstrumentType.customChipWave)!.name));
         menu.appendChild(option({ value: InstrumentType.pwm }, EditorConfig.valueToPreset(InstrumentType.pwm)!.name));
+        menu.appendChild(option({ value: InstrumentType.dutyCycle }, EditorConfig.valueToPreset(InstrumentType.dutyCycle)!.name));
         menu.appendChild(option({ value: InstrumentType.supersaw}, EditorConfig.valueToPreset(InstrumentType.supersaw)!.name));
         menu.appendChild(option({ value: InstrumentType.fm }, EditorConfig.valueToPreset(InstrumentType.fm)!.name));
         menu.appendChild(option({ value: InstrumentType.fm6op }, EditorConfig.instrumentToPreset(InstrumentType.fm6op)!.name));
@@ -2424,7 +2425,7 @@ export class SongEditor {
 				this._supersawSpreadRow.style.display = "none";
 				this._supersawShapeRow.style.display = "none";
 			}
-            if (instrument.type == InstrumentType.pwm || instrument.type == InstrumentType.supersaw) {
+            if (instrument.type == InstrumentType.pwm || instrument.type == InstrumentType.dutyCycle || instrument.type == InstrumentType.supersaw) {
                 this._chipWaveSelectRow.style.display = "none";
 		    						// advloop addition
                         this._useChipWaveAdvancedLoopControlsRow.style.display = "none";
@@ -2609,7 +2610,7 @@ export class SongEditor {
 
             if (effectsIncludeDistortion(instrument.effects)) {
                 this._distortionRow.style.display = "";
-                if (instrument.type == InstrumentType.chip || instrument.type == InstrumentType.customChipWave || instrument.type == InstrumentType.pwm || instrument.type == InstrumentType.supersaw)
+                if (instrument.type == InstrumentType.chip || instrument.type == InstrumentType.customChipWave || instrument.type == InstrumentType.pwm || instrument.type == InstrumentType.dutyCycle || instrument.type == InstrumentType.supersaw )
                     this._aliasingRow.style.display = "";
                 else
                     this._aliasingRow.style.display = "none";
@@ -2664,7 +2665,7 @@ export class SongEditor {
                 this._reverbRow.style.display = "none";
             }
 
-            if (instrument.type == InstrumentType.chip || instrument.type == InstrumentType.customChipWave || instrument.type == InstrumentType.harmonics || instrument.type == InstrumentType.pickedString) {
+            if (instrument.type == InstrumentType.chip || instrument.type == InstrumentType.customChipWave || InstrumentType.pwm || InstrumentType.dutyCycle || instrument.type == InstrumentType.harmonics || instrument.type == InstrumentType.pickedString) {
                 this._unisonSelectRow.style.display = "";
                 setSelectedValue(this._unisonSelect, instrument.unison);
                 this._unisonVoicesInputBox.value = instrument.unisonVoices + "";
@@ -3047,7 +3048,7 @@ export class SongEditor {
                             settingList.push("fm slider 6");
                             settingList.push("fm feedback");
                         }
-                        if (tgtInstrumentTypes.includes(InstrumentType.pwm) || tgtInstrumentTypes.includes(InstrumentType.supersaw)) {
+                        if (tgtInstrumentTypes.includes(InstrumentType.pwm) || tgtInstrumentTypes.includes(InstrumentType.dutyCycle) || tgtInstrumentTypes.includes(InstrumentType.supersaw)) {
                             settingList.push("pulse width");
                             settingList.push("decimal offset");
                         }

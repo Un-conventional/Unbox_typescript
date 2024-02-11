@@ -775,6 +775,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
 			const type: InstrumentType = selectWeightedRandom([
                 { item: InstrumentType.chip, weight: 4 },
                 { item: InstrumentType.pwm, weight: 4 },
+                { item: InstrumentType.dutyCycle, weight: 4},
                 { item: InstrumentType.supersaw, weight: 5 },
                 // { item: InstrumentType.customChipWave, weight: 3 },
                 { item: InstrumentType.harmonics, weight: 5 },
@@ -787,7 +788,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
 			
             instrument.fadeIn = (Math.random() < 0.5) ? 0 : selectCurvedDistribution(0, Config.fadeInRange - 1, 0, 2);
             instrument.fadeOut = selectCurvedDistribution(0, Config.fadeOutTicks.length - 1, Config.fadeOutNeutral, 2);
-            if (type == InstrumentType.chip || type == InstrumentType.harmonics || type == InstrumentType.pickedString) {
+            if (type == InstrumentType.chip || type == InstrumentType.pwm || type == InstrumentType.dutyCycle || type == InstrumentType.harmonics || type == InstrumentType.pickedString) {
                 instrument.unison = Config.unisons.dictionary[selectWeightedRandom([
                     { item: "none", weight: 10 },
                     { item: "shimmer", weight: 5 },
@@ -962,6 +963,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                             // advloop addition
 				} break;
 				case InstrumentType.pwm:
+                case InstrumentType.dutyCycle:
                 case InstrumentType.supersaw: {
 					if (type == InstrumentType.supersaw) {
 						instrument.supersawDynamism = selectCurvedDistribution(0, Config.supersawDynamismMax, Config.supersawDynamismMax, 2);
