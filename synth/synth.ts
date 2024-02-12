@@ -1926,9 +1926,25 @@ export class Instrument {
         } else if (this.type == InstrumentType.pwm) {
             instrumentObject["pulseWidth"] = this.pulseWidth;
             instrumentObject["decimalOffset"] = this.decimalOffset;
+            instrumentObject["unison"] = this.unison == Config.unisons.length ? "custom" : Config.unisons[this.unison].name;
+            if (this.unison == Config.unisons.length) {
+                instrumentObject["unisonVoices"] = this.unisonVoices;
+                instrumentObject["unisonSpread"] = this.unisonSpread;
+                instrumentObject["unisonOffset"] = this.unisonOffset;
+                instrumentObject["unisonExpression"] = this.unisonExpression;
+                instrumentObject["unisonSign"] = this.unisonSign;
+            }
         } else if (this.type == InstrumentType.dutyCycle) {
             instrumentObject["pulseWidth"] = this.pulseWidth;
             instrumentObject["decimalOffset"] = this.decimalOffset;
+            instrumentObject["unison"] = this.unison == Config.unisons.length ? "custom" : Config.unisons[this.unison].name;
+            if (this.unison == Config.unisons.length) {
+                instrumentObject["unisonVoices"] = this.unisonVoices;
+                instrumentObject["unisonSpread"] = this.unisonSpread;
+                instrumentObject["unisonOffset"] = this.unisonOffset;
+                instrumentObject["unisonExpression"] = this.unisonExpression;
+                instrumentObject["unisonSign"] = this.unisonSign;
+            }
         } else if (this.type == InstrumentType.supersaw) {
 			instrumentObject["pulseWidth"] = this.pulseWidth;
             instrumentObject["decimalOffset"] = this.decimalOffset;
@@ -3316,9 +3332,13 @@ export class Song {
                 } else if (instrument.type == InstrumentType.pwm) {
                     buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth]);
                     buffer.push(base64IntToCharCode[instrument.decimalOffset >> 6], base64IntToCharCode[instrument.decimalOffset & 0x3f]); 
+                    buffer.push(SongTagCode.unison, base64IntToCharCode[instrument.unison]);
+                    if (instrument.unison == Config.unisons.length) encodeUnisonSettings(buffer, instrument.unisonVoices, instrument.unisonSpread, instrument.unisonOffset, instrument.unisonExpression, instrument.unisonSign);
                 } else if (instrument.type == InstrumentType.dutyCycle) {
                     buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth]);
                     buffer.push(base64IntToCharCode[instrument.decimalOffset >> 6], base64IntToCharCode[instrument.decimalOffset & 0x3f]);
+                    buffer.push(SongTagCode.unison, base64IntToCharCode[instrument.unison]);
+                    if (instrument.unison == Config.unisons.length) encodeUnisonSettings(buffer, instrument.unisonVoices, instrument.unisonSpread, instrument.unisonOffset, instrument.unisonExpression, instrument.unisonSign);
                 } else if (instrument.type == InstrumentType.supersaw) {
 					buffer.push(SongTagCode.supersaw, base64IntToCharCode[instrument.supersawDynamism], base64IntToCharCode[instrument.supersawSpread], base64IntToCharCode[instrument.supersawShape]);
 					buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth]);
@@ -7920,6 +7940,18 @@ class InstrumentState {
             this.unisonOffset = instrument.unisonOffset;
             this.unisonExpression = instrument.unisonExpression;
             this.unisonSign = instrument.unisonSign;
+        } else if (instrument.type == InstrumentType.pwm) {
+            this.unisonVoices = instrument.unisonVoices;
+            this.unisonSpread = instrument.unisonSpread;
+            this.unisonOffset = instrument.unisonOffset;
+            this.unisonExpression = instrument.unisonExpression;
+            this.unisonSign = instrument.unisonSign;
+        } else if (instrument.type == InstrumentType.dutyCycle) {
+            this.unisonVoices = instrument.unisonVoices;
+            this.unisonSpread = instrument.unisonSpread;
+            this.unisonOffset = instrument.unisonOffset;
+            this.unisonExpression = instrument.unisonExpression;
+            this.unisonSign = instrument.unisonSign;
         } else if (instrument.type == InstrumentType.noise) {
             this.wave = getDrumWave(instrument.chipNoise, inverseRealFourierTransform, scaleElementsByFactor);
         } else if (instrument.type == InstrumentType.harmonics) {
@@ -12475,14 +12507,19 @@ export class Synth {
         effectsFunction(synth, outputDataL, outputDataR, bufferIndex, runLength, instrumentState);
     }
 
-    private static pulseWidthSynth(synth: Synth, bufferIndex: number, roundedSamplesPerTick: number, tone: Tone, instrument: Instrument): void {
+    private static pulseWidthSynth(synth: Synth, bufferIndex: number, roundedSamplesPerTick: number, tone: Tone, instrumentState: InstrumentState): void {
         const data: Float32Array = synth.tempMonoInstrumentSampleBuffer!;
 
-        let phaseDelta: number = tone.phaseDeltas[0];
-        const phaseDeltaScale: number = +tone.phaseDeltaScales[0];
+        const unisonSign: number = tone.specialIntervalExpressionMult * instrumentState.unison!.sign;
+        if (instrumentState.unison!.voices == 1 && !instrumentState.chord!.customInterval) tone.phases[1] = tone.phases[0];
+        let phaseDeltaA: number = tone.phaseDeltas[0];
+        let phaseDeltaB: number = tone.phaseDeltas[1];
+        const phaseDeltaScaleA: number = +tone.phaseDeltaScales[0];
+        const phaseDeltaScaleB: number = +tone.phaseDeltaScales[1];
         let expression: number = +tone.expression;
         const expressionDelta: number = +tone.expressionDelta;
-        let phase: number = (tone.phases[0] % 1);
+        let phaseA: number = (tone.phases[0] % 1);
+        let phaseB: number = (tone.phases[1] % 1);
 
         let pulseWidth: number = tone.pulseWidth;
         const pulseWidthDelta: number = tone.pulseWidthDelta;
@@ -12496,36 +12533,55 @@ export class Synth {
         const stopIndex: number = bufferIndex + roundedSamplesPerTick;
         for (let sampleIndex: number = bufferIndex; sampleIndex < stopIndex; sampleIndex++) {
 
-            const sawPhaseA: number = phase % 1;
-            const sawPhaseB: number = (phase + pulseWidth) % 1;
+            const sawPhaseA: number = phaseA % 1;
+            const sawPhaseB: number = (phaseA + pulseWidth) % 1;
+            const sawPhaseC: number = phaseB % 1;
+            const sawPhaseD: number = (phaseB + pulseWidth) % 1;
 
-            let pulseWave: number = sawPhaseB - sawPhaseA;
+            let pulseWaveA: number = sawPhaseB - sawPhaseA;
+            let pulseWaveB: number = sawPhaseD - sawPhaseC;
 
             // This is a PolyBLEP, which smooths out discontinuities at any frequency to reduce aliasing. 
-            if (!instrument.aliases) {
-                if (sawPhaseA < phaseDelta) {
-                    var t = sawPhaseA / phaseDelta;
-                    pulseWave += (t + t - t * t - 1) * 0.5;
-                } else if (sawPhaseA > 1.0 - phaseDelta) {
-                    var t = (sawPhaseA - 1.0) / phaseDelta;
-                    pulseWave += (t + t + t * t + 1) * 0.5;
+            if (!instrumentState.aliases) {
+                if (sawPhaseA < phaseDeltaA) {
+                    var t = sawPhaseA / phaseDeltaA;
+                    pulseWaveA += (t + t - t * t - 1) * 0.5;
+                } else if (sawPhaseA > 1.0 - phaseDeltaA) {
+                    var t = (sawPhaseA - 1.0) / phaseDeltaA;
+                    pulseWaveA += (t + t + t * t + 1) * 0.5;
                 }
-                if (sawPhaseB < phaseDelta) {
-                    var t = sawPhaseB / phaseDelta;
-                    pulseWave -= (t + t - t * t - 1) * 0.5;
-                } else if (sawPhaseB > 1.0 - phaseDelta) {
-                    var t = (sawPhaseB - 1.0) / phaseDelta;
-                    pulseWave -= (t + t + t * t + 1) * 0.5;
+                if (sawPhaseB < phaseDeltaA) {
+                    var t = sawPhaseB / phaseDeltaA;
+                    pulseWaveA -= (t + t - t * t - 1) * 0.5;
+                } else if (sawPhaseB > 1.0 - phaseDeltaA) {
+                    var t = (sawPhaseB - 1.0) / phaseDeltaA;
+                    pulseWaveA -= (t + t + t * t + 1) * 0.5;
+                }
+                if (sawPhaseC < phaseDeltaB) {
+                    var t = sawPhaseC / phaseDeltaB;
+                    pulseWaveB += (t + t - t * t - 1) * 0.5;
+                } else if (sawPhaseC > 1.0 - phaseDeltaB) {
+                    var t = (sawPhaseC - 1.0) / phaseDeltaB;
+                    pulseWaveB += (t + t + t * t + 1) * 0.5;
+                }
+                if (sawPhaseD < phaseDeltaB) {
+                    var t = sawPhaseD / phaseDeltaB;
+                    pulseWaveB -= (t + t - t * t - 1) * 0.5;
+                } else if (sawPhaseD > 1.0 - phaseDeltaB) {
+                    var t = (sawPhaseD - 1.0) / phaseDeltaB;
+                    pulseWaveB -= (t + t + t * t + 1) * 0.5;
                 }
             }
 
-            const inputSample: number = pulseWave;
+            const inputSample: number = pulseWaveA + pulseWaveB * unisonSign;
             const sample: number = applyFilters(inputSample, initialFilterInput1, initialFilterInput2, filterCount, filters);
             initialFilterInput2 = initialFilterInput1;
             initialFilterInput1 = inputSample;
 
-            phase += phaseDelta;
-            phaseDelta *= phaseDeltaScale;
+            phaseA += phaseDeltaA;
+            phaseB += phaseDeltaB;
+            phaseDeltaA *= phaseDeltaScaleA;
+            phaseDeltaB *= phaseDeltaScaleB;
             pulseWidth += pulseWidthDelta;
 
             const output: number = sample * expression;
@@ -12534,8 +12590,10 @@ export class Synth {
             data[sampleIndex] += output;
         }
 
-        tone.phases[0] = phase;
-        tone.phaseDeltas[0] = phaseDelta;
+        tone.phases[0] = phaseA;
+        tone.phases[1] = phaseB;
+        tone.phaseDeltas[0] = phaseDeltaA;
+        tone.phaseDeltas[1] = phaseDeltaB;
         tone.expression = expression;
         tone.pulseWidth = pulseWidth;
 
