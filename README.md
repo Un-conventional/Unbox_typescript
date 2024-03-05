@@ -1,10 +1,10 @@
-# UltraBox
+# Unbox
 
-UltraBox is an online tool for sketching and sharing instrumental music.
-You can find it [here](https://ultraabox.github.io).
-It is a modification of Goldbox, which itself is a modification of JummBox, which inturn is a modification of the [original BeepBox](https://beepbox.co).
+Unbox is an online tool for sketching and sharing instrumental music.
+You can find it [here](https://un-conventional.github.io).
+This mod is a modification of Ultrabox, which is a modification of Goldbox, which itself is a modification of JummBox, which inturn is a modification of the [original BeepBox](https://beepbox.co).
 
-The goal of UltraBox is to combine every single beepbox mod into one. Feel free to contribute!
+The goal of Unbox is to "Fix" some things and add instruments and modulations. This also serves as an introduction to coding for me as well. 
 
 
 All song data is packaged into the URL at the top of your browser. When you make
@@ -12,9 +12,11 @@ changes to the song, the URL is updated to reflect your changes. When you are
 satisfied with your song, just copy and paste the URL to save and share your
 song!
 
-UltraBox, as well as GoldBox, Jummbox, and Beepbox which it's based on, are free projects. If you ever feel so inclined, please support the original creator, [John Nesky](http://www.johnnesky.com/), via
+Unbox, UltraBox, as well as GoldBox, Jummbox, and Beepbox which it's based on, are free projects. If you ever feel so inclined, please support the original creator, [John Nesky](http://www.johnnesky.com/), via
 [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=QZJTX9GRYEV9N&currency_code=USD)!
 JummBox is developed by [Jummbus](http://www.twitter.com/jummbus).
+
+If you wish to make a mod out of Beepbox or its mods I am not too sure the guide below is up to date, I will keep it there regardless.  
 
 ## Compiling
 
