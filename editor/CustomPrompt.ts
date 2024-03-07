@@ -8,7 +8,7 @@ import { PatternEditor } from "./PatternEditor";
 // import { ColorConfig } from "./ColorConfig";
 
 //namespace beepbox {
-const { button, div, h2, input, p} = HTML;
+const { button, div, h2, input, p, a} = HTML;
 let doReload = false;
 export class CustomPrompt implements Prompt {
 	private readonly _fileInput: HTMLInputElement = input({ type: "file", accept: ".png,.jpg,.jpeg", text: "choose editor background image"});
@@ -27,11 +27,13 @@ export class CustomPrompt implements Prompt {
 		--link-accent: #98f;
 		--ui-widget-background: #393e4f;
 		--ui-widget-focus: #6d6886;
-		--pitch-background: #393e4f99;
+		--pitch-background: #393e4f;
 		--tonic: #725491;
 		--fifth-note: #54547a;
 		--white-piano-key: #eee;
 		--black-piano-key: #666;
+		--white-piano-key-text: #131200;
+		--black-piano-key-text: #fff;
 		--use-color-formula: true;
 		--track-editor-bg-pitch: #393e4f;
 		--track-editor-bg-pitch-dim: #1c1d28;
@@ -51,25 +53,25 @@ export class CustomPrompt implements Prompt {
 		--mod-label-secondary-text: rgb(87, 86, 120);
 		--mod-label-primary-text: white;
 		--pitch-secondary-channel-hue: 0;
-		--pitch-secondary-channel-hue-scale: 6.1;
+		--pitch-secondary-channel-hue-scale: 6.5;
 		--pitch-secondary-channel-sat: 83.3;
 		--pitch-secondary-channel-sat-scale: 0.1;
 		--pitch-secondary-channel-lum: 40;
 		--pitch-secondary-channel-lum-scale: 0.05;
 		--pitch-primary-channel-hue: 0;
-		--pitch-primary-channel-hue-scale: 6.1;
+		--pitch-primary-channel-hue-scale: 6.5;
 		--pitch-primary-channel-sat: 100;
 		--pitch-primary-channel-sat-scale: 0.1;
 		--pitch-primary-channel-lum: 67.5;
 		--pitch-primary-channel-lum-scale: 0.05;
 		--pitch-secondary-note-hue: 0;
-		--pitch-secondary-note-hue-scale: 6.1;
+		--pitch-secondary-note-hue-scale: 6.5;
 		--pitch-secondary-note-sat: 93.9;
 		--pitch-secondary-note-sat-scale: 0.1;
 		--pitch-secondary-note-lum: 25;
 		--pitch-secondary-note-lum-scale: 0.05;
 		--pitch-primary-note-hue: 0;
-		--pitch-primary-note-hue-scale: 6.1;
+		--pitch-primary-note-hue-scale: 6.5;
 		--pitch-primary-note-sat: 100;
 		--pitch-primary-note-sat-scale: 0.05;
 		--pitch-primary-note-lum: 85.6;
@@ -122,6 +124,8 @@ export class CustomPrompt implements Prompt {
 		--mod-primary-note-sat-scale: 0;
 		--mod-primary-note-lum: 85;
 		--mod-primary-note-lum-scale: 0;
+		--disabled-note-primary:    #91879f;
+		--disabled-note-secondary:  #6a677a;
 	}`});
 	private readonly _cancelButton: HTMLButtonElement = button({ class: "cancelButton" });
 	private readonly _okayButton: HTMLButtonElement = button({ class: "okayButton", style: "width:45%;" }, "Okay");
@@ -130,11 +134,15 @@ export class CustomPrompt implements Prompt {
 	public readonly container: HTMLDivElement = div({ class: "prompt noSelection", style: "width: 300px;" },
 		h2("Import"),
 		p({ style: "text-align: left; margin: 0.5em 0;" },
-			"You can upload images to create a custom theme.",
+			"You can upload images to create a custom theme. The first image will become the editor background, and the second image will be tiled across the webpage.",
 		),
-		p({ style: "text-align: left; margin: 0.5em 0;" },
-			"The first image will become the editor background, and the second image will be tiled across the webpage.",
-		),
+		// p({ style: "text-align: left; margin: 0.5em 0;" },
+		// 	"The first image will become the editor background, and the second image will be tiled across the webpage.",
+		// ),
+		div({ style: "text-align: left; margin-top: 0.5em; margin-bottom: 0.5em;" },
+			"You can find a list of custom themes made by other users on the ",
+			a({ target: "_blank", href: "https://docs.google.com/spreadsheets/d/1dGjEcLgJrPwzBExPmwA9pbE_KVQ3jNrnTBrd46d2IKo/edit" }, "custom theme sheet."),
+        ),
 		div(),
 		p({ style: "text-align: left; margin: 0;" },
 			"Editor Background Image:",
@@ -146,7 +154,7 @@ export class CustomPrompt implements Prompt {
 		),
 		div(),
 		p({ style: "text-align: left; margin: 0;"},
-			"If you want to mess with custom color schemes, mess with the hexcodes yourself, I dare you:",
+			"Replace the text below with your custom theme data to load it:",
 		),
 		this._colorInput,
 		div({ style: "display: flex; flex-direction: row-reverse; justify-content: space-between;" },

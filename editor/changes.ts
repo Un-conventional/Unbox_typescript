@@ -591,7 +591,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
 
         const isNoise: boolean = doc.song.getChannelIsNoise(doc.channel);
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        instrument.effects &= 1 << EffectType.panning; // disable all existing effects except panning.
+        instrument.effects = 1 << EffectType.panning; // disable all existing effects except panning, which should always be on.
         instrument.aliases = false;
         instrument.envelopeCount = 0;
 
@@ -790,17 +790,25 @@ export class ChangeRandomGeneratedInstrument extends Change {
             instrument.fadeOut = selectCurvedDistribution(0, Config.fadeOutTicks.length - 1, Config.fadeOutNeutral, 2);
             if (type == InstrumentType.chip || type == InstrumentType.pwm || type == InstrumentType.dutyCycle || type == InstrumentType.harmonics || type == InstrumentType.pickedString) {
                 instrument.unison = Config.unisons.dictionary[selectWeightedRandom([
-                    { item: "none", weight: 10 },
-                    { item: "shimmer", weight: 5 },
-                    { item: "hum", weight: 4 },
-                    { item: "honky tonk", weight: 3 },
-                    { item: "dissonant", weight: 1 },
-                    { item: "fifth", weight: 1 },
-                    { item: "octave", weight: 2 },
-                    { item: "bowed", weight: 2 },
-                    { item: "piano", weight: 5 },
-                    { item: "warbled", weight: 3 },
-                    { item: "hecking gosh", weight: 2 },
+                    { item: "none", weight: 25 },
+                    { item: "shimmer", weight: 10 },
+                    { item: "hum", weight: 8 },
+                    { item: "honky tonk", weight: 6 },
+                    { item: "dissonant", weight: 2 },
+                    { item: "fifth", weight: 4 },
+                    { item: "octave", weight: 5 },
+                    { item: "bowed", weight: 4 },
+                    { item: "piano", weight: 10 },
+                    { item: "warbled", weight: 5 },
+                    { item: "hecking gosh", weight: 3 },
+                    { item: "spinner", weight: 6 },
+                    { item: "detune", weight: 4 },
+                    { item: "rising", weight: 2 },
+                    { item: "vibrate", weight: 3 },
+                    { item: "bass", weight: 2 },
+                    { item: "recurve", weight: 3 },
+                    { item: "inject", weight: 2 },
+                    { item: "FART", weight: 1 },
                     // { item: "custom", weight: 55 },
                 ])].index;
                 // randomly generated unisons don't work correctly - instead of trying to fix them, just ignore it
@@ -1096,7 +1104,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                             { item: "sawtooth", weight: 3 },
                             { item: "ramp", weight: 3 },
                             { item: "trapezoid", weight: 4 },
-				{ item: "rounded", weight: 1 },
+				            { item: "rounded", weight: 2 },
                         ])].index;
 						if (instrument.operators[i].waveform == 2/*"pulse width"*/) {
 							instrument.operators[i].pulseWidth = selectWeightedRandom([
@@ -1166,7 +1174,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                             { item: "sawtooth", weight: 3 },
                             { item: "ramp", weight: 3 },
                             { item: "trapezoid", weight: 4 },
-				{ item: "rounded", weight: 1 },
+				            { item: "rounded", weight: 2 },
                         ])].index;
 						if (instrument.operators[i].waveform == 2) {
 							instrument.operators[i].pulseWidth = selectWeightedRandom([
@@ -1479,6 +1487,7 @@ export class ChangeChannelCount extends Change {
                                 const preset: Preset = EditorConfig.valueToPreset(presetValue)!;
                                 instrument.fromJsonObject(preset.settings, isNoise, isMod, doc.song.rhythm == 0 || doc.song.rhythm == 2, doc.song.rhythm >= 2);
                                 instrument.preset = presetValue;
+                                instrument.effects |= 1 << EffectType.panning;
                             } else {
                                 instrument.setTypeAndReset(InstrumentType.mod, isNoise, isMod);
                             }
@@ -2560,6 +2569,7 @@ export class ChangeAddChannelInstrument extends Change {
         const instrument: Instrument = new Instrument(isNoise, isMod);
         instrument.fromJsonObject(preset.settings, isNoise, isMod, false, false, 1);
         instrument.preset = presetValue;
+        instrument.effects |= 1 << EffectType.panning;
         instrument.volume = 0;
         channel.instruments.push(instrument);
         if (!isMod) { // Mod channels lose information when changing set instrument
@@ -2824,6 +2834,17 @@ export class ChangePasteInstrument extends ChangeGroup {
         instrument.fromJsonObject(instrumentCopy, instrumentCopy["isDrum"], instrumentCopy["isMod"], false, false);
         doc.notifier.changed();
         this._didSomething();
+    }
+}
+
+export class ChangeAppendInstrument extends ChangeGroup {
+    constructor(doc: SongDocument, channel: Channel, instrument: any) {
+        super();
+        let newInstrument: Instrument = new Instrument(instrument["isDrum"], instrument["isMod"])
+        newInstrument.fromJsonObject(instrument, instrument["isDrum"], instrument["isMod"], false, false);
+        channel.instruments.push(newInstrument);
+        this._didSomething();
+        doc.notifier.changed();
     }
 }
 
@@ -3472,17 +3493,18 @@ export function setDefaultInstruments(song: Song): void {
             const preset: Preset = EditorConfig.valueToPreset(presetValue)!;
             instrument.fromJsonObject(preset.settings, isNoise, isMod, song.rhythm == 0 || song.rhythm == 2, song.rhythm >= 2, 1);
             instrument.preset = presetValue;
+            instrument.effects |= 1 << EffectType.panning;
         }
     }
 }
 
 export class ChangeSong extends ChangeGroup {
-    constructor(doc: SongDocument, newHash: string) {
+    constructor(doc: SongDocument, newHash: string, jsonFormat: string = "auto") {
         super();
         let pitchChannelCount = doc.song.pitchChannelCount;
         let noiseChannelCount = doc.song.noiseChannelCount;
         let modChannelCount = doc.song.modChannelCount;
-        doc.song.fromBase64String(newHash);
+        doc.song.fromBase64String(newHash, jsonFormat);
         if (pitchChannelCount != doc.song.pitchChannelCount || noiseChannelCount != doc.song.noiseChannelCount || modChannelCount != doc.song.modChannelCount) {
             ColorConfig.resetColors();
         }

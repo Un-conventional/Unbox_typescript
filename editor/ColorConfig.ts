@@ -3220,6 +3220,7 @@ export class ColorConfig {
 					--mod-label-primary-text:   black;
 					--disabled-note-primary:    #999;
 					--disabled-note-secondary:  #666;
+					--text-disabled-icon: ✗ ;
 				}
 			`,
 			"zefbox": `
@@ -3589,7 +3590,7 @@ export class ColorConfig {
 		:root {
 				font: 16px/2 cursive;
 				--page-margin: #4667CE;
-				--editor-background: black;
+				--editor-background: #4667CE;
 				--hover-preview: white;
 				--playhead: white;
 				--primary-text: white;
@@ -3597,7 +3598,7 @@ export class ColorConfig {
 				--inverted-text: black;
 				--text-selection: rgba(119,68,255,0.99);
 				--box-selection-fill: rgba(255,255,255,0.2);
-				--loop-accent: #9900cc;
+				--loop-accent: #74f;
 				--link-accent: #98f;
 				--ui-widget-background: #444;
 				--ui-widget-focus: #777;
@@ -3610,9 +3611,9 @@ export class ColorConfig {
 				--black-piano-key-text: #fff;
 					--use-color-formula: false;
 					--track-editor-bg-pitch: #444;
-					--track-editor-bg-pitch-dim: #333;
+					--track-editor-bg-pitch-dim: #444;
 					--track-editor-bg-noise: #444;
-					--track-editor-bg-noise-dim: #333;
+					--track-editor-bg-noise-dim: #444;
 					--track-editor-bg-mod: #234;
 					--track-editor-bg-mod-dim: #123;
 					--multiplicative-mod-slider: #456;
@@ -3708,6 +3709,27 @@ export class ColorConfig {
 					--disabled-note-primary:    #999;
 					--disabled-note-secondary:  #666;
 				}
+
+				span input, 
+				div.harmonics svg,
+				div.spectrum svg,
+				div.filterEditor svg,
+				div.fadeInOut svg,
+				div.loopEditor svg,
+				svg#firstImage,
+				div.trackContainer div.noSelection
+				{
+					background: black !important;
+				}
+
+				input, textarea {
+					background-color: black !important;
+				}
+
+				#text-content > section > h1 {
+					color: white;
+				}
+
 			`,
 			 "shitbox 2.0": `
 			:root {
@@ -3829,6 +3851,8 @@ export class ColorConfig {
 					--mod-label-primary-text:   black;
 					--disabled-note-primary:    #999;
 					--disabled-note-secondary:  #666;
+					--note-flash: firebrick;
+  					--note-flash-secondary: firebrick;
 				}
 			`,
 			 "shitbox 3.0": `
@@ -3836,16 +3860,16 @@ export class ColorConfig {
 			:root {
 				font: 20px/2 monospace;
 				--page-margin: #252525;
-				--editor-background: black;
+				--editor-background: #252525;
 				--hover-preview: white;
 				--playhead: white;
-				--primary-text: white;
+				--primary-text: #C8C8C8;
 				--secondary-text: #999;
 				--inverted-text: black;
 				--text-selection: rgba(119,68,255,0.99);
 				--box-selection-fill: rgba(255,255,255,0.2);
 				--loop-accent: #74f;
-				--link-accent: #98f;
+				--link-accent: #945800;
 				--ui-widget-background: #444;
 				--ui-widget-focus: #777;
 				--pitch-background: #444;
@@ -3857,9 +3881,9 @@ export class ColorConfig {
 				--black-piano-key-text: #fff;
 					--use-color-formula: false;
 					--track-editor-bg-pitch: #444;
-					--track-editor-bg-pitch-dim: #333;
+					--track-editor-bg-pitch-dim: #444;
 					--track-editor-bg-noise: #444;
-					--track-editor-bg-noise-dim: #333;
+					--track-editor-bg-noise-dim: #444;
 					--track-editor-bg-mod: #234;
 					--track-editor-bg-mod-dim: #123;
 					--multiplicative-mod-slider: #456;
@@ -3954,7 +3978,46 @@ export class ColorConfig {
 					--disabled-note-primary:    #999;
 					--disabled-note-secondary:  #666;
 				}
-			
+
+				.beepboxEditor input[type="range"]::-moz-range-thumb {
+					width: 8px !important;
+				  }
+
+				button.playButton {
+					width: 80px;
+				}
+				button.prevBarButton {
+					width: 40px;
+					left:-5px;
+				}
+				button.nextBarButton {
+					width: 40px;
+				}
+
+				span input, 
+				div.harmonics svg,
+				div.spectrum svg,
+				div.filterEditor svg,
+				div.fadeInOut svg,
+				div.loopEditor svg,
+				svg#firstImage 
+				{
+					background: black !important;
+				}
+
+				.beepboxEditor {
+					line-height: 1.25;
+				}
+
+				#text-content {
+					font-size: 32px;
+					line-height: 40px;
+				}
+
+				#text-content > section > h1 {
+					color: #C8C8C8;
+					}
+
 			`,
 			"nerdbox": `
 			:root {
@@ -4076,6 +4139,91 @@ export class ColorConfig {
 					--mod-label-primary-text:   black;
 					--disabled-note-primary:    #999;
 					--disabled-note-secondary:  #666;
+				}
+			`,
+			"nepbox": `
+			:root {
+				--page-margin: #000;
+				--editor-background: #060606;
+				--hover-preview: #fff;
+				--playhead: rgb(0, 242, 255);
+				--primary-text: #00fff5;
+				--secondary-text: #a82f2f;
+				--inverted-text: #000;
+				--text-selection: rgba(98, 46, 164, .99);
+				--box-selection-fill: #b74a4a;
+				--loop-accent: #7744FF;
+				--link-accent: #ff00e1;
+				--ui-widget-background: #484848;
+				--ui-widget-focus: #3e3e3e;
+				--pitch-background: #0a2d44;
+				--tonic: #9150ff;
+				--fifth-note: #900;
+				--white-piano-key: #353535;
+				--black-piano-key: #fff;
+				--white-piano-key-text: #fff;
+				--black-piano-key-text: #000;
+				--use-color-formula: false;
+				--track-editor-bg-pitch: #424242;
+				--track-editor-bg-pitch-dim: #000;
+				--track-editor-bg-noise: #424242;
+				--track-editor-bg-noise-dim: #000;
+				--track-editor-bg-mod: #3c3c3c;
+				--track-editor-bg-mod-dim: #000;
+				--multiplicative-mod-slider: #fff;
+				--overwriting-mod-slider: #9d9d9d;
+				--indicator-primary: #f00;
+				--indicator-secondary: #919191;
+				--select2-opt-group: #5d576f;
+				--input-box-outline: #626262;
+				--mute-button-normal: #9a00ff;
+				--mute-button-mod: #00fff7;
+				--mod-label-primary: #2b2b2b;
+				--pitch-channel-limit: 4;
+				--noise-channel-limit: 2;
+
+				--pitch1-secondary-channel: #c13cbf;
+				--pitch1-primary-channel: #f75dff;
+				--pitch1-secondary-note: #b930a2;
+				--pitch1-primary-note: #fca5ff;
+				--pitch2-secondary-channel: #800000;
+				--pitch2-primary-channel: #f00;
+				--pitch2-secondary-note: #8c2121;
+				--pitch2-primary-note: #ff5252;
+				--pitch3-secondary-channel: #004bb3;
+				--pitch3-primary-channel: #1792ff;
+				--pitch3-secondary-note: #005cb3;
+				--pitch3-primary-note: #00ffe9;
+				--pitch4-secondary-channel: #a48800;
+				--pitch4-primary-channel: #fb0;
+				--pitch4-secondary-note: #9c4100;
+				--pitch4-primary-note: #ffd84e;
+				--noise1-secondary-channel: #868686;
+				--noise1-primary-channel: #fff;
+				--noise1-secondary-note: #868686;
+				--noise1-primary-note: #fff;
+				--noise2-secondary-channel: #805300;
+				--noise2-primary-channel: #ff8c00;
+				--noise2-secondary-note: #6a3500;
+				--noise2-primary-note: #a85400;
+				--mod1-secondary-channel: #6c0000;
+				--mod1-primary-channel: #ff3e3e;
+				--mod1-secondary-note: #6c0000;
+				--mod1-primary-note: #ff3e3e;
+				--mod2-secondary-channel: #d25a00;
+				--mod2-primary-channel: #fdff00;
+				--mod2-secondary-note: #d25a00;
+				--mod2-primary-note: #fdff00;
+				--mod3-secondary-channel: #046000;
+				--mod3-primary-channel: #23ff1b;
+				--mod3-secondary-note: #046000;
+				--mod3-primary-note: #23ff1b;
+				--mod4-secondary-channel: #3b2bae;
+				--mod4-primary-channel: #0c79ff;
+				--mod4-secondary-note: #3b2bae;
+				--mod4-primary-note: #0c79ff;
+				--disabled-note-primary: #999;
+				--disabled-note-secondary: #696969;
 				}
 			`,
 			 "cardboardbox classic": `
@@ -5099,8 +5247,8 @@ export class ColorConfig {
 			 "wackybox": `
 			
 			:root {
-				--page-margin: black;
-				--editor-background: black;
+				--page-margin: #050000;
+				--editor-background: #050000;
 				--hover-preview: white;
 				--playhead: white;
 				--primary-text: white;
@@ -5220,7 +5368,7 @@ export class ColorConfig {
 				}
 
 				* {
-					cursor: url("wackybox_cursor.png"), auto !important;
+					cursor: url("theme_resources/wackybox_cursor.png"), auto !important;
 				}
 
 			`,
@@ -5453,124 +5601,6 @@ export class ColorConfig {
 			  --disabled-note-primary: #994038;
 			  --disabled-note-secondary: #331512;
 			}
-			`,
-			 "slushie": `
-			:root {
-				--page-margin: #040814;
-    --editor-background: #040814;
-    --hover-preview: #c6f7ff;
-    --playhead: white;
-    --primary-text: #d3f3ff;
-    --secondary-text: #6f72b5;
-    --inverted-text: black;
-    --text-selection: rgba(119,68,255,0.99);
-    --box-selection-fill: rgb(43 70 171 / 62%);
-    --loop-accent: #573ebb;
-    --link-accent: #98f;
-    --ui-widget-background: #2e2f44;
-    --ui-widget-focus: #2b2c46;
-    --pitch-background: #353654;
-    --tonic: #716fe3;
-    --fifth-note: #76469b;
-    --white-piano-key: #abbce3;
-    --black-piano-key: #2f235e;
-    --use-color-formula: false;
-    --track-editor-bg-pitch: #3a3b5c;
-    --track-editor-bg-pitch-dim: #1f2036;
-    --track-editor-bg-noise: #3c3554;
-    --track-editor-bg-noise-dim: #1e1834;
-    --track-editor-bg-mod: #30335e;
-    --track-editor-bg-mod-dim: #161938;
-    --multiplicative-mod-slider: #e29cff;
-    --overwriting-mod-slider: #495789;
-    --indicator-primary: #e1a6ff;
-    --indicator-secondary: #415187;
-    --select2-opt-group: #22223a;
-    --input-box-outline: #2d2648;
-    --mute-button-normal: #7aceff;
-    --mute-button-mod: #9d6bff;
-    --pitch1-secondary-channel: #5f3ea5;
-    --pitch1-primary-channel: #c1a4ff;
-    --pitch1-secondary-note: #794fd3;
-    --pitch1-primary-note: #d8c6ff;
-    --pitch2-secondary-channel: #4f44bf;
-    --pitch2-primary-channel: #9287ff;
-    --pitch2-secondary-note: #5e51d9;
-    --pitch2-primary-note: #b6afff;
-    --pitch3-secondary-channel: #374eb9;
-    --pitch3-primary-channel: #8097ff;
-    --pitch3-secondary-note: #445cc9;
-    --pitch3-primary-note: #a0b2ff;
-    --pitch4-secondary-channel: #2867cf;
-    --pitch4-primary-channel: #6fa5ff;
-    --pitch4-secondary-note: #2e6ed7;
-    --pitch4-primary-note: #a6c7ff;
-    --pitch5-secondary-channel: #3175a7;
-    --pitch5-primary-channel: #7ec9ff;
-    --pitch5-secondary-note: #367eb3;
-    --pitch5-primary-note: #9fd7ff;
-    --pitch6-secondary-channel: #3993a9;
-    --pitch6-primary-channel: #8ce9ff;
-    --pitch6-secondary-note: #386da3;
-    --pitch6-primary-note: #9eecff;
-    --pitch7-secondary-channel: #369d8a;
-    --pitch7-primary-channel: #8bfce7;
-    --pitch7-secondary-note: #1c93a7;
-    --pitch7-primary-note: #abffef;
-    --pitch8-secondary-channel: #00A170;
-    --pitch8-primary-channel: #50FFC9;
-    --pitch8-secondary-note: #00C78A;
-    --pitch8-primary-note: #83FFD9;
-    --pitch9-secondary-channel: #49b374;
-    --pitch9-primary-channel: #8affa9;
-    --pitch9-secondary-note: #26815f;
-    --pitch9-primary-note: #c8ffde;
-    --pitch10-secondary-channel: #58a747;
-    --pitch10-primary-channel: #bbffaa;
-    --pitch10-secondary-note: #1d7c48;
-    --pitch10-primary-note: #c7ffbc;
-    --noise1-secondary-channel: #42829b;
-    --noise1-primary-channel: #97d3fc;
-    --noise1-secondary-note: #3f53b3;
-    --noise1-primary-note: #97d3fc;
-    --noise2-secondary-channel: #6354bb;
-    --noise2-primary-channel: #9a89ff;
-    --noise2-secondary-note: #5f4dcd;
-    --noise2-primary-note: #c6bcff;
-    --noise3-secondary-channel: #704a95;
-    --noise3-primary-channel: #c285ff;
-    --noise3-secondary-note: #ad5aff;
-    --noise3-primary-note: #d3a6ff;
-    --noise4-secondary-channel: #a53c65;
-    --noise4-primary-channel: #f794bb;
-    --noise4-secondary-note: #cb5080;
-    --noise4-primary-note: #f794bb;
-    --noise5-secondary-channel: #9b2d2d;
-    --noise5-primary-channel: #ff7676;
-    --noise5-secondary-note: #cb4444;
-    --noise5-primary-note: #ff9999;
-    --mod1-secondary-channel: #b7613c;
-    --mod1-primary-channel: #ff9f76;
-    --mod1-secondary-note: #e77e52;
-    --mod1-primary-note: #ffb99b;
-    --mod2-secondary-channel: #916d34;
-    --mod2-primary-channel: #fece80;
-    --mod2-secondary-note: #c58b35;
-    --mod2-primary-note: #ffdda5;
-    --mod3-secondary-channel: #83761a;
-    --mod3-primary-channel: #fdf68c;
-    --mod3-secondary-note: #c18e00;
-    --mod3-primary-note: #fdf68c;
-    --mod4-secondary-channel: #a86436;
-    --mod4-primary-channel: #c8a825;
-    --mod4-secondary-note: #e8ba46;
-    --mod4-primary-note: #c8a825;
-    --mod-label-primary: #37325e;
-    --mod-label-secondary-text: #6e8aa7;
-    --mod-label-primary-text: #c1ffff;
-    --disabled-note-primary: #999;
-    --disabled-note-secondary: #666;
-				}
 			`,
 			"midbox":
 			`:root {
@@ -5806,7 +5836,641 @@ export class ColorConfig {
 				--mod4-primary-note: #b2fffb;
 				--disabled-note-primary: #c6c6c6;
 				--disabled-note-secondary: #8c8c8c;
+				--note-flash: #ffffff;
+				--note-flash-secondary: #ffffff77;
 				}`,
+				"AbyssBox Classic": `
+				:root {		
+				--page-margin: #1e0915; 		
+				--editor-background: #1e0915; 		
+				--hover-preview: white; 		
+				--playhead: rgba(255, 255, 255, 0.9); 		
+				--primary-text: white; 		
+				--secondary-text: #ffcedd; 		
+				--inverted-text: black;	 		
+				--text-selection: rgba(119,68,255,0.99); 		
+				--box-selection-fill: #1e0915; 		
+				--loop-accent: #873a51; 		
+				--link-accent: #df88ff; 		
+				--ui-widget-background: #581b3e; 		
+				--ui-widget-focus: #762b4c; 		
+				--pitch-background: #381d24; 		
+				--tonic: #873a51; 		
+				--fifth-note: #75001e; 		
+				--white-piano-key: #cca5c7; 		
+				--black-piano-key: #402f2f;
+				--white-piano-key-text: #131200;		
+				--black-piano-key-text: #fff;		 		
+				--use-color-formula: true; 		
+				--track-editor-bg-pitch: #571c40; 		
+				--track-editor-bg-pitch-dim: #290d0d; 		
+				--track-editor-bg-noise: #571131; 		
+				--track-editor-bg-noise-dim: #330a28; 		
+				--track-editor-bg-mod: #54083c; 		
+				--track-editor-bg-mod-dim: #360426; 		
+				--multiplicative-mod-slider: #9f6082; 		
+				--overwriting-mod-slider: #9e3470; 		
+				--indicator-primary: #b3498f; 		
+				--indicator-secondary: #541d40; 		
+				--select2-opt-group: #4f191e; 		
+				--input-box-outline: #18041a; 		
+				--mute-button-normal: #dd5d94;	 		
+				--mute-button-mod: #ba364c; 		
+				--mod-label-primary: #541625; 		
+				--mod-label-secondary-text: rgb(120, 87, 86); 
+				--mod-label-primary-text: gray; 
+			
+				--pitch-secondary-channel-hue: -80; 		
+				--pitch-secondary-channel-hue-scale 0; 		
+				--pitch-secondary-channel-sat: 43; 		
+				--pitch-secondary-channel-sat-scale: 0.1; 		
+				--pitch-secondary-channel-lum: 40; 		
+				--pitch-secondary-channel-lum-scale: 0.05; 
+			
+				--pitch-primary-channel-hue: -53; 		
+				--pitch-primary-channel-hue-scale: 6.1; 		
+				--pitch-primary-channel-sat: 75; 		
+				--pitch-primary-channel-sat-scale: 0.1; 		
+				--pitch-primary-channel-lum: 67.5; 		
+				--pitch-primary-channel-lum-scale: 0.05; 	
+		
+				--pitch-secondary-note-hue: -34; 		
+				--pitch-secondary-note-hue-scale: 6.1; 		
+				--pitch-secondary-note-sat: 93.9; 		
+				--pitch-secondary-note-sat-scale: 0.1; 		
+				--pitch-secondary-note-lum: 25; 		
+				--pitch-secondary-note-lum-scale: 0.05; 
+			
+				--pitch-primary-note-hue: -53; 		
+				--pitch-primary-note-hue-scale: 6.1; 		
+				--pitch-primary-note-sat: 100; 		
+				--pitch-primary-note-sat-scale: 0.05; 		
+				--pitch-primary-note-lum: 85.6; 		
+				--pitch-primary-note-lum-scale: 0.025; 
+			
+				--noise-secondary-channel-hue: 0; 		
+				--noise-secondary-channel-hue-scale: 2; 		
+				--noise-secondary-channel-sat: 65; 		
+				--noise-secondary-channel-sat-scale: 0; 		
+				--noise-secondary-channel-lum: 42; 		
+				--noise-secondary-channel-lum-scale: 0; 
+			
+				--noise-primary-channel-hue: 0; 		
+				--noise-primary-channel-hue-scale: 1; 		
+				--noise-primary-channel-sat: 100; 		
+				--noise-primary-channel-sat-scale: 1; 		
+				--noise-primary-channel-lum: 63.5; 		
+				--noise-primary-channel-lum-scale: 0; 
+			
+				--noise-secondary-note-hue: 24; 		
+				--noise-secondary-note-hue-scale: 2; 		
+				--noise-secondary-note-sat: 100; 		
+				--noise-secondary-note-sat-scale: 0; 		
+				--noise-secondary-note-lum: 35; 		
+				--noise-secondary-note-lum-scale: 0; 	
+		
+				--noise-primary-note-hue: 24; 		
+				--noise-primary-note-hue-scale: 2; 		
+				--noise-primary-note-sat: 100; 		
+				--noise-primary-note-sat-scale: 1; 		
+				--noise-primary-note-lum: 60; 		
+				--noise-primary-note-lum-scale: 1; 	
+		
+				--mod-secondary-channel-hue: 55; 		
+				--mod-secondary-channel-hue-scale: 1.5; 		
+				--mod-secondary-channel-sat: 100; 		
+				--mod-secondary-channel-sat-scale: 0; 		
+				--mod-secondary-channel-lum: 20; 		
+				--mod-secondary-channel-lum-scale: 0; 
+			
+				--mod-primary-channel-hue: 55; 		
+				--mod-primary-channel-hue-scale: 1.5; 		
+				--mod-primary-channel-sat: 96; 		
+				--mod-primary-channel-sat-scale: 0; 		
+				--mod-primary-channel-lum: 50; 		
+				--mod-primary-channel-lum-scale: 0; 
+			
+				--mod-secondary-note-hue: 55; 		
+				--mod-secondary-note-hue-scale: 1.5; 		
+				--mod-secondary-note-sat: 92; 		
+				--mod-secondary-note-sat-scale: 0; 		
+				--mod-secondary-note-lum: 45; 		
+				--mod-secondary-note-lum-scale: 0; 
+			
+				--mod-primary-note-hue: 55; 		
+				--mod-primary-note-hue-scale: 1.5; 		
+				--mod-primary-note-sat: 96; 		
+				--mod-primary-note-sat-scale: 0; 		
+				--mod-primary-note-lum: 85; 		
+				--mod-primary-note-lum-scale: 0; 	
+	
+				--note-flash: #ffffff;
+				--note-flash-secondary: #ffffff77;
+				
+				--file-page-symbol: url("theme_resources/icon-file.png");
+				--edit-pencil-symbol: url("theme_resources/icon-edit.png");
+				--preferences-gear-symbol: url("theme_resources/icon-preferences.png");
+				--instrument-copy-symbol: url("theme_resources/icon-copy.png");
+				--instrument-paste-symbol: url("theme_resources/icon-paste.png");
+				--play-symbol: url("theme_resources/icon-play.png");
+				--pause-symbol: url("theme_resources/icon-pause.png");
+				--record-symbol: url("theme_resources/icon-record.png");
+				--stop-symbol: url("theme_resources/icon-stop.png");
+				--prev-bar-symbol: url("theme_resources/icon-prev.png");
+				--next-bar-symbol: url("theme_resources/icon-next.png");
+				--muted-symbol: url("theme_resources/icon-speakerMuted.png");
+				--unmuted-symbol: url("theme_resources/icon-speaker.png");
+				--volume-symbol: url("theme_resources/icon-speaker.png");
+				--zoom-in-symbol: url("theme_resources/icon-zoomIn.png");
+				--zoom-out-symbol: url("theme_resources/icon-zoomOut.png");
+				--export-symbol: url("theme_resources/icon-export.png");
+					}
+			* {
+			cursor: url("theme_resources/abyssbox_cursor.png"), auto;
+			}
+			
+				@font-face {
+			   font-family: "AbyssType";
+			   src:
+				url("theme_resources/abysstype.otf") format("opentype") tech(color-COLRv1),
+				}
+	
+				/* sets background image */
+				body {
+				background-image: url("theme_resources/stripesbg.gif") !important;
+				background-position: center;
+				background-repeat: repeat;
+	
+				image-rendering: -moz-crisp-edges !important;         /* Firefox */
+				image-rendering: -webkit-optimize-contrast !important; /* Webkit (Chrome/Safari) */
+				image-rendering: -o-crisp-edges !important;            /* Opera */
+				image-rendering: pixelated !important;                 /* Future browsers */
+				image-rendering: optimizeSpeed !important;             /* IE */
+					}
+	
+				#text-content {
+						border-image-source: url("theme_resources/abyssbox_border.png");
+						border-image-slice: 4 fill; 
+					   border-image-width: 8px; 
+					border-image-repeat: stretch; 
+						padding: 12px; 
+	
+						image-rendering: -moz-crisp-edges !important;         /* Firefox */
+						image-rendering: -webkit-optimize-contrast !important; /* Webkit (Chrome/Safari) */
+						image-rendering: -o-crisp-edges !important;            /* Opera */
+						image-rendering: pixelated !important;                 /* Future browsers */
+						image-rendering: optimizeSpeed !important;             /* IE */
+					}
+				#beepboxEditorContainer {
+						border-image-source: url("theme_resources/abyssbox_border.png");
+						border-image-slice: 4 fill; 
+					   border-image-width: 8px; 
+					border-image-repeat: stretch;
+						padding: 12px;
+	
+						image-rendering: -moz-crisp-edges !important;         /* Firefox */
+						image-rendering: -webkit-optimize-contrast !important; /* Webkit (Chrome/Safari) */
+						image-rendering: -o-crisp-edges !important;            /* Opera */
+						image-rendering: pixelated !important;                 /* Future browsers */
+						image-rendering: optimizeSpeed !important;             /* IE */ 
+					}
+				.beepboxEditor button,
+				button.playButton,
+				button.pauseButton, 
+				button.recordButton, 
+				button.stopButton,
+				button.nextBarButton, 
+				button.prevBarButton, 
+				button.copyButton, 
+				button.pasteButton, 
+				button.exportInstrumentButton, 
+				button.importInstrumentButton, 
+				.beepboxEditor select, 
+				.beepboxEditor .select2-selection__rendered {
+						border-image-source: url("theme_resources/abyssbox_border.png") !important;
+						border-image-slice: 4 fill !important; 
+					   border-image-width: 4px !important; 
+					border-image-repeat: stretch !important;
+						padding: 4px !important; 
+	
+						image-rendering: -moz-crisp-edges !important;         /* Firefox */
+						image-rendering: -webkit-optimize-contrast !important; /* Webkit (Chrome/Safari) */
+						image-rendering: -o-crisp-edges !important;            /* Opera */
+						image-rendering: pixelated !important;                 /* Future browsers */
+						image-rendering: optimizeSpeed !important;             /* IE */
+	
+						cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+					}
+	
+				div.selectRow button:not(.copyButton,.pasteButton,.exportInstrumentButton,.importInstrumentButton) {
+					--ui-widget-background: #1e0915 !important;
+					border-image-source:none !important;
+				}
+	
+					select.trackSelectBox {
+						border-image: none !important;
+					}
+					
+				@font-face {
+			   font-family: "AbyssType_small";
+			   src:
+				url("theme_resources/abysstype_small.otf") format("opentype") tech(color-COLRv1),
+				}
+	
+				html {
+					font-family: 'AbyssType';
+				}
+	
+				div.channelBoxLabel {
+					font-family: 'AbyssType_small' !important;
+				}
+	
+				.beepboxEditor input[type="range"]::-webkit-slider-thumb
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]::-webkit-slider-runnable-track
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]:focus::-webkit-slider-runnable-track
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]::-ms-thumb
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]::-ms-track
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]:focus::-ms-track
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]::-moz-range-thumb
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]::-moz-range-track
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]:focus::-moz-range-track
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="text"],
+				.beepboxEditor input[type="number"]
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="checkbox"]
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="checkbox"]:checked
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="checkbox"]:checked:after
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+	
+				div.selectRow span {
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+	
+				`,
+		"AbyssBox Light": `
+				:root { 		
+				--page-margin: #e0adbc; 		
+				--editor-background: #e0adbc; 		
+				--hover-preview: white; 		
+				--playhead: rgba(255, 255, 255, 0.9); 		
+				--primary-text: #f5f0f1; 		
+				--secondary-text: #eddadf; 		
+				--inverted-text:  #e8bcc9;	 		
+				--text-selection: rgba(119,68,255,0.99); 		
+				--box-selection-fill: #bf2c5d; 		
+				--loop-accent: #8c346a; 		
+				--link-accent: #8c346a; 		
+				--ui-widget-background: #f5e9f0;		
+				--ui-widget-focus: #8c346a; 		
+				--pitch-background: #eddadf; 		
+				--tonic: #f5f0f1; 		
+				--fifth-note: #ffb5c9; 		
+				--white-piano-key: #cca5c7; 		
+				--black-piano-key: #402f2f;
+				--white-piano-key-text: #131200;		
+				--black-piano-key-text: #fff;	 		
+				--use-color-formula: true; 		
+				--track-editor-bg-pitch: #decad8; 		
+				--track-editor-bg-pitch-dim: #bfb0bb; 		
+				--track-editor-bg-noise: #d6a3ca; 		
+				--track-editor-bg-noise-dim: #b389a9; 		
+				--track-editor-bg-mod: #b0649e; 		
+				--track-editor-bg-mod-dim: #915683; 		
+				--multiplicative-mod-slider: #9f6082; 		
+				--overwriting-mod-slider: #9e3470; 		
+				--indicator-primary: #b3498f; 		
+				--indicator-secondary: #541d40; 		
+				--select2-opt-group: #4f191e; 		
+				--input-box-outline: #18041a; 		
+				--mute-button-normal: #dd5d94;	 		
+				--mute-button-mod: #ba364c; 		
+				--mod-label-primary: #541625; 		
+				--mod-label-secondary-text: rgb(120, 87, 86); 
+				--mod-label-primary-text: gray; 
+			
+				--pitch-secondary-channel-hue: -80; 		
+				--pitch-secondary-channel-hue-scale 0; 		
+				--pitch-secondary-channel-sat: 255; 		
+				--pitch-secondary-channel-sat-scale: 0.1; 		
+				--pitch-secondary-channel-lum: 30; 		
+				--pitch-secondary-channel-lum-scale: 0.05; 
+			
+				--pitch-primary-channel-hue: -53; 		
+				--pitch-primary-channel-hue-scale: 6.1; 		
+				--pitch-primary-channel-sat: 255; 		
+				--pitch-primary-channel-sat-scale: 0.1; 		
+				--pitch-primary-channel-lum: 60; 		
+				--pitch-primary-channel-lum-scale: 0.05; 	
+		
+				--pitch-secondary-note-hue: -34; 		
+				--pitch-secondary-note-hue-scale: 6.1; 		
+				--pitch-secondary-note-sat: 255; 		
+				--pitch-secondary-note-sat-scale: 0.1; 		
+				--pitch-secondary-note-lum: 30; 		
+				--pitch-secondary-note-lum-scale: 0.05; 
+			
+				--pitch-primary-note-hue: -53; 		
+				--pitch-primary-note-hue-scale: 6.1; 		
+				--pitch-primary-note-sat: 255; 		
+				--pitch-primary-note-sat-scale: 0.05; 		
+				--pitch-primary-note-lum: 60; 		
+				--pitch-primary-note-lum-scale: 0.025; 
+			
+				--noise-secondary-channel-hue: 0; 		
+				--noise-secondary-channel-hue-scale: 2; 		
+				--noise-secondary-channel-sat: 255; 		
+				--noise-secondary-channel-sat-scale: 0; 		
+				--noise-secondary-channel-lum: 30; 		
+				--noise-secondary-channel-lum-scale: 0; 
+			
+				--noise-primary-channel-hue: 0; 		
+				--noise-primary-channel-hue-scale: 1; 		
+				--noise-primary-channel-sat: 255; 		
+				--noise-primary-channel-sat-scale: 1; 		
+				--noise-primary-channel-lum: 60; 		
+				--noise-primary-channel-lum-scale: 0; 
+			
+				--noise-secondary-note-hue: 24; 		
+				--noise-secondary-note-hue-scale: 2; 		
+				--noise-secondary-note-sat: 255; 		
+				--noise-secondary-note-sat-scale: 0; 		
+				--noise-secondary-note-lum: 30; 		
+				--noise-secondary-note-lum-scale: 0; 	
+		
+				--noise-primary-note-hue: 24; 		
+				--noise-primary-note-hue-scale: 2; 		
+				--noise-primary-note-sat: 255; 		
+				--noise-primary-note-sat-scale: 1; 		
+				--noise-primary-note-lum: 60; 		
+				--noise-primary-note-lum-scale: 1; 	
+		
+				--mod-secondary-channel-hue: 55; 		
+				--mod-secondary-channel-hue-scale: 1.5; 		
+				--mod-secondary-channel-sat: 255; 		
+				--mod-secondary-channel-sat-scale: 0; 		
+				--mod-secondary-channel-lum: 30; 		
+				--mod-secondary-channel-lum-scale: 0; 
+			
+				--mod-primary-channel-hue: 55; 		
+				--mod-primary-channel-hue-scale: 1.5; 		
+				--mod-primary-channel-sat: 255; 		
+				--mod-primary-channel-sat-scale: 0; 		
+				--mod-primary-channel-lum: 60; 		
+				--mod-primary-channel-lum-scale: 0; 
+			
+				--mod-secondary-note-hue: 55; 		
+				--mod-secondary-note-hue-scale: 1.5; 		
+				--mod-secondary-note-sat: 255; 		
+				--mod-secondary-note-sat-scale: 0; 		
+				--mod-secondary-note-lum: 30; 		
+				--mod-secondary-note-lum-scale: 0; 
+			
+				--mod-primary-note-hue: 55; 		
+				--mod-primary-note-hue-scale: 1.5; 		
+				--mod-primary-note-sat: 255; 		
+				--mod-primary-note-sat-scale: 0; 		
+				--mod-primary-note-lum: 60; 		
+				--mod-primary-note-lum-scale: 0; 
+
+				--note-flash: #ffffff;
+				--note-flash-secondary: #ffffff77;
+
+				--file-page-symbol: url("theme_resources/icon-file.png");
+				--edit-pencil-symbol: url("theme_resources/icon-edit.png");
+				--preferences-gear-symbol: url("theme_resources/icon-preferences.png");
+				--instrument-copy-symbol: url("theme_resources/icon-copy.png");
+				--instrument-paste-symbol: url("theme_resources/icon-paste.png");
+				--play-symbol: url("theme_resources/icon-play.png");
+				--pause-symbol: url("theme_resources/icon-pause.png");
+				--record-symbol: url("theme_resources/icon-record.png");
+				--stop-symbol: url("theme_resources/icon-stop.png");
+				--prev-bar-symbol: url("theme_resources/icon-prev.png");
+				--next-bar-symbol: url("theme_resources/icon-next.png");
+				--muted-symbol: url("theme_resources/icon-speakerMuted.png");
+				--unmuted-symbol: url("theme_resources/icon-speaker.png");
+				--volume-symbol: url("theme_resources/icon-speaker.png");
+				--zoom-in-symbol: url("theme_resources/icon-zoomIn.png");
+				--zoom-out-symbol: url("theme_resources/icon-zoomOut.png");
+				--export-symbol: url("theme_resources/icon-export.png");
+					}
+					/* sets background image */
+					body {
+					background-image: url("theme_resources/stripesbg_light.gif") !important;
+					background-position: center;
+					background-repeat: repeat;
+		
+					image-rendering: -moz-crisp-edges !important;         /* Firefox */
+					image-rendering: -webkit-optimize-contrast !important; /* Webkit (Chrome/Safari) */
+					image-rendering: -o-crisp-edges !important;            /* Opera */
+					image-rendering: pixelated !important;                 /* Future browsers */
+					image-rendering: optimizeSpeed !important;             /* IE */
+						}		
+				#text-content {
+						border-image-source: url("theme_resources/abyssbox_border_light.png");
+						border-image-slice: 4 fill; 
+					   border-image-width: 8px; 
+					border-image-repeat: stretch; 
+						padding: 12px; 
+	
+						image-rendering: -moz-crisp-edges !important;         /* Firefox */
+						image-rendering: -webkit-optimize-contrast !important; /* Webkit (Chrome/Safari) */
+						image-rendering: -o-crisp-edges !important;            /* Opera */
+						image-rendering: pixelated !important;                 /* Future browsers */
+						image-rendering: optimizeSpeed !important;             /* IE */
+					}
+				#beepboxEditorContainer {
+						border-image-source: url("theme_resources/abyssbox_border_light.png");
+						border-image-slice: 4 fill; 
+					   border-image-width: 8px; 
+					border-image-repeat: stretch;
+						padding: 12px;
+	
+						image-rendering: -moz-crisp-edges !important;         /* Firefox */
+						image-rendering: -webkit-optimize-contrast !important; /* Webkit (Chrome/Safari) */
+						image-rendering: -o-crisp-edges !important;            /* Opera */
+						image-rendering: pixelated !important;                 /* Future browsers */
+						image-rendering: optimizeSpeed !important;             /* IE */ 
+					}
+					.beepboxEditor button,
+					button.playButton,
+					button.pauseButton, 
+					button.recordButton, 
+					button.stopButton,
+					button.nextBarButton, 
+					button.prevBarButton, 
+					button.copyButton, 
+					button.pasteButton, 
+					button.exportInstrumentButton, 
+					button.importInstrumentButton, 
+					.beepboxEditor select, 
+					.beepboxEditor .select2-selection__rendered {
+							border-image-source: url("theme_resources/abyssbox_border_light.png") !important;
+							border-image-slice: 4 fill !important; 
+						   border-image-width: 4px !important; 
+						border-image-repeat: stretch !important;
+							padding: 4px !important; 
+		
+							image-rendering: -moz-crisp-edges !important;         /* Firefox */
+							image-rendering: -webkit-optimize-contrast !important; /* Webkit (Chrome/Safari) */
+							image-rendering: -o-crisp-edges !important;            /* Opera */
+							image-rendering: pixelated !important;                 /* Future browsers */
+							image-rendering: optimizeSpeed !important;             /* IE */
+		
+							cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+						}
+		
+					div.selectRow button:not(.copyButton,.pasteButton,.exportInstrumentButton,.importInstrumentButton) {
+						--ui-widget-background: var(--editor-background) !important;
+						border-image-source:none !important;
+					}
+	
+					select.trackSelectBox {
+						border-image: none !important;
+					}
+	
+			/* sets cursor */ 
+			* {
+			cursor: url("theme_resources/abyssbox_cursor.png"), auto !important;
+			}
+				@font-face {
+			   font-family: "AbyssType";
+			   src:
+				url("theme_resources/abysstype.otf") format("opentype") tech(color-COLRv1),
+				}
+	
+				@font-face {
+			   font-family: "AbyssType_small";
+			   src:
+				url("theme_resources/abysstype_small.otf") format("opentype") tech(color-COLRv1),
+				}
+	
+				html {
+				font-family: 'AbyssType';
+				}
+				div.channelBoxLabel {
+					font-family: 'AbyssType_small' !important;
+				}
+	
+				.beepboxEditor input[type="range"]::-webkit-slider-thumb
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]::-webkit-slider-runnable-track
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]:focus::-webkit-slider-runnable-track
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]::-ms-thumb
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]::-ms-track
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]:focus::-ms-track
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]::-moz-range-thumb
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]::-moz-range-track
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="range"]:focus::-moz-range-track
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="text"],
+				.beepboxEditor input[type="number"]
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="checkbox"]
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="checkbox"]:checked
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+				 
+				.beepboxEditor input[type="checkbox"]:checked:after
+				{
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+	
+				div.selectRow span {
+					cursor: url("theme_resources/abyssbox_cursor_hand.png"), pointer !important;
+				}
+	
+				`,
 		"azur lane":`
 		:root {
 			--page-margin: #19337e;
@@ -5930,18 +6594,18 @@ export class ColorConfig {
 		}
 		.instructions-column > section:first-of-type > p:first-of-type:after {
 		display: block;
-		content: url("UltraboxAzurLaneThemeStarterSquad.png");
+		content: url("theme_resources/AzurLaneThemeStarterSquad.png");
 		width: 100%;
 		text-align: center;
 		margin-top: 25px;
 		}
 		/* sets cursor */
 		* {
-		cursor: url("UltraBoxAzurLaneThemeMouse.png"), auto !important;
+		cursor: url("theme_resources/AzurLaneThemeMouse.png"), auto !important;
 		}
 		/* sets background image */
 		body {
-		background-image: url("UltraBoxAzurLaneThemeMemoryTaskBackground.png") !important;
+		background-image: url("theme_resources/AzurLaneThemeMemoryTaskBackground.png") !important;
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
@@ -5955,7 +6619,7 @@ export class ColorConfig {
 		}
 		#text-content > section > h1 {
 		margin: auto;
-		content: url("UltraBoxALThemeLogo.png");
+		content: url("theme_resources/AzurLaneThemeLogo.png");
 		}
 	}`,
 			  "custom": `${localStorage.getItem("customColors") || `:root {
@@ -6090,10 +6754,17 @@ export class ColorConfig {
     public static readonly blackPianoKey: string = "var(--black-piano-key)";
     public static readonly whitePianoKeyText: string = "var(--white-piano-key-text)";
     public static readonly blackPianoKeyText: string = "var(--black-piano-key-text)";
-	public static readonly oscilloscopeLineL: string = "var(--oscilloscope-line-L)";
-	public static readonly oscilloscopeLineR: string = "var(--oscilloscope-line-R)";
-	public static readonly modTitle: string = "var(--mod-title)";
+	// public static readonly oscilloscopeLineL: string = "var(--oscilloscope-line-L)";
+	// public static readonly oscilloscopeLineR: string = "var(--oscilloscope-line-R)";
+	// modTitle can stay uncommented until it's used somwhere that's not index.html
+	// public static readonly modTitle: string = "var(--mod-title)";
     public static readonly useColorFormula: string = "var(--use-color-formula)";
+	// public static readonly pitchLimit: string = "var(--pitch-channel-limit)";
+	// public static readonly noiseLimit: string = "var(--noise-channel-limit)";
+	// public static readonly modLimit: string = "var(--mod-channel-limit)";
+	// public static readonly colorFormulaPitchLimit: string = "var(--formula-pitch-channel-limit)";
+	// public static readonly colorFormulaNoiseLimit: string = "var(--formula-noise-channel-limit)";
+	// public static readonly colorFormulaModLimit: string = "var(--formula-mod-channel-limit)";
     public static readonly pitchSecondaryChannelHue: string = "var(--pitch-secondary-channel-hue)";
     public static readonly pitchSecondaryChannelHueScale: string = "var(--pitch-secondary-channel-hue-scale)";
     public static readonly pitchSecondaryChannelSat: string = "var(--pitch-secondary-channel-sat)";
@@ -6427,20 +7098,23 @@ export class ColorConfig {
             let newNotePrimary: string = ColorConfig.getComputed((regex.exec(base.primaryNote) as RegExpExecArray)[1] as string);
             return <ChannelColors>{ secondaryChannel: newChannelSecondary, primaryChannel: newChannelPrimary, secondaryNote: newNoteSecondary, primaryNote: newNotePrimary };
         }
+		let colorFormulaPitchLimit: number = ColorConfig.getComputed("--formula-pitch-channel-limit") == "" ? 360 : Number(ColorConfig.getComputed("--formula-pitch-channel-limit"));
+		let colorFormulaNoiseLimit: number = ColorConfig.getComputed("--formula-noise-channel-limit") == "" ? 360 : Number(ColorConfig.getComputed("--formula-noise-channel-limit"));
+		let colorFormulaModLimit: number = ColorConfig.getComputed("--formula-mod-channel-limit") == "" ? 360 : Number(ColorConfig.getComputed("--formula-mod-channel-limit"));
         switch (type) {
             case ("noise"): {
 				// Noise formula
 
-                let newChannelSecondary: string = "hsl(" + ((this.c_noiseSecondaryChannelHue + ((channel * this.c_noiseSecondaryChannelHueScale) / Config.noiseChannelCountMax) * 256) % 360) + ","
+                let newChannelSecondary: string = "hsl(" + ((this.c_noiseSecondaryChannelHue + ((channel * this.c_noiseSecondaryChannelHueScale) / Config.noiseChannelCountMax) * 256) % colorFormulaNoiseLimit) + ","
                     + (this.c_noiseSecondaryChannelSat + channel * this.c_noiseSecondaryChannelSatScale) + "%,"
                     + (this.c_noiseSecondaryChannelLum + channel * this.c_noiseSecondaryChannelLumScale) + "%)";
-                let newChannelPrimary: string = "hsl(" + ((this.c_noisePrimaryChannelHue + ((channel * this.c_noisePrimaryChannelHueScale) / Config.noiseChannelCountMax) * 256) % 360) + ","
+                let newChannelPrimary: string = "hsl(" + ((this.c_noisePrimaryChannelHue + ((channel * this.c_noisePrimaryChannelHueScale) / Config.noiseChannelCountMax) * 256) % colorFormulaNoiseLimit) + ","
                     + (this.c_noisePrimaryChannelSat + channel * this.c_noisePrimaryChannelSatScale) + "%,"
                     + (this.c_noisePrimaryChannelLum + channel * this.c_noisePrimaryChannelLumScale) + "%)";
-                let newNoteSecondary: string = "hsl(" + ((this.c_noiseSecondaryNoteHue + ((channel * this.c_noiseSecondaryNoteHueScale) / Config.noiseChannelCountMax) * 256) % 360) + ","
+                let newNoteSecondary: string = "hsl(" + ((this.c_noiseSecondaryNoteHue + ((channel * this.c_noiseSecondaryNoteHueScale) / Config.noiseChannelCountMax) * 256) % colorFormulaNoiseLimit) + ","
                     + (this.c_noiseSecondaryNoteSat + channel * this.c_noiseSecondaryNoteSatScale) + "%,"
                     + (this.c_noiseSecondaryNoteLum + channel * this.c_noiseSecondaryNoteLumScale) + "%)";
-                let newNotePrimary: string = "hsl(" + ((this.c_noisePrimaryNoteHue + ((channel * this.c_noisePrimaryNoteHueScale) / Config.noiseChannelCountMax) * 256) % 360) + ","
+                let newNotePrimary: string = "hsl(" + ((this.c_noisePrimaryNoteHue + ((channel * this.c_noisePrimaryNoteHueScale) / Config.noiseChannelCountMax) * 256) % colorFormulaNoiseLimit) + ","
                     + (this.c_noisePrimaryNoteSat + channel * this.c_noisePrimaryNoteSatScale) + "%,"
                     + (this.c_noisePrimaryNoteLum + channel * this.c_noisePrimaryNoteLumScale) + "%)";
 
@@ -6449,16 +7123,16 @@ export class ColorConfig {
             } case ("mod"): {
                 // Mod formula
 
-                let newChannelSecondary: string = "hsl(" + ((this.c_modSecondaryChannelHue + ((channel * this.c_modSecondaryChannelHueScale) / Config.modChannelCountMax) * 256) % 360) + ","
+                let newChannelSecondary: string = "hsl(" + ((this.c_modSecondaryChannelHue + ((channel * this.c_modSecondaryChannelHueScale) / Config.modChannelCountMax) * 256) % colorFormulaModLimit) + ","
                     + (this.c_modSecondaryChannelSat + channel * this.c_modSecondaryChannelSatScale) + "%,"
                     + (this.c_modSecondaryChannelLum + channel * this.c_modSecondaryChannelLumScale) + "%)";
-                let newChannelPrimary: string = "hsl(" + ((this.c_modPrimaryChannelHue + ((channel * this.c_modPrimaryChannelHueScale) / Config.modChannelCountMax) * 256) % 360) + ","
+                let newChannelPrimary: string = "hsl(" + ((this.c_modPrimaryChannelHue + ((channel * this.c_modPrimaryChannelHueScale) / Config.modChannelCountMax) * 256) % colorFormulaModLimit) + ","
                     + (this.c_modPrimaryChannelSat + channel * this.c_modPrimaryChannelSatScale) + "%,"
                     + (this.c_modPrimaryChannelLum + channel * this.c_modPrimaryChannelLumScale) + "%)";
-                let newNoteSecondary: string = "hsl(" + ((this.c_modSecondaryNoteHue + ((channel * this.c_modSecondaryNoteHueScale) / Config.modChannelCountMax) * 256) % 360) + ","
+                let newNoteSecondary: string = "hsl(" + ((this.c_modSecondaryNoteHue + ((channel * this.c_modSecondaryNoteHueScale) / Config.modChannelCountMax) * 256) % colorFormulaModLimit) + ","
                     + (this.c_modSecondaryNoteSat + channel * this.c_modSecondaryNoteSatScale) + "%,"
                     + (this.c_modSecondaryNoteLum + channel * this.c_modSecondaryNoteLumScale) + "%)";
-                let newNotePrimary: string = "hsl(" + ((this.c_modPrimaryNoteHue + ((channel * this.c_modPrimaryNoteHueScale) / Config.modChannelCountMax) * 256) % 360) + ","
+                let newNotePrimary: string = "hsl(" + ((this.c_modPrimaryNoteHue + ((channel * this.c_modPrimaryNoteHueScale) / Config.modChannelCountMax) * 256) % colorFormulaModLimit) + ","
                     + (this.c_modPrimaryNoteSat + channel * this.c_modPrimaryNoteSatScale) + "%,"
                     + (this.c_modPrimaryNoteLum + channel * this.c_modPrimaryNoteLumScale) + "%)";
 
@@ -6469,16 +7143,16 @@ export class ColorConfig {
             default: {
 				// Pitch formula
 
-                let newChannelSecondary: string = "hsl(" + ((this.c_pitchSecondaryChannelHue + (channel * this.c_pitchSecondaryChannelHueScale / Config.pitchChannelCountMax) * 256) % 360) + ","
+                let newChannelSecondary: string = "hsl(" + ((this.c_pitchSecondaryChannelHue + (channel * this.c_pitchSecondaryChannelHueScale / Config.pitchChannelCountMax) * 256) % colorFormulaPitchLimit) + ","
                     + (this.c_pitchSecondaryChannelSat * (1 - (this.c_pitchSecondaryChannelSatScale * Math.floor(channel / 7)))) + "%,"
                     + (this.c_pitchSecondaryChannelLum * (1 - (this.c_pitchSecondaryChannelLumScale * Math.floor(channel / 7)))) + "%)";
-                let newChannelPrimary: string = "hsl(" + ((this.c_pitchPrimaryChannelHue + (channel * this.c_pitchPrimaryChannelHueScale / Config.pitchChannelCountMax) * 256) % 360) + ","
+                let newChannelPrimary: string = "hsl(" + ((this.c_pitchPrimaryChannelHue + (channel * this.c_pitchPrimaryChannelHueScale / Config.pitchChannelCountMax) * 256) % colorFormulaPitchLimit) + ","
                     + (this.c_pitchPrimaryChannelSat * (1 - (this.c_pitchPrimaryChannelSatScale * Math.floor(channel / 7)))) + "%,"
                     + (this.c_pitchPrimaryChannelLum * (1 - (this.c_pitchPrimaryChannelLumScale * Math.floor(channel / 7)))) + "%)";
-                let newNoteSecondary: string = "hsl(" + ((this.c_pitchSecondaryNoteHue + (channel * this.c_pitchSecondaryNoteHueScale / Config.pitchChannelCountMax) * 256) % 360) + ","
+                let newNoteSecondary: string = "hsl(" + ((this.c_pitchSecondaryNoteHue + (channel * this.c_pitchSecondaryNoteHueScale / Config.pitchChannelCountMax) * 256) % colorFormulaPitchLimit) + ","
                     + (this.c_pitchSecondaryNoteSat * (1 - (this.c_pitchSecondaryNoteSatScale * Math.floor(channel / 7)))) + "%,"
                     + (this.c_pitchSecondaryNoteLum * (1 - (this.c_pitchSecondaryNoteLumScale * Math.floor(channel / 7)))) + "%)";
-                let newNotePrimary: string = "hsl(" + ((this.c_pitchPrimaryNoteHue + (channel * this.c_pitchPrimaryNoteHueScale / Config.pitchChannelCountMax) * 256) % 360) + ","
+                let newNotePrimary: string = "hsl(" + ((this.c_pitchPrimaryNoteHue + (channel * this.c_pitchPrimaryNoteHueScale / Config.pitchChannelCountMax) * 256) % colorFormulaPitchLimit) + ","
                     + (this.c_pitchPrimaryNoteSat * (1 - (this.c_pitchPrimaryNoteSatScale * Math.floor(channel / 7)))) + "%,"
                     + (this.c_pitchPrimaryNoteLum * (1 - (this.c_pitchPrimaryNoteLumScale * Math.floor(channel / 7)))) + "%)";
 
@@ -6529,19 +7203,22 @@ export class ColorConfig {
             }
             else {
                 // Formulaic color definition
+				let colorFormulaPitchLimit: number = ColorConfig.getComputed("--formula-pitch-channel-limit") == "" ? 360 : Number(ColorConfig.getComputed("--formula-pitch-channel-limit"));
+				let colorFormulaNoiseLimit: number = ColorConfig.getComputed("--formula-noise-channel-limit") == "" ? 360 : Number(ColorConfig.getComputed("--formula-noise-channel-limit"));
+				let colorFormulaModLimit: number = ColorConfig.getComputed("--formula-mod-channel-limit") == "" ? 360 : Number(ColorConfig.getComputed("--formula-mod-channel-limit"));
                 if (channel < song.pitchChannelCount) {
                     // Pitch formula
 
-					let newChannelSecondary: string = "hsl(" + ((this.c_pitchSecondaryChannelHue + (channel * this.c_pitchSecondaryChannelHueScale / Config.pitchChannelCountMax) * 256) % 360) + ","
+					let newChannelSecondary: string = "hsl(" + ((this.c_pitchSecondaryChannelHue + (channel * this.c_pitchSecondaryChannelHueScale / Config.pitchChannelCountMax) * 256) % colorFormulaPitchLimit) + ","
 					+ (this.c_pitchSecondaryChannelSat * (1 - (this.c_pitchSecondaryChannelSatScale * Math.floor(channel / 9)))) + "%,"
 					+ (this.c_pitchSecondaryChannelLum * (1 - (this.c_pitchSecondaryChannelLumScale * Math.floor(channel / 9)))) + "%)";
-				let newChannelPrimary: string = "hsl(" + ((this.c_pitchPrimaryChannelHue + (channel * this.c_pitchPrimaryChannelHueScale / Config.pitchChannelCountMax) * 256) % 360) + ","
+				let newChannelPrimary: string = "hsl(" + ((this.c_pitchPrimaryChannelHue + (channel * this.c_pitchPrimaryChannelHueScale / Config.pitchChannelCountMax) * 256) % colorFormulaPitchLimit) + ","
 					+ (this.c_pitchPrimaryChannelSat * (1 - (this.c_pitchPrimaryChannelSatScale * Math.floor(channel / 9)))) + "%,"
 					+ (this.c_pitchPrimaryChannelLum * (1 - (this.c_pitchPrimaryChannelLumScale * Math.floor(channel / 9)))) + "%)";
-				let newNoteSecondary: string = "hsl(" + ((this.c_pitchSecondaryNoteHue + (channel * this.c_pitchSecondaryNoteHueScale / Config.pitchChannelCountMax) * 256) % 360) + ","
+				let newNoteSecondary: string = "hsl(" + ((this.c_pitchSecondaryNoteHue + (channel * this.c_pitchSecondaryNoteHueScale / Config.pitchChannelCountMax) * 256) % colorFormulaPitchLimit) + ","
 					+ (this.c_pitchSecondaryNoteSat * (1 - (this.c_pitchSecondaryNoteSatScale * Math.floor(channel / 9)))) + "%,"
 					+ (this.c_pitchSecondaryNoteLum * (1 - (this.c_pitchSecondaryNoteLumScale * Math.floor(channel / 9)))) + "%)";
-				let newNotePrimary: string = "hsl(" + ((this.c_pitchPrimaryNoteHue + (channel * this.c_pitchPrimaryNoteHueScale / Config.pitchChannelCountMax) * 256) % 360) + ","
+				let newNotePrimary: string = "hsl(" + ((this.c_pitchPrimaryNoteHue + (channel * this.c_pitchPrimaryNoteHueScale / Config.pitchChannelCountMax) * 256) % colorFormulaPitchLimit) + ","
 					+ (this.c_pitchPrimaryNoteSat * (1 - (this.c_pitchPrimaryNoteSatScale * Math.floor(channel / 9)))) + "%,"
 					+ (this.c_pitchPrimaryNoteLum * (1 - (this.c_pitchPrimaryNoteLumScale * Math.floor(channel / 9)))) + "%)";
 
@@ -6553,16 +7230,16 @@ export class ColorConfig {
                 else if (channel < song.pitchChannelCount + song.noiseChannelCount) {
                     // Noise formula
 					
-				let newChannelSecondary: string = "hsl(" + ((this.c_noiseSecondaryChannelHue + (((channel - song.pitchChannelCount) * this.c_noiseSecondaryChannelHueScale) / Config.noiseChannelCountMax) * 256) % 360) + ","
+				let newChannelSecondary: string = "hsl(" + ((this.c_noiseSecondaryChannelHue + (((channel - song.pitchChannelCount) * this.c_noiseSecondaryChannelHueScale) / Config.noiseChannelCountMax) * 256) % colorFormulaNoiseLimit) + ","
 					+ (this.c_noiseSecondaryChannelSat + channel * this.c_noiseSecondaryChannelSatScale) + "%,"
 					+ (this.c_noiseSecondaryChannelLum + channel * this.c_noiseSecondaryChannelLumScale) + "%)";
-				let newChannelPrimary: string = "hsl(" + ((this.c_noisePrimaryChannelHue + (((channel - song.pitchChannelCount) * this.c_noisePrimaryChannelHueScale) / Config.noiseChannelCountMax) * 256) % 360) + ","
+				let newChannelPrimary: string = "hsl(" + ((this.c_noisePrimaryChannelHue + (((channel - song.pitchChannelCount) * this.c_noisePrimaryChannelHueScale) / Config.noiseChannelCountMax) * 256) % colorFormulaNoiseLimit) + ","
 					+ (this.c_noisePrimaryChannelSat + channel * this.c_noisePrimaryChannelSatScale) + "%,"
 					+ (this.c_noisePrimaryChannelLum + channel * this.c_noisePrimaryChannelLumScale) + "%)";
-				let newNoteSecondary: string = "hsl(" + ((this.c_noiseSecondaryNoteHue + (((channel - song.pitchChannelCount) * this.c_noiseSecondaryNoteHueScale) / Config.noiseChannelCountMax) * 256) % 360) + ","
+				let newNoteSecondary: string = "hsl(" + ((this.c_noiseSecondaryNoteHue + (((channel - song.pitchChannelCount) * this.c_noiseSecondaryNoteHueScale) / Config.noiseChannelCountMax) * 256) % colorFormulaNoiseLimit) + ","
 					+ (this.c_noiseSecondaryNoteSat + channel * this.c_noiseSecondaryNoteSatScale) + "%,"
 					+ (this.c_noiseSecondaryNoteLum + channel * this.c_noiseSecondaryNoteLumScale) + "%)";
-				let newNotePrimary: string = "hsl(" + ((this.c_noisePrimaryNoteHue + (((channel - song.pitchChannelCount) * this.c_noisePrimaryNoteHueScale) / Config.noiseChannelCountMax) * 256) % 360) + ","
+				let newNotePrimary: string = "hsl(" + ((this.c_noisePrimaryNoteHue + (((channel - song.pitchChannelCount) * this.c_noisePrimaryNoteHueScale) / Config.noiseChannelCountMax) * 256) % colorFormulaNoiseLimit) + ","
 					+ (this.c_noisePrimaryNoteSat + channel * this.c_noisePrimaryNoteSatScale) + "%,"
 					+ (this.c_noisePrimaryNoteLum + channel * this.c_noisePrimaryNoteLumScale) + "%)";
 
@@ -6573,16 +7250,16 @@ export class ColorConfig {
                 else {
                     // Mod formula
 
-					let newChannelSecondary: string = "hsl(" + ((this.c_modSecondaryChannelHue + (((channel - song.pitchChannelCount - song.noiseChannelCount) * this.c_modSecondaryChannelHueScale) / Config.modChannelCountMax) * 256) % 360) + ","
+					let newChannelSecondary: string = "hsl(" + ((this.c_modSecondaryChannelHue + (((channel - song.pitchChannelCount - song.noiseChannelCount) * this.c_modSecondaryChannelHueScale) / Config.modChannelCountMax) * 256) % colorFormulaModLimit) + ","
 						+ (this.c_modSecondaryChannelSat + channel * this.c_modSecondaryChannelSatScale) + "%,"
 						+ (this.c_modSecondaryChannelLum + channel * this.c_modSecondaryChannelLumScale) + "%)";
-					let newChannelPrimary: string = "hsl(" + ((this.c_modPrimaryChannelHue + (((channel - song.pitchChannelCount - song.noiseChannelCount) * this.c_modPrimaryChannelHueScale) / Config.modChannelCountMax) * 256) % 360) + ","
+					let newChannelPrimary: string = "hsl(" + ((this.c_modPrimaryChannelHue + (((channel - song.pitchChannelCount - song.noiseChannelCount) * this.c_modPrimaryChannelHueScale) / Config.modChannelCountMax) * 256) % colorFormulaModLimit) + ","
 						+ (this.c_modPrimaryChannelSat + channel * this.c_modPrimaryChannelSatScale) + "%,"
 						+ (this.c_modPrimaryChannelLum + channel * this.c_modPrimaryChannelLumScale) + "%)";
-					let newNoteSecondary: string = "hsl(" + ((this.c_modSecondaryNoteHue + (((channel - song.pitchChannelCount - song.noiseChannelCount) * this.c_modSecondaryNoteHueScale) / Config.modChannelCountMax) * 256) % 360) + ","
+					let newNoteSecondary: string = "hsl(" + ((this.c_modSecondaryNoteHue + (((channel - song.pitchChannelCount - song.noiseChannelCount) * this.c_modSecondaryNoteHueScale) / Config.modChannelCountMax) * 256) % colorFormulaModLimit) + ","
 						+ (this.c_modSecondaryNoteSat + channel * this.c_modSecondaryNoteSatScale) + "%,"
 						+ (this.c_modSecondaryNoteLum + channel * this.c_modSecondaryNoteLumScale) + "%)";
-					let newNotePrimary: string = "hsl(" + ((this.c_modPrimaryNoteHue + (((channel - song.pitchChannelCount - song.noiseChannelCount) * this.c_modPrimaryNoteHueScale) / Config.modChannelCountMax) * 256) % 360) + ","
+					let newNotePrimary: string = "hsl(" + ((this.c_modPrimaryNoteHue + (((channel - song.pitchChannelCount - song.noiseChannelCount) * this.c_modPrimaryNoteHueScale) / Config.modChannelCountMax) * 256) % colorFormulaModLimit) + ","
 						+ (this.c_modPrimaryNoteSat + channel * this.c_modPrimaryNoteSatScale) + "%,"
 						+ (this.c_modPrimaryNoteLum + channel * this.c_modPrimaryNoteLumScale) + "%)";
 

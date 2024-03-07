@@ -19,6 +19,8 @@ export class Preferences {
 	public alwaysFineNoteVol: boolean;
 	public displayVolumeBar: boolean;
 	public instrumentCopyPaste: boolean;
+	public instrumentImportExport: boolean;
+	public instrumentButtonsAtTop: boolean;
 	public enableChannelMuting: boolean;
 	public colorTheme: string;
 	public layout: string;
@@ -34,8 +36,11 @@ export class Preferences {
 	public ignorePerformedNotesNotInScale: boolean;
 	public metronomeCountIn: boolean;
 	public metronomeWhileRecording: boolean;
+	public notesFlashWhenPlayed: boolean;
 	public showOscilloscope: boolean;
 	public showSampleLoadingStatus: boolean;
+	public showDescription: boolean;
+	public closePromptByClickoff: boolean;
 	
 	constructor() {
 		this.reload();
@@ -49,10 +54,12 @@ export class Preferences {
 		this.notesOutsideScale = window.localStorage.getItem("notesOutsideScale") == "true";
 		this.showLetters = window.localStorage.getItem("showLetters") == "true";
 		this.showChannels = window.localStorage.getItem("showChannels") == "true";
-		this.showScrollBar = window.localStorage.getItem("showScrollBar") == "true";
+		this.showScrollBar = window.localStorage.getItem("showScrollBar") != "false";
 		this.alwaysFineNoteVol = window.localStorage.getItem("alwaysFineNoteVol") == "true";
 		this.displayVolumeBar = window.localStorage.getItem("displayVolumeBar") == "true";
-		this.instrumentCopyPaste = window.localStorage.getItem("instrumentCopyPaste") == "true";
+		this.instrumentCopyPaste = window.localStorage.getItem("instrumentCopyPaste") != "false";
+		this.instrumentImportExport = window.localStorage.getItem("instrumentImportExport") == "true";
+		this.instrumentButtonsAtTop = window.localStorage.getItem("instrumentButtonsAtTop") == "true"
 		this.enableChannelMuting = window.localStorage.getItem("enableChannelMuting") == "true";
 		this.displayBrowserUrl = window.localStorage.getItem("displayBrowserUrl") != "false";
 		this.pressControlForShortcuts = window.localStorage.getItem("pressControlForShortcuts") == "true";
@@ -62,14 +69,17 @@ export class Preferences {
 		this.ignorePerformedNotesNotInScale = window.localStorage.getItem("ignorePerformedNotesNotInScale") == "true";
 		this.metronomeCountIn = window.localStorage.getItem("metronomeCountIn") != "false";
 		this.metronomeWhileRecording = window.localStorage.getItem("metronomeWhileRecording") != "false";
+		this.notesFlashWhenPlayed = window.localStorage.getItem("notesFlashWhenPlayed") == "true";
 		this.showOscilloscope = window.localStorage.getItem("showOscilloscope") != "false";
 		this.showSampleLoadingStatus = window.localStorage.getItem("showSampleLoadingStatus") != "false";
+		this.showDescription = window.localStorage.getItem("showDescription") != "false";
+		this.closePromptByClickoff = window.localStorage.getItem("closePromptByClickoff") == "true";
 		this.keyboardLayout = window.localStorage.getItem("keyboardLayout") || "wickiHayden";
 		this.bassOffset = (+(<any>window.localStorage.getItem("bassOffset"))) || 0;
 		this.layout = window.localStorage.getItem("layout") || "small";
 		this.colorTheme = window.localStorage.getItem("colorTheme") || "dark classic";
 		this.customTheme = window.localStorage.getItem("customTheme");
-                this.customTheme2 = window.localStorage.getItem("customTheme2");
+        this.customTheme2 = window.localStorage.getItem("customTheme2");
 		this.visibleOctaves = ((<any>window.localStorage.getItem("visibleOctaves")) >>> 0) || Preferences.defaultVisibleOctaves;
 		
 		const defaultScale: Scale | undefined = Config.scales.dictionary[window.localStorage.getItem("defaultScale")!];
@@ -99,6 +109,8 @@ export class Preferences {
 		window.localStorage.setItem("displayVolumeBar", this.displayVolumeBar ? "true" : "false");
 		window.localStorage.setItem("enableChannelMuting", this.enableChannelMuting ? "true" : "false");
 		window.localStorage.setItem("instrumentCopyPaste", this.instrumentCopyPaste ? "true" : "false");
+		window.localStorage.setItem("instrumentImportExport", this.instrumentImportExport ? "true" : "false");
+		window.localStorage.setItem("instrumentButtonsAtTop", this.instrumentButtonsAtTop ? "true" : "false");
 		window.localStorage.setItem("displayBrowserUrl", this.displayBrowserUrl ? "true" : "false");
 		window.localStorage.setItem("pressControlForShortcuts", this.pressControlForShortcuts ? "true" : "false");
 		window.localStorage.setItem("enableMidi", this.enableMidi ? "true" : "false");
@@ -107,8 +119,11 @@ export class Preferences {
 		window.localStorage.setItem("ignorePerformedNotesNotInScale", this.ignorePerformedNotesNotInScale ? "true" : "false");
 		window.localStorage.setItem("metronomeCountIn", this.metronomeCountIn ? "true" : "false");
 		window.localStorage.setItem("metronomeWhileRecording", this.metronomeWhileRecording ? "true" : "false");
+		window.localStorage.setItem("notesFlashWhenPlayed", this.notesFlashWhenPlayed ? "true" : "false");
 		window.localStorage.setItem("showOscilloscope", this.showOscilloscope ? "true" : "false");
 		window.localStorage.setItem("showSampleLoadingStatus", this.showSampleLoadingStatus ? "true" : "false");
+		window.localStorage.setItem("showDescription", this.showDescription ? "true" : "false");
+		window.localStorage.setItem("closePromptByClickoff", this.closePromptByClickoff ? "true" : "false");
 		window.localStorage.setItem("keyboardLayout", this.keyboardLayout);
 		window.localStorage.setItem("bassOffset", String(this.bassOffset));
 		window.localStorage.setItem("layout", this.layout);

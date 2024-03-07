@@ -337,6 +337,8 @@ export function startLoadingSample(url: string, chipWaveIndex: number, presetSet
     const chipWave = Config.chipWaves[chipWaveIndex];
     const rawChipWave = Config.rawChipWaves[chipWaveIndex];
     const rawRawChipWave = Config.rawRawChipWaves[chipWaveIndex];
+    // UB Offline local sample uploading (theoretically could have other uses as well)
+    if (url.slice(0, 5) === "file:") url = "http://" + window.location.host + "/" + url.slice(5);
     fetch(url).then((response) => {
 	if (!response.ok) {
 	    // @TODO: Be specific with the error handling.
@@ -833,6 +835,8 @@ export class Config {
     public static releaseVal: number = 0.25;
 
     public static willReloadForCustomSamples: boolean = false;
+
+    public static jsonFormat: string = "UltraBox";
 
     public static readonly scales: DictionaryArray<Scale> = toNameMap([
 
@@ -1343,10 +1347,11 @@ export class Config {
         { name: "rise 1", type: EnvelopeType.rise, speed: 32.0 },
         { name: "rise 2", type: EnvelopeType.rise, speed: 8.0 },
         { name: "rise 3", type: EnvelopeType.rise, speed: 2.0 },
-	    		{ name: "flute 1", type: 9, speed: 16.0 },
+	    		//modbox
+        { name: "flute 1", type: 9, speed: 16.0 },
 		{ name: "flute 2", type: 9, speed: 8.0 },
 		{ name: "flute 3", type: 9, speed: 4.0 },
-		//modbox
+        // sandbox
 		{ name: "tripolo1", type: 6, speed: 9.0 },
         { name: "tripolo2", type: 6, speed: 6.0 },
         { name: "tripolo3", type: 6, speed: 3.0 },
@@ -1359,11 +1364,11 @@ export class Config {
         { name: "pentolo4", type: 7, speed: 10.0 },
         { name: "pentolo5", type: 7, speed: 5.0 },
         { name: "pentolo6", type: 7, speed: 2.5 },	
-		//sandbox
+        // todbox
 	    { name: "flutter 1", type: 6, speed: 14.0 },
         { name: "flutter 2", type: 7, speed: 11.0 },
         { name: "water-y flutter", type: 6, speed: 9.0 },
-	    //todbox
+	    // new jummbox
         { name: "blip 1", type: EnvelopeType.blip, speed: 6.0 },
         { name: "blip 2", type: EnvelopeType.blip, speed: 16.0 },
         { name: "blip 3", type: EnvelopeType.blip, speed: 32.0 },
@@ -1619,7 +1624,7 @@ export class Config {
         { name: "echo delay", pianoName: "Echo Delay", maxRawVol: Config.echoDelayRange, newNoteVol: 0, forSong: false, convertRealFactor: 0, associatedEffect: EffectType.length,
             promptName: "Instrument Echo Delay", promptDesc: ["This setting controls the echo delay of your instrument, just like the echo delay slider.", "At $LO, your instrument will have very little echo delay, and this increases up to 2 beats of delay at $HI.", "[OVERWRITING] [$LO - $HI] [~beats ÷12]" ]
         }, // Disabled via associatedEffect and manually in list build in SongEditor, enable and set back to echo after fixing bugginess!
-        { name: "chorus", pianoName: "Chorus", maxRawVol: Config.chorusRange, newNoteVol: 0, forSong: false, convertRealFactor: 0, associatedEffect: EffectType.chorus,
+        { name: "chorus", pianoName: "Chorus", maxRawVol: Config.chorusRange - 1, newNoteVol: 0, forSong: false, convertRealFactor: 0, associatedEffect: EffectType.chorus,
             promptName: "Instrument Chorus", promptDesc: ["This setting controls the chorus strength of your instrument, just like the chorus slider.", "At $LO, the chorus effect will be disabled. The strength of the chorus effect increases up to the max value, $HI.", "[OVERWRITING] [$LO - $HI]"] },
         { name: "eq filt cut", pianoName: "EQFlt Cut", maxRawVol: Config.filterSimpleCutRange - 1, newNoteVol: Config.filterSimpleCutRange - 1, forSong: false, convertRealFactor: 0, associatedEffect: EffectType.length,
             promptName: "EQ Filter Cutoff Frequency", promptDesc: ["This setting controls the filter cut position of your instrument, just like the filter cut slider.", "This setting is roughly analagous to the horizontal position of a single low-pass dot on the advanced filter editor. At lower values, a wider range of frequencies is cut off.", "[OVERWRITING] [$LO - $HI]"] },

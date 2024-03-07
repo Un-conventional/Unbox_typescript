@@ -1712,7 +1712,7 @@ export class Instrument {
         let noCarriersControlledByNoteSize: boolean = true;
         let allCarriersControlledByNoteSize: boolean = true;
         let noteSizeControlsSomethingElse: boolean = (legacyFilterEnv.type == EnvelopeType.noteSize) || (legacyPulseEnv.type == EnvelopeType.noteSize);
-        if (this.type == InstrumentType.fm) {
+        if (this.type == InstrumentType.fm || this.type == InstrumentType.fm6op) {
             noteSizeControlsSomethingElse = noteSizeControlsSomethingElse || (legacyFeedbackEnv.type == EnvelopeType.noteSize);
             for (let i: number = 0; i < legacyOperatorEnvelopes.length; i++) {
                 if (i < carrierCount) {
@@ -1729,7 +1729,7 @@ export class Instrument {
 
         this.envelopeCount = 0;
 
-        if (this.type == InstrumentType.fm) {
+        if (this.type == InstrumentType.fm || this.type == InstrumentType.fm6op) {
             if (allCarriersControlledByNoteSize && noteSizeControlsSomethingElse) {
                 this.addEnvelope(Config.instrumentAutomationTargets.dictionary["noteVolume"].index, 0, Config.envelopes.dictionary["note size"].index);
             } else if (noCarriersControlledByNoteSize && !noteSizeControlsSomethingElse) {
@@ -2048,10 +2048,12 @@ export class Instrument {
     }
 
 
-    public fromJsonObject(instrumentObject: any, isNoiseChannel: boolean, isModChannel: boolean, useSlowerRhythm: boolean, useFastTwoNoteArp: boolean, legacyGlobalReverb: number = 0): void {
+    public fromJsonObject(instrumentObject: any, isNoiseChannel: boolean, isModChannel: boolean, useSlowerRhythm: boolean, useFastTwoNoteArp: boolean, legacyGlobalReverb: number = 0, jsonFormat: string = Config.jsonFormat): void {
         if (instrumentObject == undefined) instrumentObject = {};
 
         let type: InstrumentType = Config.instrumentTypeNames.indexOf(instrumentObject["type"]);
+        // SynthBox support
+        if ((jsonFormat == "SynthBox") && (instrumentObject["type"] == "FM")) type = Config.instrumentTypeNames.indexOf("FM6op");
         if (<any>type == -1) type = isModChannel ? InstrumentType.mod : (isNoiseChannel ? InstrumentType.noise : InstrumentType.chip);
         this.setTypeAndReset(type, isNoiseChannel, isModChannel);
 
@@ -2062,7 +2064,11 @@ export class Instrument {
         }
 
         if (instrumentObject["volume"] != undefined) {
-            this.volume = clamp(-Config.volumeRange / 2, (Config.volumeRange / 2) + 1, instrumentObject["volume"] | 0);
+            if (jsonFormat == "JummBox" || jsonFormat == "SynthBox" || jsonFormat == "UltraBox") {
+                this.volume = clamp(-Config.volumeRange / 2, (Config.volumeRange / 2) + 1, instrumentObject["volume"] | 0);
+            } else {
+                this.volume = Math.round(-clamp(0, 8, Math.round(5 - (instrumentObject["volume"] | 0) / 20)) * 25.0 / 7.0);
+            }
         } else {
             this.volume = 0;
         }
@@ -2163,7 +2169,7 @@ export class Instrument {
         this.unison = Config.unisons.dictionary["none"].index; // default value.
         const unisonProperty: any = instrumentObject["unison"] || instrumentObject["interval"] || instrumentObject["chorus"]; // The unison property has gone by various names in the past.
         if (unisonProperty != undefined) {
-            const legacyChorusNames: Dictionary<string> = { "union": "none", "fifths": "fifth", "octaves": "octave" };
+            const legacyChorusNames: Dictionary<string> = { "union": "none", "fifths": "fifth", "octaves": "octave", "error": "voiced" };
             const unison: Unison | undefined = Config.unisons.dictionary[legacyChorusNames[unisonProperty]] || Config.unisons.dictionary[unisonProperty];
             if (unison != undefined) this.unison = unison.index;
             if (unisonProperty == "custom") this.unison = Config.unisons.length;
@@ -2187,6 +2193,23 @@ export class Instrument {
 
         if (instrumentObject["pitchShiftSemitones"] != undefined) {
             this.pitchShift = clamp(0, Config.pitchShiftRange, Math.round(+instrumentObject["pitchShiftSemitones"]));
+        }
+        // modbox pitch shift, known in that mod as "octave offset"
+        if (instrumentObject["octoff"] != undefined) {
+            let potentialPitchShift: string = instrumentObject["octoff"];
+            this.effects = (this.effects | (1 << EffectType.pitchShift));
+            
+            if ((potentialPitchShift == "+1 (octave)") || (potentialPitchShift == "+2 (2 octaves)")) {
+                this.pitchShift = 24;
+            } else if ((potentialPitchShift == "+1/2 (fifth)") || (potentialPitchShift == "+1 1/2 (octave and fifth)")) {
+                this.pitchShift = 18;
+            } else if ((potentialPitchShift == "-1 (octave)") || (potentialPitchShift == "-2 (2 octaves)")) {
+                this.pitchShift = 0;
+            } else if ((potentialPitchShift == "-1/2 (fifth)") || (potentialPitchShift == "-1 1/2 (octave and fifth)")) {
+                this.pitchShift = 6;
+            } else {
+                this.pitchShift = 12;
+            }
         }
         if (instrumentObject["detuneCents"] != undefined) {
             this.detune = clamp(Config.detuneMin, Config.detuneMax + 1, Math.round(Synth.centsToDetune(+instrumentObject["detuneCents"])));
@@ -2314,6 +2337,7 @@ export class Instrument {
         if (instrumentObject["spectrum"] != undefined) {
             for (let i: number = 0; i < Config.spectrumControlPoints; i++) {
                 this.spectrumWave.spectrum[i] = Math.max(0, Math.min(Config.spectrumMax, Math.round(Config.spectrumMax * (+instrumentObject["spectrum"][i]) / 100)));
+                this.spectrumWave.markCustomWaveDirty();
             }
         } else {
             this.spectrumWave.reset(isNoiseChannel);
@@ -2404,11 +2428,49 @@ export class Instrument {
                     this.customAlgorithm.fromPreset(this.algorithm6Op);
                 }
                 this.feedbackType6Op = Config.feedbacks6Op.findIndex(feedback6Op => feedback6Op.name == instrumentObject["feedbackType"]);
-                if (this.feedbackType6Op == -1) this.feedbackType6Op = 1;
-                if(this.feedbackType6Op == 0) {
-                    this.customFeedbackType.set(instrumentObject["customFeedback"]["mods"]);
-                }else{
-                    this.customFeedbackType.fromPreset(this.feedbackType6Op)
+                // SynthBox feedback support
+                if ((this.feedbackType6Op == -1) && (jsonFormat == "SynthBox")) {
+                    this.feedbackType6Op = Config.algorithms6Op.findIndex(feedbackType6Op => feedbackType6Op.name == "Custom");
+                    
+                    // These are all of the SynthBox feedback presets that aren't present in Gold/UltraBox
+                    let synthboxLegacyFeedbacks: DictionaryArray<any> = toNameMap([
+                        { name: "2⟲ 3⟲", indices: [[], [2], [3], [], [], []] },
+                        { name: "4⟲ 5⟲", indices: [[], [], [], [4], [5], []] },
+                        { name: "5⟲ 6⟲", indices: [[], [], [], [], [5], [6]] },
+                        { name: "1⟲ 6⟲", indices: [[1], [], [], [], [], [6]] },
+                        { name: "1⟲ 3⟲", indices: [[1], [], [3], [], [], []] },
+                        { name: "1⟲ 4⟲", indices: [[1], [], [], [4], [], []] },
+                        { name: "1⟲ 5⟲", indices: [[1], [], [], [], [5], []] },
+                        { name: "4⟲ 6⟲", indices: [[], [], [], [4], [], [6]] },
+                        { name: "2⟲ 6⟲", indices: [[], [2], [], [], [], [6]] },
+                        { name: "3⟲ 6⟲", indices: [[], [], [3], [], [], [6]] },
+                        { name: "4⟲ 5⟲ 6⟲", indices: [[], [], [], [4], [5], [6]] },
+                        { name: "1⟲ 3⟲ 6⟲", indices: [[1], [], [3], [], [], [6]] },
+                        { name: "2→5", indices: [[], [], [], [], [2], []] },
+                        { name: "2→6", indices: [[], [], [], [], [], [2]] },
+                        { name: "3→5", indices: [[], [], [], [], [3], []] },
+                        { name: "3→6", indices: [[], [], [], [], [], [3]] },
+                        { name: "4→6", indices: [[], [], [], [], [], [4]] },
+                        { name: "5→6", indices: [[], [], [], [], [], [5]] },
+                        { name: "1→3→4", indices: [[], [], [1], [], [3], []] },
+                        { name: "2→5→6", indices: [[], [], [], [], [2], [5]] },
+                        { name: "2→4→6", indices: [[], [], [], [2], [], [4]] },
+                        { name: "4→5→6", indices: [[], [], [], [], [4], [5]] },
+                        { name: "3→4→5→6", indices: [[], [], [], [3], [4], [5]] },
+                        { name: "2→3→4→5→6", indices: [[], [1], [2], [3], [4], [5]] },
+                        { name: "1→2→3→4→5→6", indices: [[], [1], [2], [3], [4], [5]] },
+                    ]);
+
+                    let synthboxFeedbackType = synthboxLegacyFeedbacks[synthboxLegacyFeedbacks.findIndex(feedback => feedback.name == instrumentObject["feedbackType"])].indices;
+                    
+                    this.customFeedbackType.set(synthboxFeedbackType);
+                } else {
+                    if (this.feedbackType6Op == -1) this.feedbackType6Op = 1;
+                    if (this.feedbackType6Op == 0) {
+                        this.customFeedbackType.set(instrumentObject["customFeedback"]["mods"]);
+                    } else {
+                        this.customFeedbackType.fromPreset(this.feedbackType6Op)
+                    }
                 }
             }
             if (instrumentObject["feedbackAmplitude"] != undefined) {
@@ -2518,7 +2580,14 @@ export class Instrument {
                 this.aliases = instrumentObject["aliases"];
             }
             else {
-                this.aliases = false;
+                // modbox had no anti-aliasing, so enable it for everything if that mode is selected
+                if (jsonFormat == "ModBox") {
+                    this.effects = (this.effects | (1 << EffectType.distortion));
+                    this.aliases = true;
+                    this.distortion = 0;
+                } else {
+                    this.aliases = false;
+                }
             }
 
             if (instrumentObject["noteFilterType"] != undefined) {
@@ -2577,7 +2646,7 @@ export class Instrument {
                 legacySettings.feedbackEnvelope = getEnvelope(instrumentObject["feedbackEnvelope"]);
                 if (Array.isArray(instrumentObject["operators"])) {
                     legacySettings.operatorEnvelopes = [];
-                    for (let j: number = 0; j < Config.operatorCount; j++) {
+                    for (let j: number = 0; j < Config.operatorCount + (this.type == InstrumentType.fm6op?2:0); j++) {
                         let envelope: Envelope | undefined;
                         if (instrumentObject["operators"][j] != undefined) {
                             envelope = getEnvelope(instrumentObject["operators"][j]["envelope"]);
@@ -2746,7 +2815,7 @@ export class Channel {
 }
 
 export class Song {
-    private static readonly _format: string = "UltraBox";
+    private static readonly _format: string = Config.jsonFormat;
     private static readonly _oldestBeepboxVersion: number = 2;
     private static readonly _latestBeepboxVersion: number = 9;
     private static readonly _oldestJummBoxVersion: number = 1;
@@ -3617,7 +3686,7 @@ export class Song {
         return Config.envelopes[clamp(0, Config.envelopes.length, legacyIndex)];
     }
 
-    public fromBase64String(compressed: string): void {
+    public fromBase64String(compressed: string, jsonFormat: string = "auto"): void {
         if (compressed == null || compressed == "") {
             Song._clearSamples();
 
@@ -3631,7 +3700,7 @@ export class Song {
         if (compressed.charCodeAt(charIndex) == CharCode.HASH) charIndex++;
         // if it starts with curly brace, treat it as JSON.
         if (compressed.charCodeAt(charIndex) == CharCode.LEFT_CURLY_BRACE) {
-            this.fromJsonObject(JSON.parse(charIndex == 0 ? compressed : compressed.substring(charIndex)));
+            this.fromJsonObject(JSON.parse(charIndex == 0 ? compressed : compressed.substring(charIndex)), jsonFormat);
             return;
         }
 
@@ -3639,7 +3708,10 @@ export class Song {
         let fromBeepBox: boolean;
         let fromJummBox: boolean;
         let fromGoldBox: boolean;
-	let fromUltraBox: boolean;
+	    let fromUltraBox: boolean;
+        // let fromMidbox: boolean;
+        // let fromDogebox2: boolean;
+        // let fromAbyssBox: boolean;
 
         // Detect variant here. If version doesn't match known variant, assume it is a vanilla string which does not report variant.
         if (variantTest == 0x6A) { //"j"
@@ -3659,6 +3731,14 @@ export class Song {
                 fromJummBox = false;
                 fromGoldBox = false;
 		        fromUltraBox = true;
+                charIndex++;
+        } else if (variantTest == 0x64) { //"d" 
+                fromBeepBox = false;
+                fromJummBox = true;
+                fromGoldBox = false;
+		        fromUltraBox = false;
+                // to-do: add explicit dogebox2 support
+                //fromDogeBox2 = true;
                 charIndex++;
             } else {
             fromBeepBox = true;
@@ -4023,7 +4103,7 @@ export class Song {
                     }
                 }
                 // Similar story here, JB before v5 had custom chip and mod before supersaw was added. Index +1.
-                else if ((fromJummBox && beforeSix) || (fromUltraBox && beforeFive) ) {
+                else if ((fromJummBox && beforeSix) || (fromGoldBox && !beforeFour) || (fromUltraBox && beforeFive) ) {
                     if (instrumentType == InstrumentType.supersaw || instrumentType == InstrumentType.customChipWave || instrumentType == InstrumentType.mod) {
                         instrumentType += 1;
                     }
@@ -4031,7 +4111,7 @@ export class Song {
                 instrument.setTypeAndReset(instrumentType, instrumentChannelIterator >= this.pitchChannelCount && instrumentChannelIterator < this.pitchChannelCount + this.noiseChannelCount, instrumentChannelIterator >= this.pitchChannelCount + this.noiseChannelCount);
 
                 // Anti-aliasing was added in BeepBox 3.0 (v6->v7) and JummBox 1.3 (v1->v2 roughly but some leakage possible)
-                if (((beforeSeven && fromBeepBox) || (beforeTwo && fromJummBox)) && (instrumentType == InstrumentType.chip || instrumentType == InstrumentType.customChipWave || instrumentType == InstrumentType.pwm || instrumentType == InstrumentType.dutyCycle)) {
+                if (((beforeSeven && fromBeepBox) || (beforeTwo && fromJummBox)) && (instrumentType == InstrumentType.chip || instrumentType == InstrumentType.customChipWave || instrumentType == InstrumentType.pwm)) {
                     instrument.aliases = true;
                     instrument.distortion = 0;
                     instrument.effects |= 1 << EffectType.distortion;
@@ -5087,7 +5167,8 @@ export class Song {
                     legacySettings.operatorEnvelopes = [];
                     for (let o: number = 0; o < (instrument.type == InstrumentType.fm6op ? 6 : Config.operatorCount); o++) {
                         let aa:number = base64CharCodeToInt[compressed.charCodeAt(charIndex++)];
-                        if ((beforeTwo && fromGoldBox) || (!fromGoldBox && !fromUltraBox)) aa = pregoldToEnvelope[aa];
+                        if ((beforeTwo && fromGoldBox) || (fromBeepBox)) aa = pregoldToEnvelope[aa];
+                        if (fromJummBox) aa = jummToUltraEnvelope[aa];
                         legacySettings.operatorEnvelopes[o] = Song._envelopeFromLegacyIndex(aa);
                     }
                     instrument.convertLegacySettings(legacySettings, forceSimpleFilter);
@@ -5107,7 +5188,7 @@ export class Song {
                         }
                         let aa:number = base64CharCodeToInt[compressed.charCodeAt(charIndex++)];
                         if ((beforeTwo && fromGoldBox) || (fromBeepBox)) aa = pregoldToEnvelope[aa]; 
-                        if (fromJummBox && !beforeSix) aa = jummToUltraEnvelope[aa];
+                        if (fromJummBox) aa = jummToUltraEnvelope[aa];
                         const envelope: number = clamp(0, Config.envelopes.length, aa);
                         instrument.addEnvelope(target, index, envelope);
                     }
@@ -6005,24 +6086,17 @@ export class Song {
         return result;
     }
 
-    public fromJsonObject(jsonObject: any): void {
+    public fromJsonObject(jsonObject: any, jsonFormat: string = "auto"): void {
         this.initToDefault(true);
         if (!jsonObject) return;
 
         //const version: number = jsonObject["version"] | 0;
         //if (version > Song._latestVersion) return; // Go ahead and try to parse something from the future I guess? JSON is pretty easy-going!
+        const format: string = jsonFormat == "auto" ? jsonObject["format"] : jsonFormat;
 
         if (jsonObject["name"] != undefined) {
             this.title = jsonObject["name"];
         }
-
-	    			// if (jsonObject["customSamples"] != undefined && EditorConfig.customSamples == undefined) {
-                // EditorConfig.customSamples = atob(jsonObject["customSamples"]);
-				// console.log(EditorConfig.customSamples);
-				// location.reload(); 
-            // }
-			//jsonmark
-			//this doesn't work
 
         if (jsonObject["customSamples"] != undefined) {
             const customSamples: string[] = jsonObject["customSamples"];
@@ -6546,7 +6620,7 @@ export class Song {
                         if (i >= this.getMaxInstrumentsPerChannel()) break;
                         const instrument: Instrument = new Instrument(isNoiseChannel, isModChannel);
                         channel.instruments[i] = instrument;
-                        instrument.fromJsonObject(instrumentObjects[i], isNoiseChannel, isModChannel, false, false, legacyGlobalReverb);
+                        instrument.fromJsonObject(instrumentObjects[i], isNoiseChannel, isModChannel, false, false, legacyGlobalReverb, format);
                     }
 
                 }
@@ -6905,7 +6979,7 @@ class EnvelopeComputer {
                 this._noteSizeFinal = Config.noteSizeMax;
             }
         }
-        const tickTimeEnd: number = tickTimeStart + 1.0;
+        const tickTimeEnd: number = tickTimeStart + timeScale;
         const tickTimeEndReal: number = tickTimeStartReal + 1.0;
         const noteSecondsStart: number = this.noteSecondsEnd;
         const noteSecondsEnd: number = noteSecondsStart + secondsPerTick;
@@ -7446,10 +7520,6 @@ class InstrumentState {
 
         this.volumeScale = 1.0;
         this.aliases = false;
-        this.vibratoTime = 0.0;
-        this.nextVibratoTime = 0.0;
-        this.arpTime = 0.0;
-        this.envelopeTime = 0.0;
 
         this.awake = false;
         this.flushingDelayLines = false;
@@ -7460,6 +7530,11 @@ class InstrumentState {
 
     public resetAllEffects(): void {
         this.deactivate();
+        // LFOs are reset here rather than in deactivate() for periodic oscillation that stays "on the beat". Resetting in deactivate() will cause it to reset with each note.
+        this.vibratoTime = 0;
+        this.nextVibratoTime = 0;
+        this.arpTime = 0;
+        this.envelopeTime = 0;
 
         if (this.chorusDelayLineDirty) {
             for (let i: number = 0; i < this.chorusDelayLineL!.length; i++) this.chorusDelayLineL![i] = 0.0;
@@ -8070,7 +8145,6 @@ export class Synth {
         this.isPlayingSong = true;
         this.synthesize(dummyArray, dummyArray, 1, true);
         this.isPlayingSong = false;
-		//BUGFIX FROM JUMMBOX
     }
 
     public computeLatestModValues(): void {
@@ -8352,7 +8426,8 @@ export class Synth {
     public static readonly tempFilterEndCoefficients: FilterCoefficients = new FilterCoefficients();
     private tempDrumSetControlPoint: FilterControlPoint = new FilterControlPoint();
     public tempFrequencyResponse: FrequencyResponse = new FrequencyResponse();
-    public loopBar: number = -1;
+    public loopBarStart: number = -1;
+    public loopBarEnd: number = -1;
 
     private static readonly fmSynthFunctionCache: Dictionary<Function> = {};
     private static readonly fm6SynthFunctionCache: Dictionary<Function> = {};
@@ -8915,10 +8990,10 @@ export class Synth {
             if (nextBar >= this.song!.barCount) {
                 nextBar = this.song!.barCount - 1;
             }
-        } else if (this.bar == this.loopBar && !this.renderingSong) {
-            nextBar = this.bar;
+        } else if (this.bar == this.loopBarEnd && !this.renderingSong) {
+            nextBar = this.loopBarStart;
         }
-        else if (this.loopRepeatCount != 0 && nextBar == this.song!.loopStart + this.song!.loopLength) {
+        else if (this.loopRepeatCount != 0 && nextBar == Math.max(this.loopBarEnd+1, this.song!.loopStart + this.song!.loopLength)) {
             nextBar = this.song!.loopStart;
         }
         return nextBar;
@@ -8927,16 +9002,25 @@ export class Synth {
     public skipBar(): void {
         if (!this.song) return;
         const samplesPerTick: number = this.getSamplesPerTick();
-        this.bar++;
+        if (this.loopBarEnd != this.bar)
+            this.bar++;
+        else {
+            this.bar = this.loopBarStart;
+        }
         this.beat = 0;
         this.part = 0;
         this.tick = 0;
         this.tickSampleCountdown = samplesPerTick;
 	    			this.isAtStartOfTick = true;
+	    			this.isAtStartOfTick = true;
+			//BUGFIX FROM JUMMBOX
+	    this.isAtStartOfTick = true;
 			//BUGFIX FROM JUMMBOX
 
-        if (this.loopRepeatCount != 0 && this.bar == this.song.loopStart + this.song.loopLength) {
+        if (this.loopRepeatCount != 0 && this.bar == Math.max(this.song.loopStart + this.song.loopLength, this.loopBarEnd)) {
             this.bar = this.song.loopStart;
+            if (this.loopBarStart != -1)
+                this.bar = this.loopBarStart;
             if (this.loopRepeatCount > 0) this.loopRepeatCount--;
         }
 
@@ -9035,7 +9119,6 @@ export class Synth {
         let limit: number = +this.limit;
 	    			let skippedBars = [];
         let firstSkippedBufferIndex = -1;
-		//BUGFIX FROM JUMMBOX
 
         let bufferIndex: number = 0;
         while (bufferIndex < outputBufferLength && !ended) {
@@ -9107,17 +9190,21 @@ export class Synth {
 		    					// Unable to continue, as we have skipped back to a previously visited bar without generating new samples, which means we are infinitely skipping.
                 // In this case processing will return before the designated number of samples are processed. In other words, silence will be generated.
                 let barVisited = skippedBars.includes(this.bar);
-                if (barVisited && bufferIndex == firstSkippedBufferIndex)
+                if (barVisited && bufferIndex == firstSkippedBufferIndex) {
+                    this.pause();
                     return;
+                }
                 if (firstSkippedBufferIndex == -1) {
                     firstSkippedBufferIndex = bufferIndex;
                 }
                 if (!barVisited)
                     skippedBars.push(this.bar);
-				//BUGFIX FROM JUMMBOX
                 this.wantToSkip = false;
                 this.skipBar();
 		    					continue;
+		    					continue;
+					//BUGFIX FROM JUMMBOX
+		    	continue;
 					//BUGFIX FROM JUMMBOX
             }
 
@@ -10221,7 +10308,8 @@ export class Synth {
 
         if ((tone.atNoteStart && !transition.isSeamless && !tone.forceContinueAtStart) || tone.freshlyAllocated) {
             tone.reset();
-						 // advloop addition
+			    // advloop addition
+            if (instrument.type == InstrumentType.chip && instrument.isUsingAdvancedLoopControls) {
                 const chipWaveLength = Config.rawRawChipWaves[instrument.chipWave].samples.length - 1;
                 const firstOffset = instrument.chipWaveStartOffset / chipWaveLength;
                 // const lastOffset = (chipWaveLength - 0.01) / chipWaveLength;
@@ -10236,7 +10324,7 @@ export class Synth {
                     tone.chipWavePrevWaves[i] = 0;
                     tone.chipWaveCompletionsLastWave[i] = 0;
                 }
-                // console.log(tone.directions);
+            }
                 // advloop addition
         }
         tone.freshlyAllocated = false;
@@ -10360,7 +10448,13 @@ export class Synth {
         const envelopeComputer: EnvelopeComputer = tone.envelopeComputer;
         let useEnvelopeSpeed: number = Config.arpSpeedScale[instrument.envelopeSpeed];
         if (this.isModActive(Config.modulators.dictionary["envelope speed"].index, channelIndex, tone.instrumentIndex)) {
-            useEnvelopeSpeed = Math.max(0, this.getModValue(Config.modulators.dictionary["envelope speed"].index, channelIndex, tone.instrumentIndex, false));
+            useEnvelopeSpeed = Math.max(0, Math.min(Config.arpSpeedScale.length - 1, this.getModValue(Config.modulators.dictionary["envelope speed"].index, channelIndex, tone.instrumentIndex, false)));
+            if (Number.isInteger(useEnvelopeSpeed)) {
+                useEnvelopeSpeed = Config.arpSpeedScale[useEnvelopeSpeed];
+            } else {
+                // Linear interpolate envelope values
+                useEnvelopeSpeed = (1 - (useEnvelopeSpeed % 1)) * Config.arpSpeedScale[Math.floor(useEnvelopeSpeed)] + (useEnvelopeSpeed % 1) * Config.arpSpeedScale[Math.ceil(useEnvelopeSpeed)];
+            }
         }
         envelopeComputer.computeEnvelopes(instrument, currentPart, instrumentState.envelopeTime, Config.ticksPerPart * partTimeStart, samplesPerTick / this.samplesPerSecond, tone, useEnvelopeSpeed);
         const envelopeStarts: number[] = tone.envelopeComputer.envelopeStarts;
@@ -11595,7 +11689,6 @@ export class Synth {
         const volumeScale = instrumentState.volumeScale;
 
         const waveLength = (aliases && instrumentState.type == 8) ? wave.length : wave.length - 1;
-			//BUGFIX FROM JUMMBOX
 
         const unisonSign: number = tone.specialIntervalExpressionMult * instrumentState.unisonSign;
         if (instrumentState.unisonVoices == 1 && !instrumentState.chord!.customInterval) tone.phases[1] = tone.phases[0];
@@ -11662,7 +11755,6 @@ export class Synth {
             }
 
             const sample: number = applyFilters(inputSample * volumeScale, initialFilterInput1, initialFilterInput2, filterCount, filters);
-		//BUGFIX FROM JUMMBOX
             initialFilterInput2 = initialFilterInput1;
             initialFilterInput1 = inputSample * volumeScale;
 
@@ -11670,7 +11762,6 @@ export class Synth {
             phaseDeltaB *= phaseDeltaScaleB;
 
             const output: number = sample * expression;
-		//BUGFIX FROM JUMMBOX
             expression += expressionDelta;
 
             data[sampleIndex] += output;

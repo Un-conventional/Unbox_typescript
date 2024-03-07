@@ -9,11 +9,38 @@
 /editor/*.js
 /player/*.js
 /synth/*.js
-/app_editor/*.js
 /editor/*.js.map
 /player/*.js.map
 /synth/*.js.map
-/app_editor/*.js.map
 /**/*.ts.bak
 /**/*.html.bak
 /build
+
+# Offline resources
+/offline/resources/*.js
+/offline/resources/*.min.js
+/offline/resources/*.html
+/offline/resources/*.png
+/offline/resources/theme_resources/
+
+!/offline/resources/icons
+!/offline/resources/index.html
+!/offline/resources/main.js
+!/offline/resources/neutralino.d.ts
+!/offline/resources/jquery-3.4.1.min.js
+!/offline/resources/select2.min.js
+
+/offline/resources/player/*
+!/offline/resources/player/index.html
+
+/offline/resources/samples/*
+
+/offline/.tmp
+
+# Neutralinojs binaries and builds
+/offline/bin
+/offline/dist
+
+# Neutralinojs related files
+.storage
+*.log
