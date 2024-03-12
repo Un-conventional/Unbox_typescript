@@ -325,10 +325,10 @@
     <script type="text/javascript">
 
         // Randomize display of header
-        // 1-in-23
+        // 1-in-33
         //I should rework this sometime (maybe add the midbox tips thingy?)
         if (Math.floor(Math.random() * 8) == 0) {
-            switch (Math.floor(Math.random() * 22)) {
+            switch (Math.floor(Math.random() * 33)) {
                 // jummbox/goldbox plants
                 case 0:
                     document.getElementById("goldboxPlant").innerHTML = "  🍂";
@@ -411,6 +411,42 @@
                 case 23:
                     document.getElementById("goldboxPlant").innerHTML = "  🍟";
                     break;
+                // Unbox plants
+                case 24:
+                    document.getElementById("goldboxPlant").innerHTML = "  🌵";
+                    break;
+                case 25:
+                    document.getElementById("goldboxPlant").innerHTML = "  🪻";
+                    break;
+                    //Should be a Hyacinth
+                case 26:
+                    document.getElementById("goldboxPlant").innerHTML = "  🪨";
+                    break;
+                    //Should be a rock
+                case 27:
+                    document.getElementById("goldboxPlant").innerHTML = "  🔔";
+                    break;
+                case 28:
+                    document.getElementById("goldboxPlant").innerHTML = "  🪨 🧻 ✂️";
+                    break;
+                case 29:
+                    document.getElementById("goldboxPlant").innerHTML = " 👁️ 🎯 🫵 🌵";
+                    break;
+                    //"I will hit you with a cactus"
+                case 30:
+                    document.getElementById("goldboxPlant").innerHTML = " ⚠️";
+                    break;
+                case 31:
+                    document.getElementById("goldboxPlant").innerHTML = " 🛆 🏆 5️⃣ ✂️ 1️⃣2️⃣";
+                    break;
+                    //heh 
+                case 32:
+                    document.getElementById("goldboxPlant").innerHTML = " 🪓 ";
+                    break;
+                case 33:
+                    document.getElementById("goldboxPlant").innerHTML = " 🌳 🪓 🪵 🪚 🪜 🏭";
+                    break; 
+                    // Wood
             }
         }
 

@@ -1413,7 +1413,7 @@ export class Instrument {
     public legacyTieOver: boolean = false;
     public clicklessTransition: boolean = false;
     public aliases: boolean = false;
-    public pulseWidth: number = Config.pulseWidthRange;
+    public pulseWidth: number = (Config.pulseWidthRange * 2);
     public decimalOffset: number = 0;
     public supersawDynamism: number = Config.supersawDynamismMax;
 	public supersawSpread: number = Math.ceil(Config.supersawSpreadMax / 2.0);
@@ -2298,9 +2298,9 @@ export class Instrument {
         }
 
         if (instrumentObject["pulseWidth"] != undefined) {
-            this.pulseWidth = clamp(1, Config.pulseWidthRange + 1, Math.round(instrumentObject["pulseWidth"]));
+            this.pulseWidth = clamp(1, (Config.pulseWidthRange * 2 + 1), Math.round(instrumentObject["pulseWidth"]));
         } else {
-            this.pulseWidth = Config.pulseWidthRange;
+            this.pulseWidth = (Config.pulseWidthRange * 2);
         }
 
         if (instrumentObject["decimalOffset"] != undefined) {
@@ -3399,18 +3399,18 @@ export class Song {
                     buffer.push(SongTagCode.unison, base64IntToCharCode[instrument.unison]);
                     if (instrument.unison == Config.unisons.length) encodeUnisonSettings(buffer, instrument.unisonVoices, instrument.unisonSpread, instrument.unisonOffset, instrument.unisonExpression, instrument.unisonSign);
                 } else if (instrument.type == InstrumentType.pwm) {
-                    buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth]);
+                    buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth >> 6], base64IntToCharCode[instrument.pulseWidth & 0x3f]);
                     buffer.push(base64IntToCharCode[instrument.decimalOffset >> 6], base64IntToCharCode[instrument.decimalOffset & 0x3f]); 
                     buffer.push(SongTagCode.unison, base64IntToCharCode[instrument.unison]);
                     if (instrument.unison == Config.unisons.length) encodeUnisonSettings(buffer, instrument.unisonVoices, instrument.unisonSpread, instrument.unisonOffset, instrument.unisonExpression, instrument.unisonSign);
                 } else if (instrument.type == InstrumentType.dutyCycle) {
-                    buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth]);
+                    buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth >> 6], base64IntToCharCode[instrument.pulseWidth & 0x3f]);
                     buffer.push(base64IntToCharCode[instrument.decimalOffset >> 6], base64IntToCharCode[instrument.decimalOffset & 0x3f]);
                     buffer.push(SongTagCode.unison, base64IntToCharCode[instrument.unison]);
                     if (instrument.unison == Config.unisons.length) encodeUnisonSettings(buffer, instrument.unisonVoices, instrument.unisonSpread, instrument.unisonOffset, instrument.unisonExpression, instrument.unisonSign);
                 } else if (instrument.type == InstrumentType.supersaw) {
 					buffer.push(SongTagCode.supersaw, base64IntToCharCode[instrument.supersawDynamism], base64IntToCharCode[instrument.supersawSpread], base64IntToCharCode[instrument.supersawShape]);
-					buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth]);
+					buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth >> 6], base64IntToCharCode[instrument.pulseWidth & 0x3f]);
                     buffer.push(base64IntToCharCode[instrument.decimalOffset >> 6], base64IntToCharCode[instrument.decimalOffset & 0x3f]);
 				} else if (instrument.type == InstrumentType.pickedString) {
                     if (Config.stringSustainRange > 0x20 || SustainType.length > 2) {
@@ -4435,21 +4435,7 @@ export class Song {
             } break;
             case SongTagCode.pulseWidth: {
                 const instrument: Instrument = this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator];
-                instrument.pulseWidth = clamp(0, Config.pulseWidthRange + (+(fromJummBox)) + 1, base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
-                if (fromBeepBox) {
-                    // BeepBox formula
-                    instrument.pulseWidth = Math.round(Math.pow(0.5, (7 - instrument.pulseWidth) * Config.pulseWidthStepPower) * Config.pulseWidthRange);
-
-                }
-
-                if ((beforeNine && fromBeepBox) || (beforeFive && fromJummBox) || (beforeFour && fromGoldBox)) {
-                    const pregoldToEnvelope: number[] = [0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16, 17, 18, 19, 20, 21, 23, 24, 25, 27, 28, 29, 32, 33, 34, 31, 11];
-                    const legacySettings: LegacySettings = legacySettingsCache![instrumentChannelIterator][instrumentIndexIterator];
-                    let aa: number = base64CharCodeToInt[compressed.charCodeAt(charIndex++)];
-                    if((beforeTwo && fromGoldBox) || (!fromGoldBox && !fromUltraBox)) aa = pregoldToEnvelope[aa];
-                    legacySettings.pulseEnvelope = Song._envelopeFromLegacyIndex(aa);
-                    instrument.convertLegacySettings(legacySettings, forceSimpleFilter);
-                }
+                instrument.pulseWidth = clamp(0, (Config.pulseWidthRange * 2 + 1), (base64CharCodeToInt[compressed.charCodeAt(charIndex++)] << 6) + base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
 
                 if (fromUltraBox && !beforeFour) {
                     instrument.decimalOffset = clamp(0, 99 + 1, (base64CharCodeToInt[compressed.charCodeAt(charIndex++)] << 6) + base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
