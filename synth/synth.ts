@@ -2304,7 +2304,7 @@ export class Instrument {
         }
 
         if (instrumentObject["decimalOffset"] != undefined) {
-            this.decimalOffset = clamp(0, 99 + 1, Math.round(instrumentObject["decimalOffset"]));
+            this.decimalOffset = clamp(0, 100 + 1, Math.round(instrumentObject["decimalOffset"]));
         } else {
             this.decimalOffset = 0;
         }
@@ -4438,7 +4438,7 @@ export class Song {
                 instrument.pulseWidth = clamp(0, (Config.pulseWidthRange * 2 + 1), (base64CharCodeToInt[compressed.charCodeAt(charIndex++)] << 6) + base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
 
                 if (fromUltraBox && !beforeFour) {
-                    instrument.decimalOffset = clamp(0, 99 + 1, (base64CharCodeToInt[compressed.charCodeAt(charIndex++)] << 6) + base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
+                    instrument.decimalOffset = clamp(0, 100 + 1, (base64CharCodeToInt[compressed.charCodeAt(charIndex++)] << 6) + base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
                 }
 
             } break;
@@ -8802,8 +8802,8 @@ export class Synth {
             nextVal = 50 - nextVal;
         }
         if (Config.modulators[setting].optionalModify == "invert-0to99") {
-            val = 99 - val;
-            nextVal = 99 - nextVal;
+            val = 100 - val;
+            nextVal = 100 - nextVal;
         }
         if (Config.modulators[setting].forSong) {
             if (this.modValues[setting] == null || this.modValues[setting] != val || this.nextModValues[setting] != nextVal) {
