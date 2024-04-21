@@ -23,10 +23,11 @@ export function prettyNumber(value: number): string {
 }
 
 export class EditorConfig {
-    public static readonly version: string = "0.0.7.5"; // Using patch versions in display right now, maybe TODAY.
+    public static readonly version: string = "0.0.8.5"; // Using patch versions in display right now, maybe TODAY.
     public static readonly versionDisplayName: string = "Unbox " + EditorConfig.version;
 
     public static readonly releaseNotesURL: string = "./patch_notes.html";
+    public static readonly informationURL: string = "./information.html";
 
     public static readonly isOnMac: boolean = /^Mac/i.test(navigator.platform) || /Mac OS X/i.test(navigator.userAgent) || /^(iPhone|iPad|iPod)/i.test(navigator.platform) || /(iPhone|iPad|iPod)/i.test(navigator.userAgent);
     public static readonly ctrlSymbol: string = EditorConfig.isOnMac ? "⌘" : "Ctrl+";
