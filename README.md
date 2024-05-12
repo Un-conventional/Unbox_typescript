@@ -4,7 +4,7 @@ Unbox is an online tool for sketching and sharing instrumental music.
 You can find it [here](https://un-conventional.github.io).
 This mod is a modification of Ultrabox, which is a modification of Goldbox, which itself is a modification of JummBox, which inturn is a modification of the [original BeepBox](https://beepbox.co).
 
-The goal of Unbox is to "Fix" some things and add instruments and modulations. This also serves as an introduction to coding for me as well. 
+The goal of Unbox is to "Fix" some things and add instruments and modulations. This also serves as an introduction to coding for me as well. If you want to contribute, feel free to suggest ideas in general.
 
 
 All song data is packaged into the URL at the top of your browser. When you make

@@ -1886,10 +1886,26 @@ export class Instrument {
 
         if (this.type == InstrumentType.noise) {
             instrumentObject["wave"] = Config.chipNoises[this.chipNoise].name;
+            instrumentObject["unison"] = this.unison == Config.unisons.length ? "custom" : Config.unisons[this.unison].name;
+            if (this.unison == Config.unisons.length) {
+                instrumentObject["unisonVoices"] = this.unisonVoices;
+                instrumentObject["unisonSpread"] = this.unisonSpread;
+                instrumentObject["unisonOffset"] = this.unisonOffset;
+                instrumentObject["unisonExpression"] = this.unisonExpression;
+                instrumentObject["unisonSign"] = this.unisonSign;
+            }
         } else if (this.type == InstrumentType.spectrum) {
             instrumentObject["spectrum"] = [];
             for (let i: number = 0; i < Config.spectrumControlPoints; i++) {
                 instrumentObject["spectrum"][i] = Math.round(100 * this.spectrumWave.spectrum[i] / Config.spectrumMax);
+            }
+            instrumentObject["unison"] = this.unison == Config.unisons.length ? "custom" : Config.unisons[this.unison].name;
+            if (this.unison == Config.unisons.length) {
+                instrumentObject["unisonVoices"] = this.unisonVoices;
+                instrumentObject["unisonSpread"] = this.unisonSpread;
+                instrumentObject["unisonOffset"] = this.unisonOffset;
+                instrumentObject["unisonExpression"] = this.unisonExpression;
+                instrumentObject["unisonSign"] = this.unisonSign;
             }
         } else if (this.type == InstrumentType.drumset) {
             instrumentObject["drums"] = [];
@@ -2065,7 +2081,7 @@ export class Instrument {
         }
 
         if (instrumentObject["volume"] != undefined) {
-            if (jsonFormat == "JummBox" || jsonFormat == "SynthBox" || jsonFormat == "UltraBox") {
+            if (jsonFormat == "JummBox" || jsonFormat == "Midbox" || jsonFormat == "SynthBox" || jsonFormat == "UltraBox") {
                 this.volume = clamp(-Config.volumeRange / 2, (Config.volumeRange / 2) + 1, instrumentObject["volume"] | 0);
             } else {
                 this.volume = Math.round(-clamp(0, 8, Math.round(5 - (instrumentObject["volume"] | 0) / 20)) * 25.0 / 7.0);
@@ -2376,6 +2392,9 @@ export class Instrument {
                     if (drum["spectrum"] != undefined) {
                         for (let i: number = 0; i < Config.spectrumControlPoints; i++) {
                             this.drumsetSpectrumWaves[j].spectrum[i] = Math.max(0, Math.min(Config.spectrumMax, Math.round(Config.spectrumMax * (+drum["spectrum"][i]) / 100)));
+                        }
+                        for (let i: number = 0; i < Config.drumCount; i++) {
+                            this.drumsetSpectrumWaves[i].markCustomWaveDirty();
                         }
                     }
                 }
@@ -9065,6 +9084,18 @@ export class Synth {
 	    			this.isAtStartOfTick = true;
 	    			this.isAtStartOfTick = true;
 	    			this.isAtStartOfTick = true;
+	    			this.isAtStartOfTick = true;
+			//BUGFIX FROM JUMMBOX
+	    this.isAtStartOfTick = true;
+			//BUGFIX FROM JUMMBOX
+	    this.isAtStartOfTick = true;
+	    			this.isAtStartOfTick = true;
+			//BUGFIX FROM JUMMBOX
+	    this.isAtStartOfTick = true;
+			//BUGFIX FROM JUMMBOX
+	    this.isAtStartOfTick = true;
+	    			this.isAtStartOfTick = true;
+	    			this.isAtStartOfTick = true;
 			//BUGFIX FROM JUMMBOX
 	    this.isAtStartOfTick = true;
 			//BUGFIX FROM JUMMBOX
@@ -9259,6 +9290,18 @@ export class Synth {
                 this.wantToSkip = false;
                 this.skipBar();
 		    					continue;
+		    					continue;
+		    					continue;
+		    					continue;
+					//BUGFIX FROM JUMMBOX
+		    	continue;
+					//BUGFIX FROM JUMMBOX
+		    	continue;
+		    					continue;
+					//BUGFIX FROM JUMMBOX
+		    	continue;
+					//BUGFIX FROM JUMMBOX
+		    	continue;
 		    					continue;
 		    					continue;
 					//BUGFIX FROM JUMMBOX

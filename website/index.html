@@ -146,8 +146,6 @@
         }
     </style>
 </head>
-	 <!--WIP, DO NOT USE-->
-	 <!--<center>THIS URL IS MEANT FOR TESTING THE CHANGES MADE IN UNBOX 2.0. THIS URL WILL BE DELETED WHEN UNBOX 2.0 RELEASES, AND ANY SONGS YOU MAKE HERE MAY BE UNRECOVERABLE. YOU'VE BEEN WARNED.</center>-->
 <body id="secondImage">
     <script>
         const image = localStorage.getItem('customTheme2');
@@ -183,9 +181,10 @@
                 When you make changes to the song, the URL is updated to reflect your changes.
                 When you are satisfied with your song, just copy and paste the URL to save and share your song!
                 You can use the built in shorten URL function or use Pastelink to shorten the links.
+                The link to pastelink can be found <a href="https://pastelink.net/">here</a>.
             </p>
             <p>
-                The offline version of UltraBox can be found <a href="https://github.com/ultraabox/ultrabox_typescript/releases">here</a>.
+                There is no offline version of Unbox, however there is an offline version of UltraBox that can be found <a href="https://github.com/ultraabox/ultrabox_typescript/releases">here</a>, while the testing version can be found <a href="https://ultraabox.github.io/testing">here</a>.
             </p>
             <!--
     <div class="donation">
@@ -210,9 +209,9 @@
                     <p>
                         You can add or remove notes by clicking on the gray rows at the top.
                         Unbox automatically plays the notes out loud for you. Try it!
-			    <img id="Hotdog" src="hotdog.png" width="500" height="333" onclick="myFunction()" />
+			    <img id="Hotdog" src="hotdog.png" width="500" height="333" onclick="changeHotdogSize()" />
 				<script>
-				function myFunction(){
+				function changeHotdogSize(){
 					var image = document.getElementById('Hotdog')
 					image.width = Math.random() * (750 - 20) + 20
 					image.height = Math.random() * (499 - 20) + 20
@@ -254,7 +253,7 @@
 							<li><b>F/H</b>: move to First or Highlighted pattern </li>
 							<li><b>Shift & Drag</b>: select part of a pattern</li>
 							<li>These are just a few shortcuts, check Unbox's edit menu for more!</li>
-                            <li> I need to add the full list eventually</li>
+                            <!-- need to edit this eventually -->
                         </ul>
                     </div>
                     <p>

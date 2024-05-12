@@ -384,6 +384,10 @@ export class ColorConfig {
 				.select2-selection__rendered {
 					box-shadow: inset 0 0 0 1px var(--secondary-text);
 				}
+
+				.promptContainerBG::before {
+					box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
+				}	
 		`,
         "jummbox classic": `
 				:root {
@@ -976,6 +980,10 @@ export class ColorConfig {
 
 				.beepboxEditor .piano-button::before {
 					display: none;
+				}
+
+				.promptContainerBG::before {
+					box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
 				}
 			`,
         "amoled dark": `
@@ -2634,6 +2642,9 @@ export class ColorConfig {
 			--mod-label-primary-text: black;
 			--disabled-note-primary: #616161;
 			--disabled-note-secondary: #474747;
+		}
+		.promptContainerBG::before {
+			box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
 		}`,
         "energized": `
 		:root {
@@ -3977,6 +3988,7 @@ export class ColorConfig {
 					--mod-label-primary-text:   black;
 					--disabled-note-primary:    #999;
 					--disabled-note-secondary:  #666;
+					--text-disabled-icon: ✗ ;
 				}
 
 				.beepboxEditor input[type="range"]::-moz-range-thumb {
@@ -5969,6 +5981,11 @@ export class ColorConfig {
 				--note-flash: #ffffff;
 				--note-flash-secondary: #ffffff77;
 				
+				--oscilloscope-line-R: var(--ui-widget-background);
+				--oscilloscope-line-L: var(--secondary-text);
+				--text-spacing-icon: > ;
+				--scrollbar-color: #bf2c5d;
+				
 				--file-page-symbol: url("theme_resources/icon-file.png");
 				--edit-pencil-symbol: url("theme_resources/icon-edit.png");
 				--preferences-gear-symbol: url("theme_resources/icon-preferences.png");
@@ -6286,6 +6303,11 @@ export class ColorConfig {
 
 				--note-flash: #ffffff;
 				--note-flash-secondary: #ffffff77;
+
+				--oscilloscope-line-R: var(--ui-widget-background);
+				--oscilloscope-line-L: var(--secondary-text);
+				--text-spacing-icon: > ;
+				--scrollbar-color: #bf2c5d;
 
 				--file-page-symbol: url("theme_resources/icon-file.png");
 				--edit-pencil-symbol: url("theme_resources/icon-edit.png");
@@ -6623,6 +6645,9 @@ export class ColorConfig {
 		#text-content > section > h1 {
 		margin: auto;
 		content: url("theme_resources/AzurLaneThemeLogo.png");
+		}
+		.promptContainerBG::before {
+			box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
 		}
 	}`,
 			  "custom": `${localStorage.getItem("customColors") || `:root {
@@ -7122,6 +7147,7 @@ export class ColorConfig {
                     + (this.c_noisePrimaryNoteLum + channel * this.c_noisePrimaryNoteLumScale) + "%)";
 
                 let newChannelColors = <ChannelColors>{ secondaryChannel: newChannelSecondary, primaryChannel: newChannelPrimary, secondaryNote: newNoteSecondary, primaryNote: newNotePrimary };
+				ColorConfig.colorLookup.set(channel, newChannelColors);
                 return newChannelColors;
             } case ("mod"): {
                 // Mod formula
