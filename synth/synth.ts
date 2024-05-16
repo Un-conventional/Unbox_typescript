@@ -4367,8 +4367,8 @@ export class Song {
                 }
             } break;
             case SongTagCode.filterResonance: {
-                if ((fromUltraBox && beforeThree)|| fromUnbox) {
-                    if (beforeThree) {
+                if (fromUltraBox || fromUnbox) {
+                    if (fromUltraBox && beforeThree) {
                         // Still have to support the old and bad loop control data format written as a test, sigh.
                         const sampleLoopInfoEncodedLength = decode32BitNumber(compressed, charIndex);
                         charIndex += 6;
@@ -4532,7 +4532,7 @@ export class Song {
                                 }
                             }
                         }
-                    } else if ((beforeFour && !fromGoldBox && !fromUltraBox) || fromBeepBox || fromUnbox) {
+                    } else if ((beforeFour && !fromGoldBox && !fromUltraBox && !fromUnbox /* @TODO: Not sure about this one, needs a test */) || fromBeepBox) {
                         const settings = legacySettings[clamp(0, legacySettings.length, base64CharCodeToInt[compressed.charCodeAt(charIndex++)])];
                         const instrument: Instrument = this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator];
                         instrument.fadeIn = Synth.secondsToFadeInSetting(settings.fadeInSeconds);
@@ -5171,7 +5171,7 @@ export class Song {
                     const legacySettings: LegacySettings = legacySettingsCache![instrumentChannelIterator][instrumentIndexIterator];
                     
                     let aa:number = base64CharCodeToInt[compressed.charCodeAt(charIndex++)];
-                    if ((beforeTwo && fromGoldBox) || (!fromGoldBox && !fromUltraBox) || (!fromUnbox)) aa = pregoldToEnvelope[aa];
+                    if ((beforeTwo && fromGoldBox) || (!fromGoldBox && !fromUltraBox && !fromUnbox)) aa = pregoldToEnvelope[aa];
                     legacySettings.feedbackEnvelope = Song._envelopeFromLegacyIndex(base64CharCodeToInt[aa]);
                     instrument.convertLegacySettings(legacySettings, forceSimpleFilter);
                 } else {
@@ -5711,7 +5711,7 @@ export class Song {
                                     if (!((beforeNine && fromBeepBox) || (beforeFive && fromJummBox)||(beforeFour&&fromGoldBox))) {
                                         note.continuesLastPattern = (bits.read(1) == 1);
                                     } else {
-                                        if ((beforeFour && !fromUltraBox) || fromBeepBox || fromUnbox) {
+                                        if ((beforeFour && !fromUltraBox && !fromUnbox /* @TODO: This may be missing a fromGoldBox term, since I believe this should be for catching JummBox songs */) || fromBeepBox) {
                                             note.continuesLastPattern = false;
                                         } else {
                                             note.continuesLastPattern = channel.instruments[newPattern.instruments[0]].legacyTieOver;
