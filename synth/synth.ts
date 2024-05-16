@@ -3017,7 +3017,7 @@ export class Song {
         this.layeredInstruments = false;
         this.patternInstruments = false;
 
-        this.title = "Unnamed";
+        this.title = "Untitled";
         document.title = this.title + " - " + EditorConfig.versionDisplayName;
 
         if (andResetChannels) {
