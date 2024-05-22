@@ -2081,7 +2081,7 @@ export class Instrument {
         }
 
         if (instrumentObject["volume"] != undefined) {
-            if (jsonFormat == "JummBox" || jsonFormat == "Midbox" || jsonFormat == "SynthBox" || jsonFormat == "UltraBox") {
+            if (jsonFormat == "JummBox" || jsonFormat == "Midbox" || jsonFormat == "SynthBox" || jsonFormat == "UltraBox" || jsonFormat == "Unbox") {
                 this.volume = clamp(-Config.volumeRange / 2, (Config.volumeRange / 2) + 1, instrumentObject["volume"] | 0);
             } else {
                 this.volume = Math.round(-clamp(0, 8, Math.round(5 - (instrumentObject["volume"] | 0) / 20)) * 25.0 / 7.0);
@@ -2209,23 +2209,35 @@ export class Instrument {
         }
 
         if (instrumentObject["pitchShiftSemitones"] != undefined) {
-            this.pitchShift = clamp(0, Config.pitchShiftRange, Math.round(+instrumentObject["pitchShiftSemitones"]));
+            if (jsonFormat == "Unbox") {
+                this.pitchShift = clamp(0, Config.pitchShiftRange, Math.round(+instrumentObject["pitchShiftSemitones"]));
+            } else {
+                this.pitchShift = clamp(0, Config.pitchShiftRange, Math.round(+instrumentObject["pitchShiftSemitones"] + 12));
+            }
         }
         // modbox pitch shift, known in that mod as "octave offset"
         if (instrumentObject["octoff"] != undefined) {
             let potentialPitchShift: string = instrumentObject["octoff"];
             this.effects = (this.effects | (1 << EffectType.pitchShift));
             
-            if ((potentialPitchShift == "+1 (octave)") || (potentialPitchShift == "+2 (2 octaves)")) {
-                this.pitchShift = 24;
-            } else if ((potentialPitchShift == "+1/2 (fifth)") || (potentialPitchShift == "+1 1/2 (octave and fifth)")) {
-                this.pitchShift = 18;
-            } else if ((potentialPitchShift == "-1 (octave)") || (potentialPitchShift == "-2 (2 octaves)")) {
-                this.pitchShift = 0;
-            } else if ((potentialPitchShift == "-1/2 (fifth)") || (potentialPitchShift == "-1 1/2 (octave and fifth)")) {
-                this.pitchShift = 6;
+            if (potentialPitchShift == "+1 (octave)") {
+                this.pitchShift = clamp(0, Config.pitchShiftRange, Config.pitchShiftCenter + 12);
+            } else if (potentialPitchShift == "+2 (2 octaves)") {
+                this.pitchShift = clamp(0, Config.pitchShiftRange, Config.pitchShiftCenter + 24);
+            } else if (potentialPitchShift == "+1/2 (fifth)") {
+                this.pitchShift = clamp(0, Config.pitchShiftRange, Config.pitchShiftCenter + 7);
+            } else if (potentialPitchShift == "+1 1/2 (octave and fifth)") {
+                this.pitchShift = clamp(0, Config.pitchShiftRange, Config.pitchShiftCenter + 19);
+            } else if (potentialPitchShift == "-1 (octave)") {
+                this.pitchShift = clamp(0, Config.pitchShiftRange, Config.pitchShiftCenter - 12);
+            } else if (potentialPitchShift == "-2 (2 octaves" || potentialPitchShift == "-2 (2 octaves)") {
+                this.pitchShift = clamp(0, Config.pitchShiftRange, Config.pitchShiftCenter - 24);
+            } else if (potentialPitchShift == "-1/2 (fifth)") {
+                this.pitchShift = clamp(0, Config.pitchShiftRange, Config.pitchShiftCenter - 7);
+            } else if (potentialPitchShift == "-1 1/2 (octave and fifth)") {
+                this.pitchShift = clamp(0, Config.pitchShiftRange, Config.pitchShiftCenter - 19);
             } else {
-                this.pitchShift = 12;
+                this.pitchShift = clamp(0, Config.pitchShiftRange, Config.pitchShiftCenter);
             }
         }
         if (instrumentObject["detuneCents"] != undefined) {
@@ -2317,7 +2329,7 @@ export class Instrument {
         if (instrumentObject["pulseWidth"] != undefined) {
             this.pulseWidth = clamp(1, (Config.pulseWidthRange * 2 + 1), Math.round(instrumentObject["pulseWidth"]));
         } else {
-            this.pulseWidth = (Config.pulseWidthRange * 2);
+            this.pulseWidth = (Config.pulseWidthRange);
         }
 
         if (instrumentObject["decimalOffset"] != undefined) {
@@ -4144,14 +4156,63 @@ export class Song {
                 // JB before v5 had custom chip and mod before pickedString and supersaw were added. Index +2.
                 let instrumentType: number = validateRange(0, InstrumentType.length - 1, base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
                 if ((fromJummBox && beforeFive) || (beforeFour && fromGoldBox)) {
-                    if (instrumentType == InstrumentType.pickedString || instrumentType == InstrumentType.supersaw) {
-                        instrumentType += 2;
+                    // InstrumentType at this point:
+                    // - 0: chip
+                    // - 1: fm
+                    // - 2: noise
+                    // - 3: spectrum
+                    // - 4: drumset
+                    // - 5: harmonics
+                    // - 6: pwm
+                    // - 7: customChipWave <- different from here onwards
+                    // - 8: mod
+                    // - 9: fm6op
+                    switch (instrumentType) {
+                        case 7: { instrumentType = InstrumentType.customChipWave; } break;
+                        case 8: { instrumentType = InstrumentType.mod; } break;
+                        case 9: { instrumentType = InstrumentType.fm6op; } break;
                     }
                 }
                 // Similar story here, JB before v5 had custom chip and mod before supersaw was added. Index +1.
                 else if ((fromJummBox && beforeSix) || (fromGoldBox && !beforeFour) || (fromUltraBox && beforeFive) ) {
-                    if (instrumentType == InstrumentType.supersaw || instrumentType == InstrumentType.customChipWave || instrumentType == InstrumentType.mod) {
-                        instrumentType += 1;
+                    // InstrumentType at this point:
+                    // - 0: chip
+                    // - 1: fm
+                    // - 2: noise
+                    // - 3: spectrum
+                    // - 4: drumset
+                    // - 5: harmonics
+                    // - 6: pwm
+                    // - 7: pickedString <- different from here onwards
+                    // - 8: customChipWave
+                    // - 9: mod
+                    // - 10: fm6op
+                    switch (instrumentType) {
+                        case 7: { instrumentType = InstrumentType.pickedString; } break;
+                        case 8: { instrumentType = InstrumentType.customChipWave; } break;
+                        case 9: { instrumentType = InstrumentType.mod; } break;
+                        case 10: { instrumentType = InstrumentType.fm6op; } break;
+                    }
+                } else if ((fromJummBox && !beforeSix) || (fromUltraBox && !beforeFive)) {
+                    // InstrumentType at this point:
+                    // - 0: chip
+                    // - 1: fm
+                    // - 2: noise
+                    // - 3: spectrum
+                    // - 4: drumset
+                    // - 5: harmonics
+                    // - 6: pwm
+                    // - 7: pickedString <- different from here onwards
+                    // - 8: supersaw
+                    // - 9: customChipWave
+                    // - 10: mod
+                    // - 11: fm6op
+                    switch (instrumentType) {
+                        case 7: { instrumentType = InstrumentType.pickedString; } break;
+                        case 8: { instrumentType = InstrumentType.supersaw; } break;
+                        case 9: { instrumentType = InstrumentType.customChipWave; } break;
+                        case 10: { instrumentType = InstrumentType.mod; } break;
+                        case 11: { instrumentType = InstrumentType.fm6op; } break;
                     }
                 }
                 instrument.setTypeAndReset(instrumentType, instrumentChannelIterator >= this.pitchChannelCount && instrumentChannelIterator < this.pitchChannelCount + this.noiseChannelCount, instrumentChannelIterator >= this.pitchChannelCount + this.noiseChannelCount);
@@ -4184,16 +4245,100 @@ export class Song {
                 this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = presetValue;
                 // Picked string was inserted before custom chip in JB v5, so bump up preset index.
                 if ((fromJummBox && beforeFive) || (beforeFour && fromGoldBox)) {
-                    if (this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset == InstrumentType.pickedString) {
-                        this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.customChipWave;
-                        this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.customChipWave;
+                    // The first preset category mirrors InstrumentType.
+                    // InstrumentType at this point:
+                    // - 0: chip
+                    // - 1: fm
+                    // - 2: noise
+                    // - 3: spectrum
+                    // - 4: drumset
+                    // - 5: harmonics
+                    // - 6: pwm
+                    // - 7: customChipWave <- different from here onwards
+                    // - 8: mod
+                    // - 9: fm6op
+                    switch (this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset) {
+                        case 7: {
+                            this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.customChipWave;
+                            this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.customChipWave;
+                        } break;
+                        // case 8: {
+                        //     this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.mod;
+                        //     this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.mod;
+                        // } break; // Shouldn't be possible if I understand this correctly
+                        case 9: {
+                            this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.fm6op;
+                            this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.fm6op;
+                        } break;
                     }
                 }
                 // Similar story, supersaw is also before custom chip (and mod, but mods can't have presets).
-                else if ((fromJummBox && beforeSix) || (fromUltraBox && beforeFive)) {
-                    if (this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset == InstrumentType.supersaw ) {
-                        this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.customChipWave;
-                        this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.customChipWave;
+                else if ((fromJummBox && beforeSix) || (fromGoldBox && !beforeFour) || (fromUltraBox && beforeFive) ) {
+                        // InstrumentType at this point:
+                        // - 0: chip
+                        // - 1: fm
+                        // - 2: noise
+                        // - 3: spectrum
+                        // - 4: drumset
+                        // - 5: harmonics
+                        // - 6: pwm
+                        // - 7: pickedString <- different from here onwards
+                        // - 8: customChipWave
+                        // - 9: mod
+                        // - 10: fm6op
+                        switch (this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset) {
+                            case 7: {
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.pickedString;
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.pickedString;
+                            } break;
+                            case 8: {
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.customChipWave;
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.customChipWave;
+                            } break;
+                            // case 9: {
+                            //     this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.mod;
+                            //     this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.mod;
+                            // } break; // Shouldn't be possible if I understand this correctly
+                            case 10: {
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.fm6op;
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.fm6op;
+                            } break;
+                        }
+                    } else if ((fromJummBox && !beforeSix) || (fromUltraBox && !beforeFive)) {
+                        // InstrumentType at this point:
+                        // - 0: chip
+                        // - 1: fm
+                        // - 2: noise
+                        // - 3: spectrum
+                        // - 4: drumset
+                        // - 5: harmonics
+                        // - 6: pwm
+                        // - 7: pickedString <- different from here onwards
+                        // - 8: supersaw
+                        // - 9: customChipWave
+                        // - 10: mod
+                        // - 11: fm6op
+                        switch (this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset) {
+                            case 7: {
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.pickedString;
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.pickedString;
+                            } break;
+                            case 8: {
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.supersaw;
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.supersaw;
+                            } break;
+                            case 9: {
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.customChipWave;
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.customChipWave;
+                            } break;
+                            // case 10: {
+                            //     this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.mod;
+                            //     this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.mod;
+                            // } break; // Shouldn't be possible if I understand this correctly
+                            case 11: {
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.fm6op;
+                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.fm6op;
+                            } break;
                     }
                     // ultra code for 6-op fm maybe
                     if (this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset == InstrumentType.mod ) {
@@ -4875,7 +5020,11 @@ export class Song {
                         }
                     }
                     if (effectsIncludePitchShift(instrument.effects)) {
-                        instrument.pitchShift = clamp(0, Config.pitchShiftRange, base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
+                        if (fromUnbox) {
+                            instrument.pitchShift = clamp(0, Config.pitchShiftRange, base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
+                        } else {
+                            instrument.pitchShift = clamp(0, Config.pitchShiftRange, base64CharCodeToInt[compressed.charCodeAt(charIndex++)] + 12);
+                        }
                     }
                     if (effectsIncludeDetune(instrument.effects)) {
                         if (fromBeepBox) {
@@ -5387,6 +5536,7 @@ export class Song {
                 charIndex += bitStringLength;
 
                 const bitsPerNoteSize: number = Song.getNeededBits(Config.noteSizeMax);
+                const modNoteSizeBits: number = fromUnbox ? 10 : 9;
                 let songReverbChannel: number = -1;
                 let songReverbInstrument: number = -1;
                 let songReverbIndex: number = -1;
@@ -5403,10 +5553,35 @@ export class Song {
 
                     // Some info about modulator settings immediately follows in mod channels.
                     if (isModChannel) {
-                        let jumfive: boolean = (beforeFive && fromJummBox) || (beforeFour && fromGoldBox)
+                        let jumfive: boolean = (beforeFive && fromJummBox) || (beforeFour && fromGoldBox);
+
+                        const maxInstrumentsPerChannelInJummBox = Math.max(
+                            this.layeredInstruments ? 4/* Config.layeredInstrumentCountMax */ : 1/* Config.instrumentCountMin */,
+                            this.patternInstruments ? 10/* Config.patternInstrumentCountMax */ : 1/* Config.instrumentCountMin */
+                        );
+                        const maxInstrumentsPerChannelInGoldBox = Math.max(
+                            this.layeredInstruments ? 4/* Config.layeredInstrumentCountMax */ : 1/* Config.instrumentCountMin */,
+                            this.patternInstruments ? 10/* Config.patternInstrumentCountMax */ : 1/* Config.instrumentCountMin */
+                        );
+                        const maxInstrumentsPerChannelInUltraBox = Math.max(
+                            this.layeredInstruments ? 10/* Config.layeredInstrumentCountMax */ : 1/* Config.instrumentCountMin */,
+                            this.patternInstruments ? 10/* Config.patternInstrumentCountMax */ : 1/* Config.instrumentCountMin */
+                        );
+                        const maxInstrumentsPerChannelInUnbox: number = this.getMaxInstrumentsPerChannel();
+
+                        // @TODO: This is incorrect, but #g4 is used in both
+                        // GoldBox and early versions of UltraBox, so this
+                        // depends on "import mode" support for links.
+                        const isActuallyUltraBox: boolean = false;
+                        const maxInstrumentsPerChannelForThisSong: number = (
+                            (fromJummBox && !beforeFive) ? maxInstrumentsPerChannelInJummBox
+                            : (fromGoldBox && !beforeFour && !isActuallyUltraBox) ? maxInstrumentsPerChannelInGoldBox
+                            : (fromUltraBox || (fromGoldBox && isActuallyUltraBox)) ? maxInstrumentsPerChannelInUltraBox
+                            : maxInstrumentsPerChannelInUnbox
+                        );
 
                         // 2 more indices for 'all' and 'active'
-                        const neededModInstrumentIndexBits: number = (jumfive) ? neededInstrumentIndexBits : Song.getNeededBits(this.getMaxInstrumentsPerChannel() + 2);
+                        const neededModInstrumentIndexBits: number = (jumfive) ? neededInstrumentIndexBits : Song.getNeededBits(maxInstrumentsPerChannelForThisSong + 2);
 
                         for (let instrumentIndex: number = 0; instrumentIndex < channel.instruments.length; instrumentIndex++) {
 
@@ -5599,7 +5774,7 @@ export class Song {
                                     } else if (!isModChannel) {
                                         shape.initialSize = bits.read(bitsPerNoteSize);
                                     } else {
-                                        shape.initialSize = bits.read(10);
+                                        shape.initialSize = bits.read(modNoteSizeBits);
                                     }
 
                                     shape.pins = [];
@@ -5619,7 +5794,7 @@ export class Song {
                                             pinObj.size = bits.read(bitsPerNoteSize);
                                         }
                                         else {
-                                            pinObj.size = bits.read(10);
+                                            pinObj.size = bits.read(modNoteSizeBits);
                                         }
                                         shape.pins.push(pinObj);
                                     }

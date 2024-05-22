@@ -23,6 +23,7 @@ export class ImportPrompt implements Prompt {
 			option({value: "JummBox"}, "JummBox"),
 			option({value: "SynthBox"}, "SynthBox"),
 			option({value: "UltraBox"}, "UltraBox"),
+			option({value: "Unbox"}, "Unbox"),
 		);
 		
 		public readonly container: HTMLDivElement = div({class: "prompt noSelection", style: "width: 300px;"},
