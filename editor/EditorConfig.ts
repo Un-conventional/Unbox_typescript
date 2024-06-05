@@ -55,6 +55,7 @@ export class EditorConfig {
         },
         {
             name: "Common Waves", presets: <DictionaryArray<Preset>>toNameMap([
+                //These waves are the standard waveforms
                 { name: "square wave", midiProgram: 80, settings: { "type": "chip", "eqFilter": [], "effects": ["aliasing"], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "square", "unison": "none", "envelopes": [] } },
                 { name: "triangle wave", midiProgram: 71, settings: { "type": "chip", "eqFilter": [], "effects": ["aliasing"], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "triangle", "unison": "none", "envelopes": [] } },
                 { name: "sawtooth wave", midiProgram: 81, settings: { "type": "chip", "eqFilter": [], "effects": ["aliasing"], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "sawtooth", "unison": "none", "envelopes": [] } },
@@ -65,12 +66,29 @@ export class EditorConfig {
             ])
         },
         //Need a way to put these into groups of PSG, Wavetable and other groups, dropdown within a dropdown anyone? Unbox presets- PSG/Wavetable/.../...- AY3... SID... and so on.
+        // these- https://en.wikipedia.org/wiki/List_of_sound_chips#Programmable_sound_generators_(PSG)
+            //Add these at a later date- GI SP0250/6 , MOS VIC and TED, OKI MSM5232, Sega PSG SN76496, Sharp LR35902/SM8521, TI SN76477, TI LPC Speech Chips, TI SN76496, TI TMS3615/3617/3630 TMS3631-RI104 / RI105 ,Toshiba T7766A, ,
+        {
+            name: "2A03/VRC6 (WIP)", presets: <DictionaryArray<Preset>>toNameMap([
+                //Ricoh 2A03, Konami VRC6- These waveforms are what you can make in the NES/Famicom. For the Sunsoft 5B, See the AY3 presets.
+                //Instrument- Duty cycle (12.5, 25, 50, 75)
+                //Instrument- Triangle
+                //Instrument- Noise
+                //Instrument- DPCM
+                //Instrument- VRC6 Duty Cycle (6.25, 12.5, 18.75, 25, 31.25, 37.5, 43.75, 50, 100)
+                //Instrument- VRC6 Sawtooth (correct one)
+                //{ name: "name", generalMidi: false, settings:  },
+                
+            ])
+        },
         {
             name: "AY-3-8910/YM2149F/5B* (WIP)", presets: <DictionaryArray<Preset>>toNameMap([
+                //General Instruments AY-3-9010/12/30, Yamaha YM2149F, Sunsoft 5B- These waveforms are what you can make in the ZX Spectrum 128k, Atari ST and Sunsoft 5B.
+                //ZXS ST 5B
                 { name: "AY3 Buzzer", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"interrupt","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"AY3 Buzzer","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
                 { name: "AY3 Half Buzzer Down", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"interrupt","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"AY3 Half Buzzer Down","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
                 { name: "AY3 Half Buzzer Up", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"interrupt","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"AY3 Half Buzzer Up","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
-                { name: "AY3 Pseudo Sine", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"interrupt","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"AY3 Pseudo SIne","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
+                { name: "AY3 Pseudo Sine", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"interrupt","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"AY3 Pseudo Sine","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
                 { name: "Atari ST Kick", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"interrupt","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"Atari ST Kick","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
                 { name: "Sync Buzzer (WIP)", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"normal","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"Sync Buzzer Test","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
                 //{ name: "name", generalMidi: false, settings:  },
@@ -79,6 +97,7 @@ export class EditorConfig {
         },
         {
             name: "SAA1099 (WIP)", presets: <DictionaryArray<Preset>>toNameMap([
+                //Phillips SAA1099- These waveforms are what you can make in the Sam Coupé
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
@@ -88,6 +107,7 @@ export class EditorConfig {
         },
         {
             name: "SN76489 (WIP)", presets: <DictionaryArray<Preset>>toNameMap([
+                //Texas Instruments SN76489/A- These waveforms are what you can make in the TI-99A, Master System, Mega Drive/Genesis (Secondary to the YM2612 FM chip), 
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
@@ -97,6 +117,7 @@ export class EditorConfig {
         },
         {
             name: "SID-6581/8580 (WIP)", presets: <DictionaryArray<Preset>>toNameMap([
+                //MOS Technology SID 6581/8580- These waveforms are what you can make in the Commodore 64/128. Both the 6581 and 8580 have a few differences, however it isn't possible to recreate these accurately at this point in time.
                 { name: "C64 TriPulse", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"interrupt","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"C64 TriPulse","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
                 { name: "C64 PulseSaw", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"interrupt","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"C64 PulseSaw","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
                 { name: "C64 SawTri", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"interrupt","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"C64 SawTri","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
@@ -107,6 +128,7 @@ export class EditorConfig {
         },
         {
             name: "TIA/POKEY/AMY/MIKEY (WIP)", presets: <DictionaryArray<Preset>>toNameMap([
+                //Atari, Inc. Atari Television Interface Adapter (TIA), Atari POKEY, Atari AMY and Atari MIKEY- These waveforms are what you can make in the Atari 2600, 7800, Video Music, Atari 8-Bit, Atari 5200, Atari Arcade machines,65EXM, Atari LYNX. (These still need some work)
                 { name: "Atari Pokey 1", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"normal","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"Atari Pokey 1","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
                 { name: "Atari Pokey 2", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"normal","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"Atari Pokey 2","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
                 //{ name: "name", generalMidi: false, settings:  },
@@ -116,6 +138,7 @@ export class EditorConfig {
         },
         {
             name: "HuC6280(WIP)", presets: <DictionaryArray<Preset>>toNameMap([
+                //Hudson Soft/NEC/EPSON_Hudson Soft HuC6280- These waveforms are what you can make in the PC Engine/TurboGrafx-16. This is a wavetable.
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
@@ -125,6 +148,7 @@ export class EditorConfig {
         },
         {
             name: "Namco WSG/N163 (WIP)", presets: <DictionaryArray<Preset>>toNameMap([
+                //Namco WSG, 52xx, 54xx, 15xx, CUS30, N163 - These waveforms are what you can make in the Namco Arcade Systems, and Namco produced Famicom games. This is a wavetable.
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
@@ -134,6 +158,7 @@ export class EditorConfig {
         },
         {
             name: "Unbox Presets(WIP)", presets: <DictionaryArray<Preset>>toNameMap([
+                //These presets contain instruments I like and rather not search for... yes I am lazy, get over it.
                 { name: "Soft Chimes", generalMidi: false, settings: {"type":"FM","eqFilter":[{"type":"low-pass","cutoffHz":6727.17,"linearGain":0.7071}],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[{"type":"low-pass","cutoffHz":6727.17,"linearGain":0.7071}],"effects":["transition type","chord type","detune","vibrato","note filter","distortion","bitcrusher","chorus","echo"],"transition":"interrupt","clicklessTransition":false,"chord":"strum","fastTwoNoteArp":false,"arpeggioSpeed":12,"detuneCents":0,"vibrato":"custom","vibratoDepth":0.08,"vibratoDelay":26,"vibratoSpeed":1,"vibratoType":0,"noteFilterType":true,"noteSimpleCut":10,"noteSimplePeak":0,"noteFilter":[],"distortion":14,"aliases":false,"bitcrusherOctave":5,"bitcrusherQuantization":43,"panDelay":10,"chorus":29,"echoSustain":71,"echoDelayBeats":1,"fadeInSeconds":0,"fadeOutTicks":-1,"algorithm":"(1 2)←(3 4)","feedbackType":"1⟲ 2⟲","feedbackAmplitude":0,"operators":[{"frequency":"~1×","amplitude":13,"waveform":"sine","pulseWidth":5},{"frequency":"8×","amplitude":8,"waveform":"sine","pulseWidth":5},{"frequency":"20×","amplitude":3,"waveform":"sine","pulseWidth":5},{"frequency":"1×","amplitude":1,"waveform":"sine","pulseWidth":5},{"frequency":"1×","amplitude":0,"waveform":"sine","pulseWidth":5},{"frequency":"1×","amplitude":0,"waveform":"sine","pulseWidth":5}],"envelopes":[{"target":"noteFilterAllFreqs","envelope":"twang 2"},{"target":"operatorAmplitude","envelope":"twang 3","index":2},{"target":"operatorAmplitude","envelope":"twang 1","index":1}]} },
                 { name: "Bass p1", generalMidi: false, settings: {"type":"FM","eqFilter":[{"type":"low-pass","cutoffHz":4756.83,"linearGain":0.3536},{"type":"high-pass","cutoffHz":148.65,"linearGain":0.5}],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[{"type":"low-pass","cutoffHz":4756.83,"linearGain":0.3536},{"type":"high-pass","cutoffHz":148.65,"linearGain":0.5}],"eqSubFilters1":[],"effects":["detune","bitcrusher","reverb"],"detuneCents":0,"bitcrusherOctave":6.5,"bitcrusherQuantization":0,"panDelay":10,"reverb":0,"fadeInSeconds":0,"fadeOutTicks":-3,"algorithm":"1←(2 3 4)","feedbackType":"1⟲","feedbackAmplitude":4,"operators":[{"frequency":"1×","amplitude":15,"waveform":"sine","pulseWidth":5},{"frequency":"2×","amplitude":2,"waveform":"sine","pulseWidth":5},{"frequency":"1×","amplitude":4,"waveform":"sine","pulseWidth":5},{"frequency":"1×","amplitude":3,"waveform":"sine","pulseWidth":5},{"frequency":"1×","amplitude":0,"waveform":"sine","pulseWidth":5},{"frequency":"1×","amplitude":0,"waveform":"sine","pulseWidth":5}],"envelopes":[{"target":"operatorAmplitude","envelope":"punch","index":3},{"target":"feedbackAmplitude","envelope":"decay 2"},{"target":"operatorAmplitude","envelope":"twang 3","index":1}]} },
                 { name: "Bass p2", generalMidi: false, settings: {"type":"FM","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"eqSubFilters1":[],"effects":["transition type","detune","bitcrusher"],"transition":"normal","clicklessTransition":true,"detuneCents":0,"bitcrusherOctave":6.5,"bitcrusherQuantization":0,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-3,"algorithm":"1←(2 3 4)","feedbackType":"1⟲ 2⟲ 3⟲ 4⟲","feedbackAmplitude":0,"operators":[{"frequency":"1×","amplitude":15,"waveform":"sine","pulseWidth":5},{"frequency":"1×","amplitude":4,"waveform":"sine","pulseWidth":5},{"frequency":"1×","amplitude":0,"waveform":"sine","pulseWidth":5},{"frequency":"1×","amplitude":0,"waveform":"sine","pulseWidth":5},{"frequency":"1×","amplitude":0,"waveform":"sine","pulseWidth":5},{"frequency":"1×","amplitude":0,"waveform":"sine","pulseWidth":5}],"envelopes":[{"target":"noteVolume","envelope":"note size"}]} },
@@ -143,6 +168,7 @@ export class EditorConfig {
         },
         {
             name: "Old Unbox Presets", presets: <DictionaryArray<Preset>>toNameMap([
+                //These are old waves I want to retire but still may have some use.
                 { name: "sawtooth wave rising", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"interrupt","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"Falling Saw","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
                 { name: "sawtooth wave falling", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"interrupt","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"Rising Saw","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":64,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },
                 //{ name: "name", generalMidi: false, settings:  },
@@ -153,6 +179,7 @@ export class EditorConfig {
 
         {
             name: "Retro Presets(UB)", presets: <DictionaryArray<Preset>>toNameMap([
+                //Why no plain sawtooth??? 
                 { name: "square wave", midiProgram: 80, settings: { "type": "chip", "eqFilter": [], "effects": ["aliasing"], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "square", "unison": "none", "envelopes": [] } },
                 { name: "triangle wave", midiProgram: 71, settings: { "type": "chip", "eqFilter": [], "effects": ["aliasing"], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "triangle", "unison": "none", "envelopes": [] } },
                 { name: "square lead", midiProgram: 80, generalMidi: true, settings: { "type": "chip", "eqFilter": [{ "type": "low-pass", "cutoffHz": 8000, "linearGain": 0.3536 }], "effects": ["aliasing"], "transition": "normal", "fadeInSeconds": 0, "fadeOutTicks": -3, "chord": "simultaneous", "wave": "square", "unison": "hum", "envelopes": [] } },
