@@ -257,7 +257,7 @@ const enum SongTagCode {
 	feedbackEnvelope    = CharCode.V, // added in BeepBox URL version 6, DEPRECATED
 	pulseWidth          = CharCode.W, // added in BeepBox URL version 7
 	aliases             = CharCode.X, // added in JummBox URL version 4 for aliases, DEPRECATED, [UB] repurposed for PWM decimal offset (DEPRECATED as well)
-//	                    = CharCode.Y,
+	dutyCycle           = CharCode.Y, // added in Unbox   URL version 1 Alpha version 1 (0.1.0.0) Not sure I need this at this point in time.
 //	                    = CharCode.Z,
 //	                    = CharCode.NUM_0,
 //	                    = CharCode.NUM_1,
@@ -1416,6 +1416,10 @@ export class Instrument {
     public aliases: boolean = false;
     public pulseWidth: number = (Config.pulseWidthRange * 2);
     public decimalOffset: number = 0;
+    //This is the order in the sequence   1  2  3     4      5      6   7      8     9      10  11     12    13     14  15     16    17     18
+    public dutyCycleSequence: number[] = [0, 1, 6.25, 12.25, 18.75, 25, 31.25, 37.5, 43.75, 50, 56.25, 62.5, 68.75, 75, 81.25, 87.5, 93.75, 99]; // 18 in total, treat 0% pulse as 100% pulse in which it "disables" the pulse width. 
+    //This is the speed ranges for cycle speed 0-
+    public dutyCycleSpeed: number = 13; // Cycle Speed?
     public supersawDynamism: number = Config.supersawDynamismMax;
 	public supersawSpread: number = Math.ceil(Config.supersawSpreadMax / 2.0);
 	public supersawShape: number = 0;
@@ -7613,6 +7617,7 @@ class InstrumentState {
     public vibratoTime: number = 0;
     public nextVibratoTime: number = 0;
     public envelopeTime: number = 0;
+    public dutyCycleTime: number = 0; //Cycle Counter
 
     public eqFilterVolume: number = 1.0;
     public eqFilterVolumeDelta: number = 0.0;
@@ -9744,6 +9749,33 @@ export class Synth {
                         let instrument: Instrument = this.song.channels[channel].instruments[instrumentIdx];
                         let instrumentState: InstrumentState = this.channels[channel].instruments[instrumentIdx];
 
+                        // dutyCycleSequence = sequence
+                        // dutyCycleTime = counter
+                        // dutyCycleSpeed = cycle speed?
+                        // Should "dutyCycle speed" be called that or call it "Cycle Time" like in Sandbox?
+                        if (instrument.type == InstrumentType.dutyCycle) {
+                            const dutyCycleSize: number = instrument.dutyCycleSequence.length
+                            let dutyCycleSpeed: number = Config.dutyCycleSpeedScale[instrument.dutyCycleSpeed];
+                            //if(this.isAnyModActive(Config.modulators.dictionary["dutyCycle speed"].index, channel)) {
+                                //const dutyCycleSpeedModValue: number = this.getModValue(Config.modulators.dictionary["dutyCycle speed"].index, channel, instrumentIdx, false);
+                                //if (Number.isInteger(dutyCycleSpeedModValue)) {
+                                    //dutyCycleSpeed = Config.dutyCycleSpeedScale[dutyCycleSpeedModValue];
+                                //} else {
+                                    //dutyCycleSpeed = (1 - (dutyCycleSpeedModValue % 1)) * Config.dutyCycleSpeedScale[Math.floor(dutyCycleSpeedModValue)] + (dutyCycleSpeedModValue % 1) * Config.dutyCycleSpeedScale[Math.min(Config.dutyCycleSpeedScale.length - 1, Math.ceil(dutyCycleSpeedModValue))];
+                                //}
+                            //}
+                            if (dutyCycleSpeed <= 0) {
+                                //Nothing. Skip?
+                            } else {
+                                if (dutyCycleSize <= 0) {
+                                    //Nothing?
+                                } else {
+                                    instrumentState.dutyCycleTime = (instrumentState.dutyCycleTime + dutyCycleSpeed * (1.0 / (Config.ticksPerPart * Config.partsPerBeat))) % dutyCycleSize;
+                                }
+
+                            }
+                        }
+
                         // Update arpeggio time, which is used to calculate arpeggio position
                         let useArpeggioSpeed: number = instrument.arpeggioSpeed;
                         if (this.isModActive(Config.modulators.dictionary["arp speed"].index, channel, instrumentIdx)) {
@@ -11260,8 +11292,15 @@ export class Synth {
                 
                 tone.pulseWidth -= (tone.decimalOffset) / 10000;
             }
+            //Goal:Create a Duty Cycle in which pulse width values swap between 16? values and a cycle length of 16 (probably will make it 8 long?).
+            //Cycle time and Loop points set by slider values?
+            //Visual (zoomed in) size would be 600px wide and 450px tall (Slarmoo's additive menu's size)
+            //This ideally should work without the need of a mod channel in regards to the changing of pulse width values.
+
+            //Shouldn't it be possible to use that framework to automate volume? I wonder if an AY envelope is possible on that...
+
             if (instrument.type == InstrumentType.dutyCycle) {
-                const basePulseWidth: number = getPulseWidthRatio(instrument.pulseWidth);
+                const basePulseWidth: number = getPulseWidthRatio(instrument.dutyCycleSequence[Math.floor(instrumentState.dutyCycleTime)]);
 
                 let pulseWidthModStart: number = basePulseWidth;
                 let pulseWidthModEnd: number = basePulseWidth;

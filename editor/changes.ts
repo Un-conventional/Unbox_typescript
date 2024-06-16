@@ -2295,6 +2295,20 @@ export class ChangeDecimalOffset extends ChangeInstrumentSlider {
         if (oldValue != newValue) this._didSomething();
     }
 }
+export class ChangeDutyCycleSpeed extends Change {
+    constructor(doc: SongDocument, oldValue: number, newValue: number) {
+        super();
+        const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+        instrument.arpeggioSpeed = newValue;
+        doc.synth.unsetMod(Config.modulators.dictionary["dutyCycle speed"].index, doc.channel, doc.getCurrentInstrument());
+
+        doc.notifier.changed();
+        if (oldValue != newValue) {
+            instrument.preset = instrument.type;
+            this._didSomething();
+        }
+    }
+}
 
 export class ChangeSupersawDynamism extends ChangeInstrumentSlider {
 	constructor(doc: SongDocument, oldValue: number, newValue: number) {
