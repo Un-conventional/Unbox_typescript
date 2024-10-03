@@ -4,7 +4,7 @@
     <link rel='shortcut icon' type='image/x-icon' href='./favicon.ico' /> 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Unbox Patch Notes</title>
+    <title>Unbox FAQ</title>
     <meta name="application-name" content="Unbox" />
     <meta name="apple-mobile-web-app-title" content="Unbox">
     <meta name="description" content="Unbox is an online tool for sketching and sharing instrumental music." />
@@ -82,12 +82,20 @@
             -webkit-text-stroke-width: 0;
         }
 
+        h4 {
+            font-size: 1rem;
+			/* text-align: center; */
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+            -webkit-text-stroke-width: 0;
+        }
+
         .centerDiv {
 			margin: 0px auto;
 		}
 
         a {
-            color: var(--link-accent, #98f);
+            color: var(--link-accent, #FFCA00);
         }
 
         /* wide screen */
@@ -135,6 +143,81 @@
     </style>
   </body>
 	  <h1>
-<font color="#9c64f7">Updates will happen whenever things are ready, ill delay updates if you keep asking about it. (-:<</font>
+<h1><font color="#FFCA00">Unbox FAQ</font></h1>
+<!-- Add some fancy box thing around this to make it look nice and clean eventually-->
+<h1><font color="#FFCA00">General Information</font></h1>
+    <h2>What is <font color="#FFCA00">Unbox</font>?</h2>    
+        <h4><ul>
+            <li>This is <font color="#9c64f7">UltraBox</font> but with my ideas added on. This also is sort of a testing ground for me to learn code.</li>
+            <li>Some ideas come from how sound chips work and that and many ideas may seem excessive but pushing limits is fun.</li>
+        </ul></h4>
+
+    <h2>Who is this mod for?</h2>
+        <h4><ul>
+            <li>This mod is for anyone regardless of skill level, I strongly suggest checking out <a href=https://ultraabox.github.io>UltraBox</a> first though.</li> 
+        </ul></h4>
+
+    <h2>Where can you contact me?</h2>
+        <h4><ul>
+            <li>The <a href="https://discord.com/invite/beepbox" target="_blank">BeepBox Discord</a>, you can probably find me in a event or in the channels related to <font color="#9c64f7">BeepBox</font> mods.</li>
+        </ul></h4>
+
+    <h2>When will updates come out?</h2>
+        <h4><ul>
+            <li>Updates will happen whenever things are ready, I WILL delay updates if you keep asking about it. (-:< (Jk)</li>
+            <li>Updates generally release when features are done or when bug fixes are applied. There might be micro updates but don't mind those.</li>
+            <li>Patch notes for <font color="#FFCA00">Unbox <a href=https://un-conventional.github.io/patch_notes.html>here</a></font>.</li>
+        </ul></h4>
+
+    <h2>Why does <font color="#FFCA00">Unbox</font> exist?</h2>
+        <h4><ul>
+            <li>It exists because I wanted it to exist. I got tired of asking "what if X existed" or "why can't W, X, Y apply to Z as well".</li>
+        </ul></h4>
+    <h2>Why is the b in <font color="#FFCA00">Unbox</font> not a capitalized B? Why is it not called <font color="#a1afb0">UnBox</font> or <font color="#a1afb0">UNBox</font>?</h2>
+        <h4><ul>
+            <li>Because I said so and I found it weird having it spelled that way.</li>
+        </ul></h4>
+
+    <h2>What does <font color="#FFCA00">Unbox</font> add, why it exists and how does it work?</h2>
+        <h3>+-24 Pitch Shift range</h3>
+            <h4><ul>
+                <li>I felt the range was too small so I increased it. It still works the same as normal Pitch Shift but with more range.</li>
+            </ul></h4>
+        <h3>Pulse Width range</h3>
+            <h4><ul>
+                <li>The fact that 1%-50% just felt limiting. With what I added, 0-100% is possible if you include the decimal offset. There is just so much that is possible with that range increase.</li>
+                <li>Lets ignore the fact that pulse width is <font color="#a1afb0">Inverted</font> and that the original range was really 50%-99%. That problem also applies to Custom chip.</li>
+            </ul></h4>
+        <h3>Duty Cycle</h3>
+            <h4><ul>
+                <li>I wanted to revive a function from an old mod called <font color="#FFCA00">SandBox</font> and that mod had Duty Cycle but it was limited to a few pulse widths and only 2 cycle types.</li>
+                <li>What I did differently was increased the amount of pulse width values and allows the user to select the cycle length and speed. (insert UI stuff when finished)</li>
+            </ul></h4>
+        <h3>Shift F shortcut</h3>
+            <h4><ul>
+                <li>How many times did you want to jump to the start of the loop? All the time? Yeah, that is why I made this shortcut. It even was put in <font color="#9c64f7">UltraBox</font>!</li>
+            </ul></h4>
+        <h3>Tempo range increase</h3>
+            <h4><ul>
+                <li>Ever wanted to make songs that are faster than 500 "tempo"? That would limit you to about 200Hz. I increased it to 1000 so 400Hz overclock should be available. I would like to increase it to 10k at one point for 1kHz.</li>
+                <li>You still can edit the tempo via the text box.</li>
+                <li>I intend to create a clock-speed type of option that may make the Hz more accurate. With 60Hz being the standard. </li>
+                <li>I also added new rhythms that should help out if you increase the beats per bar in tandem with higher tempo.</li> <!-- I should add a UI element that shows beats in more than a segment. 32 BPB would have it every 8 "beats" and such. Even 4 segments.-->
+            </ul></h4>
+
+        <!-- <h3>Insert new feature here!</h3>
+            <h4><ul>
+                <li>Insert why and what the new feature is</li>
+            </ul></h4>-->
+        
+        <h3>Chipwaves</h3>
+            <h4><ul>
+                <li><font color="#FFCA00">Unbox</font> adds some chipwaves from some sound chips like the AY-3-8910 and the SID-6581/8580. Those can always be improved, let me know if it needs updating. </li>
+            </ul></h4>
+
+        <h3>Presets</h3>
+            <h4><ul>
+                <li><font color="#FFCA00">Unbox</font> has new presets. Ranging from ones that come from chips or ones with sentimental value.  </li>
+            </ul></h4>
 </body>
 </html>

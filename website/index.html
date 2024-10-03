@@ -175,6 +175,8 @@
                 Listed here are elements that make up Ultrabox, (see <a href="./credits.html">credits</a>).
                 At this point in time, this is a testing ground for the strange, hopefully cool, stuff Unconventional has manufactured.
                 Expect things to be broken and or unfinished.
+                For any questions or information here is the <a href="./information.html">FAQ</a>.
+                For the patch notes of Unbox, look <a href="./patch_notes.html">here</a>.
             </p>
             <p>
                 All song data is contained in the URL at the top of your browser.
@@ -308,12 +310,8 @@
                         You can download and use <a href="https://github.com/Un-conventional/UNBox_typescript" target="_blank">the source code</a> for Unbox under the MIT license.
                         You can also download and use <a href="https://github.com/ultraabox/ultrabox_typescript" target="_blank">the source code</a> for Ultrabox, which this mod is based on, again under the MIT license.
                         The original BeepBox source code by John Nesky can be found <a href="https://github.com/johnnesky/beepbox" target="_blank">here</a>.
-                    </p>
-                    <p>
-                        The patch notes of Unbox are available <a href="./patch_notes.html">here</a>.
                     </p>     
-                    <p> If you made it this far, here is some <a href="./information.html">update information</a>.
-                        </p>
+                    
                 </section>
             </main>
         </div>
@@ -326,10 +324,10 @@
     <script type="text/javascript">
 
         // Randomize display of header
-        // 1-in-33
+        // 1-in-37
         //I should rework this sometime (maybe add the midbox tips thingy?)
         if (Math.floor(Math.random() * 8) == 0) {
-            switch (Math.floor(Math.random() * 33)) {
+            switch (Math.floor(Math.random() * 38)) {
                 // jummbox/goldbox plants
                 case 0:
                     document.getElementById("goldboxPlant").innerHTML = "  🍂";
@@ -452,6 +450,16 @@
                 case 34: 
                     document.getElementById("goldboxPlant").innerHTML = ":Team triangle wins!:";
                     break;
+                case 35:
+                    document.getElementById("goldboxPlant").innerHTML = " Try <pdbpx as we;;!!";
+                    break;
+                case 36:
+                    document.getElementById("goldboxPlant").innerHTML = " 🐛 ";
+                    break;
+                case 37:
+                    document.getElementById("goldboxPlant").innerHTML = " Its Unbox, not UnBox! ";
+                    break;
+                    
             }
         }
 
