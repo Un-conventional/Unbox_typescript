@@ -1417,7 +1417,7 @@ export class Instrument {
     public pulseWidth: number = (Config.pulseWidthRange * 2);
     public decimalOffset: number = 0;
     //This is the order in the sequence   1  2  3     4      5      6   7      8     9      10  11     12    13     14  15     16    17     18
-    public dutyCycleSequence: number[] = [0, 1, 6.25, 12.25, 18.75, 25, 31.25, 37.5, 43.75, 50, 56.25, 62.5, 68.75, 75, 81.25, 87.5, 93.75, 99]; // 18 in total, treat 0% pulse as 100% pulse in which it "disables" the pulse width. 
+    public dutyCycleSequence: number[] = [0, 1, 6.25, 12.5, 18.75, 25, 31.25, 37.5, 43.75, 50, 56.25, 62.5, 68.75, 75, 81.25, 87.5, 93.75, 99]; // 18 in total, treat 0% pulse as 100% pulse in which it "disables" the pulse width. 
     //This is the speed ranges for cycle speed 0-
     public dutyCycleSpeed: number = 13; // Cycle Speed?
     public supersawDynamism: number = Config.supersawDynamismMax;
