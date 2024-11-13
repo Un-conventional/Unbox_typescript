@@ -10,6 +10,8 @@ const { button, div, h2, select, option } = HTML;
 
 export class ThemePrompt implements Prompt {
 	private readonly _themeSelect: HTMLSelectElement = select({ style: "width: 100%;" },
+			option({ value: "unbox classic" }, "Unbox Dark"),
+			option({ value: "unbox legacy" }, "Unbox Legacy"),
 			option({ value: "dark classic" }, "BeepBox Dark"),
 			option({ value: "light classic" }, "BeepBox Light"),
 			option({ value: "dark competition" }, "BeepBox Competition Dark"),

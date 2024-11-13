@@ -324,10 +324,10 @@
     <script type="text/javascript">
 
         // Randomize display of header
-        // 1-in-37
+        // 1-in-40
         //I should rework this sometime (maybe add the midbox tips thingy?)
         if (Math.floor(Math.random() * 8) == 0) {
-            switch (Math.floor(Math.random() * 38)) {
+            switch (Math.floor(Math.random() * 40)) {
                 // jummbox/goldbox plants
                 case 0:
                     document.getElementById("goldboxPlant").innerHTML = "  🍂";
@@ -459,7 +459,12 @@
                 case 37:
                     document.getElementById("goldboxPlant").innerHTML = " Its Unbox, not UnBox! ";
                     break;
-                    
+                case 38:
+                    document.getElementById("goldboxPlant").innerHTML = " Try BotB ";
+                    break;
+                case 39:
+                    document.getElementById("goldboxPlant").innerHTML = " Try NepBox :) ";
+                    break;                      
             }
         }
 
