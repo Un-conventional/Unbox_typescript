@@ -62,7 +62,7 @@ export class ExportPrompt implements Prompt {
         option({ value: "html" }, "Export to .html file."),
     );
     private readonly _removeWhitespace: HTMLInputElement = input({ type: "checkbox" });
-    private readonly _removeWhitespaceDiv: HTMLDivElement = div({ style: "vertical-align: middle; align-items: center; justify-content: space-between;" },
+    private readonly _removeWhitespaceDiv: HTMLDivElement = div({ style: "vertical-align: middle; align-items: center; justify-content: space-between; margin-bottom: 14px;" },
     "Remove Whitespace: ", this._removeWhitespace);
     private readonly _cancelButton: HTMLButtonElement = button({ class: "cancelButton" });
     private readonly _exportButton: HTMLButtonElement = button({ class: "exportButton", style: "width:45%;" }, "Export");
@@ -139,7 +139,7 @@ export class ExportPrompt implements Prompt {
             this._formatSelect.value = lastExportFormat;
         }
 
-        const lastExportWhitespace: boolean = window.localStorage.getItem("exportWhitespace") == "true";
+        const lastExportWhitespace: boolean = window.localStorage.getItem("exportWhitespace") != "false";
         if (lastExportWhitespace != null) {
             this._removeWhitespace.checked = lastExportWhitespace;
         }

@@ -14,14 +14,15 @@
     <meta name="application-name" content="Unbox" />
     <meta name="apple-mobile-web-app-title" content="Unbox">
     <meta name="description" content="Unbox is an online tool for sketching and sharing instrumental music." />
-    <meta name="keywords" content="chiptune, instrumental, music, song, melody, composition, tool, free, online, square wave, NES, NSF, ultrabox, beepbox, jummbox, pandorasbox, modbox, sandbox, goldbox, wackybox, todbox, unbox" />
+    <meta name="keywords" content="chiptune, instrumental, music, song, melody, composition, tool, free, online, square wave, NES, NSF, ultrabox, beepbox, jummbox, pandorasbox, modbox, sandbox, goldbox, wackybox, todbox, unbox, BotB" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="theme-color" content="#444" />
+    <meta name="theme-color" content="#CCCCCC"/>
     <meta name="msapplication-TileColor" content="#dba600" />
     <meta name="msapplication-config" content="/browserconfig.xml" />
     <meta name="format-detection" content="telephone=no" />
+    <meta property="og:image" content="/icon_maskable_192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/icon_32.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
@@ -64,6 +65,8 @@
             padding-left: 30px;
             padding-right: 30px;
         }
+
+        #Hotdog { display: none; }
 
         h1 {
             font-size: 1.7rem;
@@ -127,6 +130,7 @@
             .instructions-column {
 				min-width: 0;
             }
+        }
 
         /* narrow screen */
 		@media (max-width: 710px) {
@@ -150,7 +154,7 @@
     <script>
         const image = localStorage.getItem('customTheme2');
         const el  = document.getElementById('secondImage');
-        // console.log(image, el);
+
         if (image != null && image !== "null" && image !== "undefined") {
             el.style.backgroundImage="url(" + image + ")";
             el.style.backgroundRepeat= "repeat";
@@ -166,7 +170,7 @@
 
             <h1>
                 <font>Unbox</font>
-                <span id="goldboxPlant" style="display: inline; color:#62a13b"></span>
+                <span id="goldboxPlant" style="display: inline; color:#7bc7cb"></span>
                 <!-- <span id="goldboxPlant" style="display: inline; color: var(--plant-color, var(--link-accent, #62a13b));"></span> -->
             </h1>
             
@@ -175,15 +179,18 @@
                 Listed here are elements that make up Ultrabox, (see <a href="./credits.html">credits</a>).
                 At this point in time, this is a testing ground for the strange, hopefully cool, stuff Unconventional has manufactured.
                 Expect things to be broken and or unfinished.
-                For any questions or information here is the <a href="./information.html">FAQ</a>.
                 For the patch notes of Unbox, look <a href="./patch_notes.html">here</a>.
+                For Unbox's FAQ visit <a href="./faq.html">here</a>.
+                You can use the built in shorten URL function or use Pastelink to shorten the links.
+                If the link is too large, the link to pastelink can be found <a href="https://pastelink.net/">here</a>.
+                <!--For any questions or information here is the <a href="./information.html">FAQ</a>. Redundant info with the new FAQ--->
             </p>
-            <p>
+            <!-- <p>
                 All song data is contained in the URL at the top of your browser.
                 When you make changes to the song, the URL is updated to reflect your changes.
                 When you are satisfied with your song, just copy and paste the URL to save and share your song!
-                You can use the built in shorten URL function or use Pastelink to shorten the links.
-                The link to pastelink can be found <a href="https://pastelink.net/">here</a>.
+                
+                If you have any questions, please visit the <a href="./faq.html">FAQ</a>.        
             </p>
             <p>
                 There is no offline version of Unbox, however there is an offline version of UltraBox that can be found <a href="https://github.com/ultraabox/ultrabox_typescript/releases">here</a>, while the testing version can be found <a href="https://ultraabox.github.io/testing">here</a>.
@@ -211,14 +218,7 @@
                     <p>
                         You can add or remove notes by clicking on the gray rows at the top.
                         Unbox automatically plays the notes out loud for you. Try it!
-			    <img id="Hotdog" src="hotdog.png" width="500" height="333" onclick="changeHotdogSize()" />
-				<script>
-				function changeHotdogSize(){
-					var image = document.getElementById('Hotdog')
-					image.width = Math.random() * (750 - 20) + 20
-					image.height = Math.random() * (499 - 20) + 20
-				}
-				</script>
+			    <img id="Hotdog" src="" width="500" height="333" onclick="changeHotdogSize()" />
 		
                     </p>
                     <p>
@@ -254,7 +254,7 @@
 							<li><b>[ ]</b>: move playhead backward or forward</li>
 							<li><b>F/H</b>: move to First or Highlighted pattern </li>
 							<li><b>Shift & Drag</b>: select part of a pattern</li>
-							<li>These are just a few shortcuts, check Unbox's edit menu for more!</li>
+							<li>These are just a few shortcuts, check UltraBox's edit menu for more!</li>
                             <!-- need to edit this eventually -->
                         </ul>
                     </div>
@@ -282,7 +282,7 @@
                     </p>
                     <p>
 						Want to see what people have made with BeepBox? Songs that were shared on Twitter prior to 2023-05-22 can now be browsed in <a href="https://twitter-archive.beepbox.co/" target="_blank">this interactive archive</a>!
-                        Additionally, there's an active <a href="https://discord.gg/beepbox">BeepBox Discord</a> who you can share songs with and ask questions!
+                        Additionally, there's an active <a href="https://discord.gg/beepbox">BeepBox Discord</a> where you can share songs and ask questions!
                     </p>
                 </section>
                 <section>
@@ -324,148 +324,47 @@
     <script type="text/javascript">
 
         // Randomize display of header
-        // 1-in-40
-        //I should rework this sometime (maybe add the midbox tips thingy?)
-        if (Math.floor(Math.random() * 8) == 0) {
-            switch (Math.floor(Math.random() * 40)) {
-                // jummbox/goldbox plants
-                case 0:
-                    document.getElementById("goldboxPlant").innerHTML = "  🍂";
-                    break;
-                case 1:
-                    document.getElementById("goldboxPlant").innerHTML = "  🌿";
-                    break;
-                case 2:
-                    document.getElementById("goldboxPlant").innerHTML = "  🌺";
-                    break;
-                case 3:
-                    document.getElementById("goldboxPlant").innerHTML = "  🍃";
-                    break;
-                case 4:
-                    document.getElementById("goldboxPlant").innerHTML = "  🍄";
-                    break;
-                case 5:
-                    document.getElementById("goldboxPlant").innerHTML = "  🍀🌷";
-                    break;
-                case 6:
-                    document.getElementById("goldboxPlant").innerHTML = "  🌈🍂🍁🍀🌷🍄🐲🌈🍃🌺🍄";
-                    break;
-                case 7:
-                    document.getElementById("goldboxPlant").innerHTML = "  #️⃣9️⃣1️⃣1️⃣";
-                    break;
-                    //Fire and EMS :)
-                // blubox plants 
-			    case 8:
-                    document.getElementById("goldboxPlant").innerHTML = "  ≽(◕ ᴗ ◕)≼";
-                    break;
-			    case 9:
-                    document.getElementById("goldboxPlant").innerHTML = "  ≽(ᴗ _ ᴗ)≼";
-                    break;
-			    case 10:
-                    document.getElementById("goldboxPlant").innerHTML = "  ≽(⌐ _ ⌐)≼";
-                    break;
-			    case 11:
-                    document.getElementById("goldboxPlant").innerHTML = "  ≽(ᵕ ‿ ᵕ)≼";
-                    break;
-                // familiarbox plant (there were others, but the code of familiarbox is long gone) 
-                // this is actually a reference to really old lore chippy made for one of their projects 
-			    case 12:
-                    document.getElementById("goldboxPlant").innerHTML = "  ☀️⭐🕒👁️";
-                    break;
-                // suggested by mel, meant to supplement the lack of a worm logo 
-                // (in case it doesn't show up, this is meant to be a worm emoji)
-			    case 13:
-                    document.getElementById("goldboxPlant").innerHTML = "  🪱";
-                    break;
-                // I believe this is from paandorasbox (might have also been present in familiarbox???? maybe not though...)
-                case 14:
-                    document.getElementById("goldboxPlant").innerHTML = "  :wackybox:";
-                    break;
-                // plant suggested by mel, in reference to the "(don't eat) thegubbys" meme
-			    case 15:
-                    document.getElementById("goldboxPlant").innerHTML = "  🐟";
-                    break;
-                 // blubox desktop plants 
-                 case 16:
-                    document.getElementById("goldboxPlant").innerHTML = "  ⚡";
-                    break;
-                case 17:
-                    document.getElementById("goldboxPlant").innerHTML = "  🔵";
-                    break;
-                case 18:
-                    document.getElementById("goldboxPlant").innerHTML = "  💫";
-                    break;
-                case 19:
-                    document.getElementById("goldboxPlant").innerHTML = "  👽";
-                    break;
-                // dogebox2 plants 
-                case 20:
-                    document.getElementById("goldboxPlant").innerHTML = "  🍕";
-                    break;
-                case 21:
-                    document.getElementById("goldboxPlant").innerHTML = "  🌭";
-                    break;
-                case 22:
-                    document.getElementById("goldboxPlant").innerHTML = "  🍔";
-                    break;
-                case 23:
-                    document.getElementById("goldboxPlant").innerHTML = "  🍟";
-                    break;
-                // Unbox plants
-                case 24:
-                    document.getElementById("goldboxPlant").innerHTML = "  🌵";
-                    break;
-                case 25:
-                    document.getElementById("goldboxPlant").innerHTML = "  🪻 :Hyacinth:";
-                    break;
-                    //Should be a Hyacinth
-                case 26:
-                    document.getElementById("goldboxPlant").innerHTML = "  🪨";
-                    break;
-                    //Should be a rock
-                case 27:
-                    document.getElementById("goldboxPlant").innerHTML = "  🔔";
-                    break;
-                case 28:
-                    document.getElementById("goldboxPlant").innerHTML = "  🪨 🧻 ✂️";
-                    break;
-                case 29:
-                    document.getElementById("goldboxPlant").innerHTML = " 👁️ 🎯 🫵 🌵";
-                    break;
-                    //"I will hit you with a cactus"
-                case 30:
-                    document.getElementById("goldboxPlant").innerHTML = " ⚠️";
-                    break;
-                case 31:
-                    document.getElementById("goldboxPlant").innerHTML = " 🛆 🏆";
-                    break;
-                    //heh 
-                case 32:
-                    document.getElementById("goldboxPlant").innerHTML = " 🪓 ";
-                    break;
-                case 33:
-                    document.getElementById("goldboxPlant").innerHTML = " 🌳 🪓 🪵 🪚 🪜 🏭";
-                    break; 
-                    // Wood
-                case 34: 
-                    document.getElementById("goldboxPlant").innerHTML = ":Team triangle wins!:";
-                    break;
-                case 35:
-                    document.getElementById("goldboxPlant").innerHTML = " Try <pdbpx as we;;!!";
-                    break;
-                case 36:
-                    document.getElementById("goldboxPlant").innerHTML = " 🐛 ";
-                    break;
-                case 37:
-                    document.getElementById("goldboxPlant").innerHTML = " Its Unbox, not UnBox! ";
-                    break;
-                case 38:
-                    document.getElementById("goldboxPlant").innerHTML = " Try BotB ";
-                    break;
-                case 39:
-                    document.getElementById("goldboxPlant").innerHTML = " Try NepBox :) ";
-                    break;                      
-            }
+        // 1-in-9 chance to appear
+
+        const plants = [
+        // jummbox/goldbox plants    
+        "🍂", "🌿", "🌺", "🍃", "🍄", "🍀🌷", "🌈🍂🍁🍀🌷🍄🐲🌈🍃🌺🍄","1️⃣3️⃣1️⃣2️⃣",
+        // blubox plants
+        "≽(◕ ᴗ ◕)≼", "≽(ᴗ _ ᴗ)≼", "≽(⌐ _ ⌐)≼", "≽(ᵕ ‿ ᵕ)≼", 
+        // familiarbox plant (there were others, but the code of familiarbox is long gone)
+        // this is a reference to (now outdated?) lore jinx made for one of their projects 
+        "☀️⭐🕒👁️",
+        // suggested by mel, meant to supplement the lack of a worm logo
+        "🪱",
+        // I believe this is from paandorasbox (might have also been present in familiarbox?)
+        " :wackybox:",
+        // plant suggested by mel, in reference to the "(don't eat) thegubbys" meme
+        "🐟",
+        // blubox desktop plants 
+        "⚡","🔵","💫",
+        // dogebox2 plants 
+        "🍕","🌭","🍔","🍟",
+        // Slarmoo's Box plants
+        "✨","🌈","🌧️","🪨","🐍","🌲","🌳",
+        // Unbox Plants - Ask me which ones to be added to Ultra if they are to be added
+        "🌵","🪻","🔔","🪨 🧻 ✂️","👁️ 🎯 🫵 🌵","⚠️","🛆 🏆","🪓","🌳 🪓 🪵 🪚 🪜 🏭",":Team triangle wins!:","Try <pdbpx as we;;!!","🐛","not UnBox!","Try BotB","Try NepBox","5️⃣6️⃣","🍪","Fire and EMS!"
+        ];
+
+        if (Math.floor(Math.random() * 9) == 0) {
+            document.getElementById("goldboxPlant").innerHTML = "  " + plants[(Math.floor(Math.random() * plants.length))];  
+        }
+
+        const date = new Date();
+
+        // Unb birthday (january 20th)
+        if ((date.getDate() == 20) && date.getMonth() == 0) {
+            document.getElementById("goldboxPlant").innerHTML = "  🎂🎉🍰🧁🎈🎁🥳";  
+        }
+
+        function changeHotdogSize() {
+            var image = document.getElementById('Hotdog');
+            image.width = Math.random() * (750 - 20) + 20;
+            image.height = Math.random() * (499 - 20) + 20;
         }
 
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|android|ipad|playbook|silk/i.test(navigator.userAgent)) {
@@ -473,7 +372,7 @@
             document.getElementById("keyboard-instructions").style.display = "none";
             document.getElementById("mobile-instructions").style.display = "";
             document.getElementById("bar-editing").innerHTML = "Tap the boxes to move to a different part of the song, or tap on the currently selected box to swap which pattern is played during that part of the song.";
-			//document.getElementById("offline-instructions").innerHTML = 'You can use BeepBox when your device is offline if you put a shortcut to BeepBox on your home screen. <ul><li>Chrome: find the "Add to Home Screen" option in the ⋮ menu.</li><li>Firefox: find the "Add Page Shortcut" option in the ⋮ menu.</li><li>Safari: find the "Add to Home Screen" option in the bookmark menu.</li></ul>';
+			//document.getElementById("offline-instructions").innerHTML = 'You can use Unbox when your device is offline if you put a shortcut to Unbox on your home screen. <ul><li>Chrome: find the "Add to Home Screen" option in the ⋮ menu.</li><li>Firefox: find the "Add Page Shortcut" option in the ⋮ menu.</li><li>Safari: find the "Add to Home Screen" option in the bookmark menu.</li></ul>';
         }
 
         function browserHasRequiredFeatures() {

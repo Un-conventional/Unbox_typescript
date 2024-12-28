@@ -257,7 +257,7 @@ const enum SongTagCode {
 	feedbackEnvelope    = CharCode.V, // added in BeepBox URL version 6, DEPRECATED
 	pulseWidth          = CharCode.W, // added in BeepBox URL version 7
 	aliases             = CharCode.X, // added in JummBox URL version 4 for aliases, DEPRECATED, [UB] repurposed for PWM decimal offset (DEPRECATED as well)
-//	                    = CharCode.Y, // should Duty Cycle exist here?
+//	                    = CharCode.Y, // should Sequence/macro exist here?
 //	                    = CharCode.Z,
 //	                    = CharCode.NUM_0,
 //	                    = CharCode.NUM_1,
@@ -535,7 +535,9 @@ export class Pattern {
         return patternObject;
     }
 
-    public fromJsonObject(patternObject: any, song: Song, channel: Channel, importedPartsPerBeat: number, isNoiseChannel: boolean, isModChannel: boolean): void {
+    public fromJsonObject(patternObject: any, song: Song, channel: Channel, importedPartsPerBeat: number, isNoiseChannel: boolean, isModChannel: boolean, jsonFormat: string = "auto"): void {
+        const format: string = jsonFormat.toLowerCase();
+
         if (song.patternInstruments) {
             if (Array.isArray(patternObject["instruments"])) {
                 const instruments: any[] = patternObject["instruments"];
@@ -577,15 +579,16 @@ export class Pattern {
 
                 //let noteClock: number = tickClock;
                 let startInterval: number = 0;
+
+                let instrument: Instrument = channel.instruments[this.instruments[0]];
+                let mod: number = Math.max(0, Config.modCount - note.pitches[0] - 1);
+
                 for (let k: number = 0; k < noteObject["points"].length; k++) {
                     const pointObject: any = noteObject["points"][k];
                     if (pointObject == undefined || pointObject["tick"] == undefined) continue;
                     const interval: number = (pointObject["pitchBend"] == undefined) ? 0 : (pointObject["pitchBend"] | 0);
 
                     const time: number = Math.round((+pointObject["tick"]) * Config.partsPerBeat / importedPartsPerBeat);
-
-                    let instrument: Instrument = channel.instruments[this.instruments[0]];
-                    let mod: number = Math.max(0, Config.modCount - note.pitches[0] - 1);
 
                     // Only one instrument per pattern allowed in mod channels.
                     let volumeCap: number = song.getVolumeCapForSetting(isModChannel, instrument.modulators[mod], instrument.modFilterTypes[mod]);
@@ -651,6 +654,15 @@ export class Pattern {
                     note.continuesLastPattern = (noteObject["continuesLastPattern"] === true);
                 } else {
                     note.continuesLastPattern = false;
+                }
+
+                if (format != "ultrabox" && instrument.modulators[mod] == Config.modulators.dictionary["tempo"].index) {
+                    for (const pin of note.pins) {
+                        const oldMin: number = 30;
+                        const newMin: number = 1;
+                        const old: number = pin.size + oldMin;
+                        pin.size = old - newMin; // convertRealFactor will add back newMin as necessary
+                    }
                 }
 
                 this.notes.push(note);
@@ -1408,7 +1420,7 @@ export class Instrument {
     public chord: number = 1;
     public volume: number = 0;
     public pan: number = Config.panCenter;
-    public panDelay: number = 10;
+    public panDelay: number = 0;
     public arpeggioSpeed: number = 12;
     public fastTwoNoteArp: boolean = false;
     public legacyTieOver: boolean = false;
@@ -1539,7 +1551,7 @@ export class Instrument {
         this.bitcrusherFreq = Math.floor((Config.bitcrusherFreqRange - 1) * 0.5)
         this.bitcrusherQuantization = Math.floor((Config.bitcrusherQuantizationRange - 1) * 0.5);
         this.pan = Config.panCenter;
-        this.panDelay = 10;
+        this.panDelay = 0;
         this.pitchShift = Config.pitchShiftCenter;
         this.detune = Config.detuneCenter;
         this.vibrato = 0;
@@ -2072,9 +2084,11 @@ export class Instrument {
     public fromJsonObject(instrumentObject: any, isNoiseChannel: boolean, isModChannel: boolean, useSlowerRhythm: boolean, useFastTwoNoteArp: boolean, legacyGlobalReverb: number = 0, jsonFormat: string = Config.jsonFormat): void {
         if (instrumentObject == undefined) instrumentObject = {};
 
+        const format: string = jsonFormat.toLowerCase();
+
         let type: InstrumentType = Config.instrumentTypeNames.indexOf(instrumentObject["type"]);
         // SynthBox support
-        if ((jsonFormat == "SynthBox") && (instrumentObject["type"] == "FM")) type = Config.instrumentTypeNames.indexOf("FM6op");
+        if ((format == "synthbox") && (instrumentObject["type"] == "FM")) type = Config.instrumentTypeNames.indexOf("FM6op");
         if (<any>type == -1) type = isModChannel ? InstrumentType.mod : (isNoiseChannel ? InstrumentType.noise : InstrumentType.chip);
         this.setTypeAndReset(type, isNoiseChannel, isModChannel);
 
@@ -2085,7 +2099,7 @@ export class Instrument {
         }
 
         if (instrumentObject["volume"] != undefined) {
-            if (jsonFormat == "JummBox" || jsonFormat == "Midbox" || jsonFormat == "SynthBox" || jsonFormat == "UltraBox" || jsonFormat == "Unbox") {
+            if (format == "jummbox" || format == "midbox" || format == "synthbox" || format == "goldbox" || format == "paandorasbox" || format == "ultrabox" || jsonFormat == "unbox") {
                 this.volume = clamp(-Config.volumeRange / 2, (Config.volumeRange / 2) + 1, instrumentObject["volume"] | 0);
             } else {
                 this.volume = Math.round(-clamp(0, 8, Math.round(5 - (instrumentObject["volume"] | 0) / 20)) * 25.0 / 7.0);
@@ -2213,8 +2227,8 @@ export class Instrument {
         }
 
         if (instrumentObject["pitchShiftSemitones"] != undefined) {
-            if (jsonFormat == "Unbox") {
-                this.pitchShift = clamp(0, Config.pitchShiftRange, Math.round(+instrumentObject["pitchShiftSemitones"]));
+            if (jsonFormat == "unbox") {
+            this.pitchShift = clamp(0, Config.pitchShiftRange, Math.round(+instrumentObject["pitchShiftSemitones"]));
             } else {
                 this.pitchShift = clamp(0, Config.pitchShiftRange, Math.round(+instrumentObject["pitchShiftSemitones"] + 12));
             }
@@ -2280,19 +2294,22 @@ export class Instrument {
 
         if (instrumentObject["pan"] != undefined) {
             this.pan = clamp(0, Config.panMax + 1, Math.round(Config.panCenter + (instrumentObject["pan"] | 0) * Config.panCenter / 100));
-
-            // Old songs may have a panning effect without explicitly enabling it.
-            if (this.pan != Config.panCenter) {
-                this.effects = (this.effects | (1 << EffectType.panning));
-            }
+        } else if (instrumentObject["ipan"] != undefined) {
+            // support for modbox fixed
+            this.pan = clamp(0, Config.panMax + 1, Config.panCenter + (instrumentObject["ipan"] * -50));
         } else {
             this.pan = Config.panCenter;
+        }
+
+        // Old songs may have a panning effect without explicitly enabling it.
+        if (this.pan != Config.panCenter) {
+            this.effects = (this.effects | (1 << EffectType.panning));
         }
 
         if (instrumentObject["panDelay"] != undefined) {
             this.panDelay = (instrumentObject["panDelay"] | 0);
         } else {
-            this.panDelay = 10;
+            this.panDelay = 0;
         }
 
         if (instrumentObject["detune"] != undefined) {
@@ -2463,12 +2480,11 @@ export class Instrument {
                 }
                 this.feedbackType6Op = Config.feedbacks6Op.findIndex(feedback6Op => feedback6Op.name == instrumentObject["feedbackType"]);
                 // SynthBox feedback support
-                if ((this.feedbackType6Op == -1) && (jsonFormat == "SynthBox")) {
-                    this.feedbackType6Op = Config.algorithms6Op.findIndex(feedbackType6Op => feedbackType6Op.name == "Custom");
-                    
+                if (this.feedbackType6Op == -1) {             
                     // These are all of the SynthBox feedback presets that aren't present in Gold/UltraBox
                     let synthboxLegacyFeedbacks: DictionaryArray<any> = toNameMap([
                         { name: "2⟲ 3⟲", indices: [[], [2], [3], [], [], []] },
+                        { name: "3⟲ 4⟲", indices: [[], [], [3], [4], [], []] },
                         { name: "4⟲ 5⟲", indices: [[], [], [], [4], [5], []] },
                         { name: "5⟲ 6⟲", indices: [[], [], [], [], [5], [6]] },
                         { name: "1⟲ 6⟲", indices: [[1], [], [], [], [], [6]] },
@@ -2495,16 +2511,21 @@ export class Instrument {
                         { name: "1→2→3→4→5→6", indices: [[], [1], [2], [3], [4], [5]] },
                     ]);
 
-                    let synthboxFeedbackType = synthboxLegacyFeedbacks[synthboxLegacyFeedbacks.findIndex(feedback => feedback.name == instrumentObject["feedbackType"])].indices;
-                    
-                    this.customFeedbackType.set(synthboxFeedbackType);
-                } else {
-                    if (this.feedbackType6Op == -1) this.feedbackType6Op = 1;
-                    if (this.feedbackType6Op == 0) {
-                        this.customFeedbackType.set(instrumentObject["customFeedback"]["mods"]);
+                    let synthboxFeedbackType = synthboxLegacyFeedbacks[synthboxLegacyFeedbacks.findIndex(feedback => feedback.name == instrumentObject["feedbackType"])]!.indices;
+
+                    if (synthboxFeedbackType != undefined) {
+                        this.feedbackType6Op = 0;
+                        this.customFeedbackType.set(synthboxFeedbackType);
                     } else {
-                        this.customFeedbackType.fromPreset(this.feedbackType6Op)
+                        // if the feedback type STILL can't be resolved, default to the first non-custom option
+                        this.feedbackType6Op = 1;
                     }
+                } 
+
+                if ((this.feedbackType6Op == 0) && (instrumentObject["customFeedback"] != undefined)) {
+                    this.customFeedbackType.set(instrumentObject["customFeedback"]["mods"]);
+                } else {
+                    this.customFeedbackType.fromPreset(this.feedbackType6Op);
                 }
             }
             if (instrumentObject["feedbackAmplitude"] != undefined) {
@@ -2527,12 +2548,20 @@ export class Instrument {
                     operator.amplitude = 0;
                 }
                 if (operatorObject["waveform"] != undefined) {
+                    // If the json is from GB, we override the last two waves to be sine to account for a bug
+                    if (format == "goldbox" && j > 3) {
+                       operator.waveform = 0;
+                       continue;
+                    }
+
                     operator.waveform = Config.operatorWaves.findIndex(wave => wave.name == operatorObject["waveform"]);
                     if (operator.waveform == -1) {
                         // GoldBox compatibility
                         if (operatorObject["waveform"] == "square") {
                             operator.waveform = Config.operatorWaves.dictionary["pulse width"].index;
                             operator.pulseWidth = 5;
+                        } else if (operatorObject["waveform"] == "rounded") {
+                            operator.waveform = Config.operatorWaves.dictionary["quasi-sine"].index;
                         } else {
                             operator.waveform = 0;
                         }
@@ -2615,7 +2644,7 @@ export class Instrument {
             }
             else {
                 // modbox had no anti-aliasing, so enable it for everything if that mode is selected
-                if (jsonFormat == "ModBox") {
+                if (format == "modbox") {
                     this.effects = (this.effects | (1 << EffectType.distortion));
                     this.aliases = true;
                     this.distortion = 0;
@@ -3027,11 +3056,11 @@ export class Song {
         this.beatsPerBar = 8;
         this.barCount = 16;
         this.patternsPerChannel = 8;
-        this.rhythm = 3;
+        this.rhythm = 1;
         this.layeredInstruments = false;
         this.patternInstruments = false;
 
-        this.title = "Unnamed";
+        this.title = "Unnamed Project";
         document.title = this.title + " - " + EditorConfig.versionDisplayName;
 
         if (andResetChannels) {
@@ -3962,7 +3991,7 @@ export class Song {
                 }
             } break;
             case SongTagCode.scale: {
-                this.scale = base64CharCodeToInt[compressed.charCodeAt(charIndex++)];
+                this.scale = clamp(0, Config.scales.length, base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
                 // All the scales were jumbled around by Jummbox. Just convert to free.
                 if (this.scale == Config.scales["dictionary"]["Custom"].index) {
                     for (var i = 1; i < Config.pitchesPerOctave; i++) {
@@ -4124,9 +4153,8 @@ export class Song {
 			}
 			
 		} else {
-			this.rhythm = base64CharCodeToInt[compressed.charCodeAt(charIndex++)];
+			this.rhythm = clamp(0, Config.rhythms.length, base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
 		}
-		//rhythm fixes
             } break;
             case SongTagCode.channelOctave: {
                 if (beforeThree && fromBeepBox) {
@@ -4261,8 +4289,8 @@ export class Song {
                     // - 9: fm6op
                     switch (this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset) {
                         case 7: {
-                            this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.customChipWave;
-                            this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.customChipWave;
+                        this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.customChipWave;
+                        this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.customChipWave;
                         } break;
                         // case 8: {
                         //     this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.mod;
@@ -4294,8 +4322,8 @@ export class Song {
                                 this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.pickedString;
                             } break;
                             case 8: {
-                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.customChipWave;
-                                this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.customChipWave;
+                        this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.customChipWave;
+                        this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].type = InstrumentType.customChipWave;
                             } break;
                             // case 9: {
                             //     this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator].preset = InstrumentType.mod;
@@ -4629,6 +4657,20 @@ export class Song {
             case SongTagCode.pulseWidth: {
                 const instrument: Instrument = this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator];
                 instrument.pulseWidth = clamp(0, (Config.pulseWidthRange * 2 + 1), (base64CharCodeToInt[compressed.charCodeAt(charIndex++)] << 6) + base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
+                if (fromBeepBox) {
+                    // BeepBox formula
+                    instrument.pulseWidth = Math.round(Math.pow(0.5, (7 - instrument.pulseWidth) * Config.pulseWidthStepPower) * Config.pulseWidthRange);
+
+                }
+
+                if ((beforeNine && fromBeepBox) || (beforeFive && fromJummBox) || (beforeFour && fromGoldBox)) {
+                    const pregoldToEnvelope: number[] = [0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16, 17, 18, 19, 20, 21, 23, 24, 25, 27, 28, 29, 32, 33, 34, 31, 11];
+                    const legacySettings: LegacySettings = legacySettingsCache![instrumentChannelIterator][instrumentIndexIterator];
+                    let aa: number = base64CharCodeToInt[compressed.charCodeAt(charIndex++)];
+                    if((beforeTwo && fromGoldBox) || (!fromGoldBox && !fromUltraBox)) aa = pregoldToEnvelope[aa];
+                    legacySettings.pulseEnvelope = Song._envelopeFromLegacyIndex(aa);
+                    instrument.convertLegacySettings(legacySettings, forceSimpleFilter);
+                }
 
                 if (fromUltraBox && !beforeFour || fromUnbox) {
                     instrument.decimalOffset = clamp(0, 100 + 1, (base64CharCodeToInt[compressed.charCodeAt(charIndex++)] << 6) + base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
@@ -5023,7 +5065,7 @@ export class Song {
                     }
                     if (effectsIncludePitchShift(instrument.effects)) {
                         if (fromUnbox) {
-                            instrument.pitchShift = clamp(0, Config.pitchShiftRange, base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
+                        instrument.pitchShift = clamp(0, Config.pitchShiftRange, base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
                         } else {
                             instrument.pitchShift = clamp(0, Config.pitchShiftRange, base64CharCodeToInt[compressed.charCodeAt(charIndex++)] + 12);
                         }
@@ -5543,6 +5585,10 @@ export class Song {
                 let songReverbInstrument: number = -1;
                 let songReverbIndex: number = -1;
 
+                // @TODO: Include GoldBox here.
+                const shouldCorrectTempoMods: boolean = fromJummBox;
+                const jummboxTempoMin: number = 30;
+
                 while (true) {
                     const channel: Channel = this.channels[channelIndex];
                     const isNoiseChannel: boolean = this.getChannelIsNoise(channelIndex);
@@ -5857,7 +5903,13 @@ export class Song {
                                 }
                                 note.pitches.length = pitchCount;
                                 pitchBends.unshift(note.pitches[0]); // TODO: Use Deque?
+                                const noteIsForTempoMod: boolean = isModChannel && channel.instruments[newPattern.instruments[0]].modulators[Config.modCount - 1 - note.pitches[0]] === Config.modulators.dictionary["tempo"].index;
+                                let tempoOffset: number = 0;
+                                if (shouldCorrectTempoMods && noteIsForTempoMod) {
+                                    tempoOffset = jummboxTempoMin - Config.tempoMin; // convertRealFactor will add back Config.tempoMin as necessary
+                                }
                                 if (isModChannel) {
+                                    note.pins[0].size += tempoOffset;
                                     note.pins[0].size *= detuneScaleNotes[newPattern.instruments[0]][note.pitches[0]];
                                 }
                                 let pinCount: number = 1;
@@ -5867,7 +5919,7 @@ export class Song {
                                     const interval: number = pitchBends[0] - note.pitches[0];
                                     if (note.pins.length <= pinCount) {
                                         if (isModChannel) {
-                                            note.pins[pinCount++] = makeNotePin(interval, pinObj.time, pinObj.size * detuneScaleNotes[newPattern.instruments[0]][note.pitches[0]]);
+                                            note.pins[pinCount++] = makeNotePin(interval, pinObj.time, pinObj.size * detuneScaleNotes[newPattern.instruments[0]][note.pitches[0]] + tempoOffset);
                                         } else {
                                             note.pins[pinCount++] = makeNotePin(interval, pinObj.time, pinObj.size);
                                         }
@@ -5876,7 +5928,7 @@ export class Song {
                                         pin.interval = interval;
                                         pin.time = pinObj.time;
                                         if (isModChannel) {
-                                            pin.size = pinObj.size * detuneScaleNotes[newPattern.instruments[0]][note.pitches[0]];
+                                            pin.size = pinObj.size * detuneScaleNotes[newPattern.instruments[0]][note.pitches[0]] + tempoOffset;
                                         } else {
                                             pin.size = pinObj.size;
                                         }
@@ -6345,12 +6397,24 @@ export class Song {
 
         //const version: number = jsonObject["version"] | 0;
         //if (version > Song._latestVersion) return; // Go ahead and try to parse something from the future I guess? JSON is pretty easy-going!
-        const format: string = jsonFormat == "auto" ? jsonObject["format"] : jsonFormat;
 
-        // Code for auto-detect mode: if statements that are lower down have 'higher priority'
-        //if (format == "auto") {
+        // Code for auto-detect mode; if statements that are lower down have 'higher priority'
+        if (jsonFormat == "auto") {
+            if (jsonObject["format"] == "BeepBox") {
+                // Assume that if there is a "riff" song setting then it must be modbox
+                if (jsonObject["riff"] != undefined) {
+                    jsonFormat = "modbox";
+                }
 
-        //}
+                // Assume that if there are limiter song settings then it must be jummbox
+                // Despite being added in JB 2.1, json export for the limiter settings wasn't added until 2.3
+                if (jsonObject["masterGain"] != undefined) {
+                    jsonFormat = "jummbox";
+                }
+            }
+        }
+
+        const format: string = (jsonFormat == "auto" ? jsonObject["format"] : jsonFormat).toLowerCase();
 
         if (jsonObject["name"] != undefined) {
             this.title = jsonObject["name"];
@@ -6633,10 +6697,8 @@ export class Song {
                                 // to the corresponding new name.
                                 instrumentObject["wave"] = names[oldNames.findIndex(x => x === waveName)];
                             } else if (veryOldNames.includes(waveName)) {
-                                if (waveName === "trumpet" || waveName === "flute") {
-                                    // @TODO: This isn't exactly correct, but for now, if we see one of these two,
-                                    // leave them with the JummBox chip waves. The actual solution here will probably
-                                    // involve disambiguation via user input.
+                                if ((waveName === "trumpet" || waveName === "flute") && (format != "paandorasbox")) {
+                                    // If we see chip waves named trumpet or flute, and if the format isn't PaandorasBox, we leave them as-is
                                 } else {
                                     // There's no other chip waves with ambiguous names like that, so it should
                                     // be okay to assume we'll need to load the legacy samples now.
@@ -6891,7 +6953,7 @@ export class Song {
                     if (channelObject["patterns"]) patternObject = channelObject["patterns"][i];
                     if (patternObject == undefined) continue;
 
-                    pattern.fromJsonObject(patternObject, this, channel, importedPartsPerBeat, isNoiseChannel, isModChannel);
+                    pattern.fromJsonObject(patternObject, this, channel, importedPartsPerBeat, isNoiseChannel, isModChannel, format);
                 }
                 channel.patterns.length = this.patternsPerChannel;
 
@@ -9295,53 +9357,7 @@ export class Synth {
         this.part = 0;
         this.tick = 0;
         this.tickSampleCountdown = samplesPerTick;
-	    			this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
 	    this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-	    			this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
-	    this.isAtStartOfTick = true;
-			//BUGFIX FROM JUMMBOX
 
         if (this.loopRepeatCount != 0 && this.bar == Math.max(this.song.loopStart + this.song.loopLength, this.loopBarEnd)) {
             this.bar = this.song.loopStart;
@@ -9377,7 +9393,7 @@ export class Synth {
 
             if (this.oscEnabled) {
                 if (this.oscRefreshEventTimer <= 0) {
-                    events.raise("oscillascopeUpdate", outputDataL, outputDataR);
+                    events.raise("oscilloscopeUpdate", outputDataL, outputDataR);
                     this.oscRefreshEventTimer = 2;
                 } else {
                     this.oscRefreshEventTimer--;
@@ -9527,53 +9543,7 @@ export class Synth {
                     skippedBars.push(this.bar);
                 this.wantToSkip = false;
                 this.skipBar();
-		    					continue;
-		    					continue;
-		    					continue;
-		    					continue;
-		    					continue;
-					//BUGFIX FROM JUMMBOX
 		    	continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-		    					continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-		    					continue;
-		    					continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-		    					continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-		    					continue;
-		    					continue;
-		    					continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-		    					continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-		    					continue;
-		    					continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-		    					continue;
-					//BUGFIX FROM JUMMBOX
-		    	continue;
-					//BUGFIX FROM JUMMBOX
             }
 
             for (let channelIndex: number = 0; channelIndex < song.pitchChannelCount + song.noiseChannelCount; channelIndex++) {
@@ -11047,8 +11017,7 @@ export class Synth {
 
         if (instrument.type == InstrumentType.drumset) {
             const drumsetFilterEnvelope: Envelope = instrument.getDrumsetEnvelope(tone.drumsetPitch!);
-            //const timeScale: number = Config.arpSpeedScale[instrument.envelopeSpeed];
-            //secondsPerTick *= timeScale;
+
             // If the drumset lowpass cutoff decays, compensate by increasing expression.
             noteFilterExpression *= EnvelopeComputer.getLowpassCutoffDecayVolumeCompensation(drumsetFilterEnvelope)
 

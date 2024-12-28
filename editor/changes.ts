@@ -1354,7 +1354,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                             { item: "sawtooth", weight: 3 },
                             { item: "ramp", weight: 3 },
                             { item: "trapezoid", weight: 4 },
-				            { item: "rounded", weight: 2 },
+				            { item: "quasi-sine", weight: 2 },
                         ])].index;
 						if (instrument.operators[i].waveform == 2/*"pulse width"*/) {
 							instrument.operators[i].pulseWidth = selectWeightedRandom([
@@ -1424,7 +1424,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                             { item: "sawtooth", weight: 3 },
                             { item: "ramp", weight: 3 },
                             { item: "trapezoid", weight: 4 },
-				            { item: "rounded", weight: 2 },
+				            { item: "quasi-sine", weight: 2 },
                         ])].index;
 						if (instrument.operators[i].waveform == 2) {
 							instrument.operators[i].pulseWidth = selectWeightedRandom([
@@ -1517,22 +1517,20 @@ export class ChangeRandomGeneratedInstrument extends Change {
                     instrument.customChipWave = randomGeneratedArray;
                     instrument.customChipWaveIntegral = randomGeneratedArrayIntegral;
                 } break;
-                /* Commented out for now as well as the unison part- you guys decide what to do with this.
-                case InstrumentType.customChipWave: {
-                    instrument.chipNoise = selectWeightedRandom([
-						{ item: 0, weight: 1 }, // retro
-						{ item: 1, weight: 1 }, // white
-						{ item: 2, weight: 6 }, // clang
-						{ item: 3, weight: 6 }, // buzz
-						{ item: 4, weight: 1 }, // hollow
-						{ item: 7, weight: 4 }, // cutter
-						{ item: 8, weight: 4 }, // metallic
-						{ item: 9, weight: 1 }, // static
-						{ item: 10, weight: 1 }, // 1-bit white
-						{ item: 11, weight: 5 }, // 1-bit metallic
-                    ]);
-                } break;
-                */
+               // case InstrumentType.noise: {
+                //     instrument.chipNoise = selectWeightedRandom([
+                //         { item: 0, weight: 1 }, // retro
+                //         { item: 1, weight: 1 }, // white
+                //         { item: 2, weight: 6 }, // clang
+                //         { item: 3, weight: 6 }, // buzz
+                //         { item: 4, weight: 1 }, // hollow
+                //         { item: 7, weight: 4 }, // cutter
+                //         { item: 8, weight: 4 }, // metallic
+                //         { item: 9, weight: 1 }, // static
+                //         { item: 10, weight: 1 }, // 1-bit white
+                //         { item: 11, weight: 5 }, // 1-bit metallic
+                //     ]);
+                // } break;
                 default: throw new Error("Unhandled pitched instrument type in random generator.");
             }
         }

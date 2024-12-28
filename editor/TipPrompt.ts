@@ -116,6 +116,7 @@ export class TipPrompt implements Prompt {
 				message = div(
 					h2("Instrument Type"),
 					p("Unbox comes with many instrument presets, try them out! You can also create your own custom instruments!"),
+					p("There are also buttons for copying and pasting instruments at the bottom of the instrument settings tab, and for generating random instruments in the \"Randomize\" category in the instrument type menu."),
 				);
 			} break;
 			case "eqFilter": {
@@ -190,7 +191,6 @@ export class TipPrompt implements Prompt {
 					h2("Pulse Wave Width"),
 					p("This setting controls the shape and sound of a pulse wave. At the minimum (1%) width and (99%) just before maximum of (100%), it sounds light and buzzy. At the center (50%), it is shaped like a classic square wave."), 
 					p("At the maximum (100%), There is no sound but if using modulators to change pulse width and use it with with decimal offset you can get SID like PWM where it slides between 99% and 1%."),
-					p("This works like duty cycle but without the automation, this is how it was done in the past, however you have more freedom doing it this way.")
 				);
 			} break;
 			case "unison": {
@@ -547,7 +547,8 @@ export class TipPrompt implements Prompt {
 					p("This setting is a volume multiplier applied to the second voice. This setting will only work correctly with two voices."),
 				);
 			} break;
-			//case "dutyCycle": {
+			//--- Change this to Macro/Sequcence later --- 
+			// case "dutyCycle": {
 				//message = div(
 					//h2("Duty Cycle"),
 					//p("This setting controls the shape and sound of a pulse wave automatically with set ranges within a repeating cycle."), 

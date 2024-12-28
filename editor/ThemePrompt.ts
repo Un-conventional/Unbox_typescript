@@ -6,17 +6,16 @@ import { SongDocument } from "./SongDocument";
 import { ColorConfig } from "./ColorConfig";
 
 //namespace beepbox {
-const { button, div, h2, select, option } = HTML;
+const { button, div, h2, select, option, optgroup } = HTML;
 
 export class ThemePrompt implements Prompt {
 	private readonly _themeSelect: HTMLSelectElement = select({ style: "width: 100%;" },
+		optgroup({ label: "Default Themes" },
 			option({ value: "unbox classic" }, "Unbox Dark"),
 			option({ value: "unbox legacy" }, "Unbox Legacy"),
-			option({ value: "dark classic" }, "BeepBox Dark"),
-			option({ value: "light classic" }, "BeepBox Light"),
-			option({ value: "dark competition" }, "BeepBox Competition Dark"),
-			option({ value: "jummbox classic" }, "JummBox Dark"),
-			option({ value: "jummbox light" }, "Gold Light"),
+		),
+		optgroup({ label: "Ultrabox Themes" },
+			option({ value: "ultrabox dark" }, "UltraBox"),
 			option({ value: "forest" }, "Forest"),
 			option({ value: "canyon" }, "Canyon"),
 			option({ value: "midnight" }, "Midnight"),
@@ -38,9 +37,15 @@ export class ThemePrompt implements Prompt {
 			option({ value: "neapolitan" }, "Neapolitan"),
 			option({ value: "poly" }, "Poly"),
 			option({ value: "blutonium" }, "Blutonium"),
-			// colorblind-friendly themes, by nep and choptop. in most circumstances I wouldn't add ultrabox-unique themes because of the custom theme sheet, but
-			// the azur lane theme is here because nep wanted it...
-			option({ value: "azur lane" }, "Azur Lane"),
+			option({ value: "slushie" }, "Slushie"),
+		),
+		optgroup({ label: "Mod Themes" },
+			option({ value: "dark classic" }, "BeepBox Dark"),
+			option({ value: "light classic" }, "BeepBox Light"),
+			option({ value: "dark competition" }, "BeepBox Competition Dark"),
+			option({ value: "jummbox classic" }, "JummBox Dark"),
+			// let's retire this again.
+			// option({ value: "jummbox light" }, "JummBox Light"), 
 			option({ value: "modbox classic" }, "Modbox"),
 			option({ value: "sandbox classic" }, "Sandbox"),
 			option({ value: "harrybox" }, "Haileybox"),
@@ -53,8 +58,6 @@ export class ThemePrompt implements Prompt {
 			option({ value: "blubox classic" }, "Blubox"),
 			option({ value: "dogebox classic" }, "Dogebox"),
 			option({ value: "wackybox" }, "Wackybox"),
-			// for some reason the todbox theme isn't looping properly. also the "todbox" theme is just old beepbox
-			// option({ value: "todbox classic" }, "Todbox"),
 			option({ value: "todbox dark mode" }, "Todbox Dark Mode"),
 			option({ value: "mainbox 1.0" }, "Mainbox"),
 			option({ value: "microbox" }, "MicroBox"),
@@ -62,10 +65,15 @@ export class ThemePrompt implements Prompt {
 			option({ value: "foxbox" }, "FoxBox"),
 			option({ value: "midbox" }, "Midbox"),
 			option({ value: "dogebox2" }, "Dogebox2"),
-			option({ value: "AbyssBox Classic"}, "AbyssBox Classic"),
-			option({ value: "AbyssBox Light"}, "AbyssBox Light"),
+			option({ value: "abyssbox classic"}, "AbyssBox Classic"),
+			option({ value: "abyssbox light"}, "AbyssBox Light"),
 			option({ value: "nepbox" }, "Nepbox"),
+			option({ value: "slarmoosbox"}, "Slarmoo's Box"),
+		),
+		optgroup({ label: "Misc" },
+			option({ value: "azur lane" }, "Azur Lane"),
 			option({ value: "custom" }, "Custom")
+		),
 	);
 	private readonly _cancelButton: HTMLButtonElement = button({ class: "cancelButton" });
 	private readonly _okayButton: HTMLButtonElement = button({ class: "okayButton", style: "width:45%;" }, "Okay");
@@ -96,7 +104,7 @@ export class ThemePrompt implements Prompt {
 		if (this.lastTheme != null) {
 			ColorConfig.setTheme(this.lastTheme);
 		} else {
-			ColorConfig.setTheme("dark classic");
+			ColorConfig.setTheme(ColorConfig.defaultTheme);
 		}
 		this._doc.undo();
 	}

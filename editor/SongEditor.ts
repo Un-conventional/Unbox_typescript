@@ -43,13 +43,13 @@ import { SustainPrompt } from "./SustainPrompt";
 import { SongRecoveryPrompt } from "./SongRecoveryPrompt";
 import { RecordingSetupPrompt } from "./RecordingSetupPrompt";
 import { SpectrumEditor } from "./SpectrumEditor";
-import { CustomPrompt } from "./CustomPrompt";
+import { CustomThemePrompt } from "./CustomThemePrompt";
 import { ThemePrompt } from "./ThemePrompt";
 import { TipPrompt } from "./TipPrompt";
 import { ChangeTempo, ChangeKeyOctave, ChangeChorus, ChangeEchoDelay, ChangeEchoSustain, ChangeReverb, ChangeVolume, ChangePan, ChangePatternSelection, ChangePatternsPerChannel, ChangePatternNumbers, ChangeSupersawDynamism, ChangeSupersawSpread, ChangeSupersawShape, ChangePulseWidth, ChangeFeedbackAmplitude, ChangeOperatorAmplitude, ChangeOperatorFrequency, ChangeDrumsetEnvelope, ChangePasteInstrument, ChangePreset, pickRandomPresetValue, ChangeRandomGeneratedInstrument, ChangeEQFilterType, ChangeNoteFilterType, ChangeEQFilterSimpleCut, ChangeEQFilterSimplePeak, ChangeNoteFilterSimpleCut, ChangeNoteFilterSimplePeak, ChangeScale, ChangeDetectKey, ChangeKey, ChangeRhythm, ChangeFeedbackType, ChangeAlgorithm, ChangeChipWave, ChangeNoiseWave, ChangeTransition, ChangeToggleEffects, ChangeVibrato, ChangeUnison, ChangeChord, ChangeSong, ChangePitchShift, ChangeDetune, ChangeDistortion, ChangeStringSustain, ChangeBitcrusherFreq, ChangeBitcrusherQuantization, ChangeAddEnvelope, ChangeEnvelopeSpeed, ChangeDiscreteEnvelope, ChangeAddChannelInstrument, ChangeRemoveChannelInstrument, ChangeCustomWave, ChangeOperatorWaveform, ChangeOperatorPulseWidth, ChangeSongTitle, ChangeVibratoDepth, ChangeVibratoSpeed, ChangeVibratoDelay, ChangeVibratoType, ChangePanDelay, ChangeArpeggioSpeed, ChangeFastTwoNoteArp, ChangeClicklessTransition, ChangeAliasing, ChangeSetPatternInstruments, ChangeHoldingModRecording, ChangeChipWavePlayBackwards, ChangeChipWaveStartOffset, ChangeChipWaveLoopEnd, ChangeChipWaveLoopStart, ChangeChipWaveLoopMode, ChangeChipWaveUseAdvancedLoopControls, ChangeDecimalOffset, ChangeUnisonVoices, ChangeUnisonSpread, ChangeUnisonOffset, ChangeUnisonExpression, ChangeUnisonSign, Change6OpFeedbackType, Change6OpAlgorithm, ChangeCustomAlgorythmorFeedback} from "./changes"; //ChangeDutyCycleSpeed
 
 import { TrackEditor } from "./TrackEditor";
-import { oscilascopeCanvas } from "../global/Oscilascope";
+import { oscilloscopeCanvas } from "../global/Oscilloscope";
 import { VisualLoopControlsPrompt } from "./VisualLoopControlsPrompt";
 import { SampleLoadingStatusPrompt } from "./SampleLoadingStatusPrompt";
 import { AddSamplesPrompt } from "./AddSamplesPrompt";
@@ -1004,7 +1004,7 @@ export class SongEditor {
         span({ class: "tip", style: "height:1em; font-size: smaller;", onclick: () => this._openPrompt("unisonSign") }, "‣ Sign: "),
         div({ style: "color: " + ColorConfig.secondaryText + "; margin-top: -3px;" }, this._unisonSignInputBox),
     ));
-    private readonly _unisonDropdownGroup: HTMLElement = div({ class: "editor-controls", style: "display: none;" }, this._unisonVoicesRow, this._unisonSpreadRow, this._unisonOffsetRow, this._unisonExpressionRow, this._unisonSignRow);
+    private readonly _unisonDropdownGroup: HTMLElement = div({ class: "editor-controls", style: "display: none; gap: 3px; margin-bottom: 0.5em;" }, this._unisonVoicesRow, this._unisonSpreadRow, this._unisonOffsetRow, this._unisonExpressionRow, this._unisonSignRow);
    
     private readonly _chordSelect: HTMLSelectElement = buildOptions(select(), Config.chords.map(chord => chord.name));
     private readonly _chordDropdown: HTMLButtonElement = button({ style: "margin-left:0em; height:1.5em; width: 10px; padding: 0px; font-size: 8px;", onclick: () => this._toggleDropdownMenu(DropdownID.Chord) }, "▼");
@@ -1066,7 +1066,7 @@ export class SongEditor {
     private readonly _feedback6OpTypeSelect: HTMLSelectElement = buildOptions(select(), Config.feedbacks6Op.map(feedback => feedback.name));
     private readonly _feedback6OpRow1: HTMLDivElement = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("feedbackType") }, "Feedback:"), div({ class: "selectContainer" }, this._feedback6OpTypeSelect));
 
-    private readonly _algorithmCanvasSwitch: HTMLButtonElement = button({ style: "margin-left:0em; height:1.5em; width: 10px; padding: 0px; font-size: 8px;", onclick: (e:Event) => this._toggleAlgorithmCanvas(e) }, "F");
+    private readonly _algorithmCanvasSwitch: HTMLButtonElement = button({ style: "margin-left:0em; height:1.5em; width: 10px; padding: 0px; font-size: 8px;", onclick: (e:Event) => this._toggleAlgorithmCanvas(e) }, "A");
     private readonly _customAlgorithmCanvas: CustomAlgorythmCanvas = new CustomAlgorythmCanvas(canvas({ width: 144, height: 144, style: "border:2px solid " + ColorConfig.uiWidgetBackground, id: "customAlgorithmCanvas" }), this._doc, (newArray: number[][], carry: number, mode: string) => new ChangeCustomAlgorythmorFeedback(this._doc, newArray, carry, mode));
     private readonly _algorithm6OpSelect: HTMLSelectElement = buildOptions(select(), Config.algorithms6Op.map(algorithm => algorithm.name));
     private readonly _algorithm6OpSelectRow: HTMLDivElement = div(div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("algorithm") }, "Algorithm: "), div({ class: "selectContainer" }, this._algorithm6OpSelect))
@@ -1103,7 +1103,7 @@ export class SongEditor {
         ]),
     ]);
 
-    public readonly _globalOscscope: oscilascopeCanvas = new oscilascopeCanvas(canvas({ width: 144, height: 32, style: `border: 2px solid ${ColorConfig.uiWidgetBackground}; position: static;`, id: "oscilascopeAll" }), 1);
+    public readonly _globalOscscope: oscilloscopeCanvas = new oscilloscopeCanvas(canvas({ width: 144, height: 32, style: `border: 2px solid ${ColorConfig.uiWidgetBackground}; position: static;`, id: "oscilloscopeAll" }), 1);
     private readonly _globalOscscopeContainer: HTMLDivElement = div({ style: "height: 38px; margin-left: auto; margin-right: auto;" },
         this._globalOscscope.canvas
     );
@@ -1761,11 +1761,11 @@ export class SongEditor {
     private _toggleAlgorithmCanvas(e:Event):void {
         if (this._customAlgorithmCanvas.mode != "feedback") {
             this._customAlgorithmCanvas.mode = "feedback";
-            (e.target as Element).textContent = "A";
+            (e.target as Element).textContent = "F";
             this._algorithmCanvasSwitch.value = "feedback";
         } else {
             this._customAlgorithmCanvas.mode = "algorithm";
-            (e.target as Element).textContent = "F";
+            (e.target as Element).textContent = "A";
         }
         this._customAlgorithmCanvas.redrawCanvas();
     }
@@ -2116,8 +2116,8 @@ export class SongEditor {
                 case "generateEuclideanRhythm":
                     this.prompt = new EuclideanRhythmPrompt(this._doc);
                     break;
-                case "custom":
-                    this.prompt = new CustomPrompt(this._doc, this._patternEditor, this._trackArea, document.getElementById("beepboxEditorContainer")!);
+                case "customTheme":
+                    this.prompt = new CustomThemePrompt(this._doc, this._patternEditor, this._trackArea, document.getElementById("beepboxEditorContainer")!);
                     break;
                 case "visualLoopControls":
                     this.prompt = new VisualLoopControlsPrompt(this._doc, this);
@@ -2259,9 +2259,9 @@ export class SongEditor {
         // make the names of these two variables as short as possible for readability
         // also, these two variables are used for the effects tab as well, should they be renamed?
         // the theme variables are named "icon" to prevent people getting confused and thinking they're svg
-        const textOnIcon: string = ColorConfig.getComputed("--text-enabled-icon") !== "" ? ColorConfig.getComputed("--text-enabled-icon") : "✓ ";
-        const textOffIcon: string = ColorConfig.getComputed("--text-disabled-icon") !== "" ? ColorConfig.getComputed("--text-disabled-icon") : "　";
-        const textSpacingIcon: string = ColorConfig.getComputed("--text-spacing-icon") !== "" ? ColorConfig.getComputed("--text-spacing-icon") : "　";
+        const textOnIcon: string = ColorConfig.getComputed("--text-enabled-icon");
+        const textOffIcon: string = ColorConfig.getComputed("--text-disabled-icon");
+        const textSpacingIcon: string = ColorConfig.getComputed("--text-spacing-icon");
         const optionCommands: ReadonlyArray<string> = [
             "Technical",
             (prefs.autoPlay ? textOnIcon : textOffIcon) + "Auto Play on Load",
@@ -3898,7 +3898,7 @@ export class SongEditor {
                     this.refocusStage();
                 } else if (canPlayNotes) break;
                 if (needControlForShortcuts == (event.ctrlKey || event.metaKey) && event.shiftKey) {
-                    location.href = "player/index.html#song=" + this._doc.song.toBase64String();
+                    location.href = "player/" + (OFFLINE ? "index.html" : "") + "#song=" + this._doc.song.toBase64String();
                     event.preventDefault();
                 }
                 break;
@@ -4052,9 +4052,9 @@ export class SongEditor {
                     break;
 			    }
                 break;
-            case 70: // f (+shift: Set playerhead to loop start)
+            case 70: // f
                 if (canPlayNotes) break;
-                if (event.shiftKey) {
+                if (event.shiftKey) { // if shift+f, move to start of loop bar instead 
                     
                     this._doc.synth.loopBarStart = -1;
                     this._doc.synth.loopBarEnd = -1;
@@ -5047,7 +5047,7 @@ export class SongEditor {
                 this._openPrompt("configureShortener");
                 break;
             case "viewPlayer":
-                location.href = "player/index.html#song=" + this._doc.song.toBase64String();
+                location.href = "player/" + (OFFLINE ? "index.html" : "") + "#song=" + this._doc.song.toBase64String();
                 break;
             case "copyEmbed":
                 this._copyTextToClipboard(`<iframe width="384" height="60" style="border: none;" src="${new URL("player/#song=" + this._doc.song.toBase64String(), location.href).href}"></iframe>`);
@@ -5180,7 +5180,7 @@ export class SongEditor {
                 this._openPrompt("theme");
                 break;
             case "customTheme":
-                this._openPrompt("custom");
+                this._openPrompt("customTheme");
                 break;
             case "recordingSetup":
                 this._openPrompt("recordingSetup");
