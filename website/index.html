@@ -324,39 +324,38 @@
     <script type="text/javascript">
 
         // Randomize display of header
-        // 1-in-9 chance to appear
-
+        // 1-in-9 chance to appear // maybe 1 in 3?
+        // Might keep or remove non Unbox plants?
         const plants = [
         // jummbox/goldbox plants    
-        "🍂", "🌿", "🌺", "🍃", "🍄", "🍀🌷", "🌈🍂🍁🍀🌷🍄🐲🌈🍃🌺🍄","1️⃣3️⃣1️⃣2️⃣",
+        //"🍂", "🌿", "🌺", "🍃", "🍄", "🍀🌷", "🌈🍂🍁🍀🌷🍄🐲🌈🍃🌺🍄","1️⃣3️⃣1️⃣2️⃣",
         // blubox plants
-        "≽(◕ ᴗ ◕)≼", "≽(ᴗ _ ᴗ)≼", "≽(⌐ _ ⌐)≼", "≽(ᵕ ‿ ᵕ)≼", 
+        //"≽(◕ ᴗ ◕)≼", "≽(ᴗ _ ᴗ)≼", "≽(⌐ _ ⌐)≼", "≽(ᵕ ‿ ᵕ)≼", 
         // familiarbox plant (there were others, but the code of familiarbox is long gone)
         // this is a reference to (now outdated?) lore jinx made for one of their projects 
-        "☀️⭐🕒👁️",
+        //"☀️⭐🕒👁️",
         // suggested by mel, meant to supplement the lack of a worm logo
-        "🪱",
-        // I believe this is from paandorasbox (might have also been present in familiarbox?)
-        " :wackybox:",
+        //"🪱",
+        //// I believe this is from paandorasbox (might have also been present in familiarbox?)
+        //" :wackybox:",
         // plant suggested by mel, in reference to the "(don't eat) thegubbys" meme
-        "🐟",
+        //"🐟",
         // blubox desktop plants 
-        "⚡","🔵","💫",
+        //"⚡","🔵","💫",
         // dogebox2 plants 
-        "🍕","🌭","🍔","🍟",
+        //"🍕","🌭","🍔","🍟",
         // Slarmoo's Box plants
-        "✨","🌈","🌧️","🪨","🐍","🌲","🌳",
+        //"✨","🌈","🌧️","🪨","🐍","🌲","🌳",
         // Unbox Plants - Ask me which ones to be added to Ultra if they are to be added
-        "🌵","🪻","🔔","🪨 🧻 ✂️","👁️ 🎯 🫵 🌵","⚠️","🛆 🏆","🪓","🌳 🪓 🪵 🪚 🪜 🏭",":Team triangle wins!:","Try <pdbpx as we;;!!","🐛⬅️SN63A07","not UnBox!","Try BotB","Try NepBox","5️⃣6️⃣","🍪","Fire and EMS!"
-        ];
+        "🌵","🔔","🪨 🧻 ✂️","👁️ 🎯 🫵 🌵","⚠️","🛆 🏆","🪓","🌳 🪓","Team triangle wins!","🐛⬅️SN63A07",", It's Not UnBox!","Try BotB","Try NepBox","5️⃣6️⃣","🍪","try your best or do your worst-BotB","The axe forgets, but the tree remembers","Did you save?"];
 
-        if (Math.floor(Math.random() * 9) == 0) {
+        if (Math.floor(Math.random() * 3) == 0) {
             document.getElementById("goldboxPlant").innerHTML = "  " + plants[(Math.floor(Math.random() * plants.length))];  
         }
 
         const date = new Date();
 
-        // Unb birthday (january 20th)
+        // Unbox birthday (january 20th)
         if ((date.getDate() == 20) && date.getMonth() == 0) {
             document.getElementById("goldboxPlant").innerHTML = "  🎂🎉🍰🧁🎈🎁🥳";  
         }
