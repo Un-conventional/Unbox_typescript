@@ -3127,8 +3127,8 @@ export class ColorConfig {
 
 --pitch4-secondary-channel: #139620;
 --pitch4-primary-channel:   #25ff3a;
---pitch4-secondary-note:    #139620;
---pitch4-primary-note:      #25ff3a;
+--pitch4-secondary-note:    #21FF33;
+--pitch4-primary-note:      #C0FFB5;
 
 --pitch5-secondary-channel: #0099A1;
 --pitch5-primary-channel:   #25F3FF;
@@ -5440,7 +5440,7 @@ export class ColorConfig {
 			--mod-label-primary: #a773e5;
 			--mod-label-secondary-text: #6b29bf;
 			--mod-label-primary-text: #14051a;
-			--mod-title: #2e0e51;
+			--mod-title: #247d1d;
 			--pitch-secondary-channel-hue: 100;
 			--pitch-secondary-channel-hue-scale: 6.1;
 			--pitch-secondary-channel-sat: 100.0;
@@ -5627,16 +5627,14 @@ export class ColorConfig {
 		  --disabled-note-primary: #3a3a3a;
 		  --disabled-note-secondary: #000;
 			}
-		/* replaces hotdog (in a hacky way) with an image of the girls using the same scratch sprites from the 404 page*/
+		/* replaces hotdog with an image of the girls using the same scratch sprites from the 404 page*/
 		#Hotdog {
-		display: none;
-		}
-		.instructions-column > section:first-of-type > p:first-of-type:after {
-		display: block;
-		content: url("theme_resources/AzurLaneThemeStarterSquad.png");
-		width: 100%;
-		text-align: center;
-		margin-top: 25px;
+			display: inline !important;
+			content: url("theme_resources/AzurLaneThemeStarterSquad.png") !important;
+			width: 75%;
+			height: 75%;
+			text-align: center;
+			margin-top: 25px;
 		}
 		/* sets cursor */
 		* {
@@ -5867,6 +5865,13 @@ export class ColorConfig {
 	public static c_noiseChannelCountOverride: number = 16;
 	public static c_modChannelCountOverride: number = 12;
 
+	public static c_pitchLimit: number = 1;
+	public static c_noiseLimit: number = 1;
+	public static c_modLimit: number = 1;
+	public static c_colorFormulaPitchLimit: number = 1;
+	public static c_colorFormulaNoiseLimit: number = 1;
+	public static c_colorFormulaModLimit: number = 1;
+
 	public static c_invertedText: string = "";
 	public static c_trackEditorBgNoiseDim: string = "";
 	public static c_trackEditorBgNoise: string = "";
@@ -6009,16 +6014,16 @@ export class ColorConfig {
             let base: ChannelColors;
             switch (type) {
                 case ("noise"): {
-                    base = ColorConfig.noiseChannels[(channel % +ColorConfig.getComputed("--noise-channel-limit")) % ColorConfig.noiseChannels.length];
+                    base = ColorConfig.noiseChannels[(channel % this.c_noiseLimit) % ColorConfig.noiseChannels.length];
                     break;
                 }
                 case ("mod"): {
-                    base = ColorConfig.modChannels[(channel % +ColorConfig.getComputed("--mod-channel-limit")) % ColorConfig.modChannels.length];
+                    base = ColorConfig.modChannels[(channel % this.c_modLimit) % ColorConfig.modChannels.length];
                     break;
                 }
                 case ("pitch"):
                 default: {
-                    base = ColorConfig.pitchChannels[(channel % +ColorConfig.getComputed("--pitch-channel-limit")) % ColorConfig.pitchChannels.length];
+                    base = ColorConfig.pitchChannels[(channel % this.c_pitchLimit) % ColorConfig.pitchChannels.length];
                     break;
                 }
             }
@@ -6029,9 +6034,9 @@ export class ColorConfig {
             let newNotePrimary: string = ColorConfig.getComputed((regex.exec(base.primaryNote) as RegExpExecArray)[1] as string);
             return <ChannelColors>{ secondaryChannel: newChannelSecondary, primaryChannel: newChannelPrimary, secondaryNote: newNoteSecondary, primaryNote: newNotePrimary };
         }
-		let colorFormulaPitchLimit: number = +ColorConfig.getComputed("--formula-pitch-channel-limit");
-		let colorFormulaNoiseLimit: number = +ColorConfig.getComputed("--formula-noise-channel-limit");
-		let colorFormulaModLimit: number = +ColorConfig.getComputed("--formula-mod-channel-limit");
+		let colorFormulaPitchLimit: number = this.c_colorFormulaPitchLimit;
+		let colorFormulaNoiseLimit: number = this.c_colorFormulaNoiseLimit;
+		let colorFormulaModLimit: number = this.c_colorFormulaModLimit;
         switch (type) {
             case ("noise"): {
 				// Noise formula
@@ -6114,23 +6119,23 @@ export class ColorConfig {
 		if (!this.usesColorFormula) {
             // Set colors, not defined by formula
             if (channel < song.pitchChannelCount) {
-				return ColorConfig.pitchChannels[(channel % +(ColorConfig.getComputed("--pitch-channel-limit"))) % ColorConfig.pitchChannels.length];
+				return ColorConfig.pitchChannels[(channel % this.c_pitchLimit) % ColorConfig.pitchChannels.length];
             } else if (channel < song.pitchChannelCount + song.noiseChannelCount) {
-                return ColorConfig.noiseChannels[((channel - song.pitchChannelCount) % +(ColorConfig.getComputed("--noise-channel-limit"))) % ColorConfig.noiseChannels.length];
+				return ColorConfig.noiseChannels[((channel - song.pitchChannelCount) % this.c_noiseLimit) % ColorConfig.noiseChannels.length];
             } else {
-                return ColorConfig.modChannels[((channel - song.pitchChannelCount - song.noiseChannelCount) % +(ColorConfig.getComputed("--mod-channel-limit"))) % ColorConfig.modChannels.length];
+				return ColorConfig.modChannels[((channel - song.pitchChannelCount - song.noiseChannelCount) % this.c_modLimit) % ColorConfig.modChannels.length];
             }
         }
         else {
             // Determine if color is cached
-            if (ColorConfig.colorLookup.has(channel)) {
+			if (ColorConfig.colorLookup.has(channel)) {
                 return ColorConfig.colorLookup.get(channel) as ChannelColors;
             }
             else {
                 // Formulaic color definition
-				let colorFormulaPitchLimit: number = +ColorConfig.getComputed("--formula-pitch-channel-limit");
-				let colorFormulaNoiseLimit: number = +ColorConfig.getComputed("--formula-noise-channel-limit");
-				let colorFormulaModLimit: number = +ColorConfig.getComputed("--formula-mod-channel-limit");
+				let colorFormulaPitchLimit: number = this.c_colorFormulaPitchLimit;
+				let colorFormulaNoiseLimit: number = this.c_colorFormulaNoiseLimit;
+				let colorFormulaModLimit: number = this.c_colorFormulaModLimit;
                 if (channel < song.pitchChannelCount) {
                     // Pitch formula
 
@@ -6326,6 +6331,13 @@ export class ColorConfig {
         this.resetColors();
 
 		this.usesColorFormula = (getComputedStyle(this._styleElement).getPropertyValue("--use-color-formula").trim() == "true");
+
+		this.c_pitchLimit = +getComputedStyle(this._styleElement).getPropertyValue("--pitch-channel-limit");
+		this.c_noiseLimit = +getComputedStyle(this._styleElement).getPropertyValue("--noise-channel-limit");
+		this.c_modLimit = +getComputedStyle(this._styleElement).getPropertyValue("--mod-channel-limit");
+		this.c_colorFormulaPitchLimit = +getComputedStyle(this._styleElement).getPropertyValue("--formula-pitch-channel-limit");
+		this.c_colorFormulaNoiseLimit = +getComputedStyle(this._styleElement).getPropertyValue("--formula-noise-channel-limit");
+		this.c_colorFormulaModLimit = +getComputedStyle(this._styleElement).getPropertyValue("--formula-mod-channel-limit");
 
 		this.c_invertedText = getComputedStyle(this._styleElement).getPropertyValue("--inverted-text");
 		this.c_trackEditorBgNoiseDim = getComputedStyle(this._styleElement).getPropertyValue("--track-editor-bg-noise-dim");

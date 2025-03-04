@@ -74,7 +74,7 @@
             margin-top: 0.5em;
             margin-bottom: 0.5em;
             -webkit-text-stroke-width: 0;
-            color: var(--mod-title, var(--link-accent, #9c64f7));
+            color: var(--mod-title, #9c64f7);
         }
 
         h2 {
@@ -93,7 +93,7 @@
             color: var(--link-accent, #98f);
         }
 
-        .donation form {
+        /* .donation form {
             display: inline;
         }
 
@@ -109,7 +109,7 @@
             cursor: pointer;
             padding: 0;
             margin: 0;
-        }
+        } */
 
         /* wide screen */
 		@media (min-width: 711px) {
@@ -130,6 +130,11 @@
             .instructions-column {
 				min-width: 0;
             }
+
+            .bsky-column {
+				width: 300px;
+				flex-shrink: 0;
+			}
         }
 
         /* narrow screen */
@@ -178,7 +183,7 @@
                 Unbox is a online tool for sketching and sharing chiptune music. This is a modification of Ultrabox which is made by Neptendo and Main. <br>
                 Listed here are elements that make up Ultrabox, (see <a href="./credits.html">credits</a>).
                 At this point in time, this is a testing ground for the strange, hopefully cool, stuff Unconventional has manufactured.
-                Expect things to be broken and or unfinished.
+                Expect things to be broken and or unfinished whilst its in pre-alpha.
                 For the patch notes of Unbox, look <a href="./patch_notes.html">here</a>.
                 For Unbox's FAQ visit <a href="./faq.html">here</a>.
                 You can use the built in shorten URL function or use Pastelink to shorten the links.
@@ -189,11 +194,10 @@
                 All song data is contained in the URL at the top of your browser.
                 When you make changes to the song, the URL is updated to reflect your changes.
                 When you are satisfied with your song, just copy and paste the URL to save and share your song!
-                
-                If you have any questions, please visit the <a href="./faq.html">FAQ</a>.        
-            </p>
+            </p> -->
             <p>
-                There is no offline version of Unbox, however there is an offline version of UltraBox that can be found <a href="https://github.com/ultraabox/ultrabox_typescript/releases">here</a>, while the testing version can be found <a href="https://ultraabox.github.io/testing">here</a>.
+                If you have any questions, please visit the <a href="./faq.html">FAQ</a>. Visit the <a href="./patch_notes.html">patch notes</a> to see the latest changes made.
+                <img id="Hotdog" src="" width="500" height="333" onclick="changeHotdogSize()" />
             </p>
             <!--
     <div class="donation">
@@ -218,7 +222,6 @@
                     <p>
                         You can add or remove notes by clicking on the gray rows at the top.
                         Unbox automatically plays the notes out loud for you. Try it!
-			    <img id="Hotdog" src="" width="500" height="333" onclick="changeHotdogSize()" />
 		
                     </p>
                     <p>
@@ -282,38 +285,42 @@
                     </p>
                     <p>
 						Want to see what people have made with BeepBox? Songs that were shared on Twitter prior to 2023-05-22 can now be browsed in <a href="https://twitter-archive.beepbox.co/" target="_blank">this interactive archive</a>!
-                        Additionally, there's an active <a href="https://discord.gg/beepbox">BeepBox Discord</a> where you can share songs and ask questions!
+                        <!-- Additionally, there's an active <a href="https://discord.gg/beepbox">BeepBox Discord</a> where you can share songs and ask questions! -->
                     </p>
-                </section>
-                <section>
-                    <h2>
-                        About
-                    </h2>
-                    <p>
-                        Unbox is a mod of Ultrabox, developed by Unconventional, which is a mod of Ultrabox made by Neptendo and Main. The easiest way to contact the developer is via the <a href="https://discord.com/invite/beepbox" target="_blank">Beepbox Discord</a>.<br><br>
-                    </p>
-                    <p>
-                        Unbox does not claim ownership over songs created with it, so original songs belong to their authors.
-                    </p>
-                    <p>
-                        Neither Unbox nor its creator assume responsibility for any copyrighted material played on Unbox. No songs are ever received, recorded, or distributed by Unbox's servers. All song data is contained in the URL after the hash (#) mark, and Unbox running inside your browser converts that data into sound waves.
-                    </p>
-                    <p>
-                        Unbox does not collect, track, or share any user data.
-                    </p>
-                    <p id="offline-instructions">
-                        <!--
-                        You can download <a download="ultrabox-offline.html" href="ultrabox-offline.html">an offline version of UltraBox</a> to use when you don't have access to the internet. The features are otherwise the same.
-                        -->
-                    </p>
-                    <p>
-                        You can download and use <a href="https://github.com/Un-conventional/UNBox_typescript" target="_blank">the source code</a> for Unbox under the MIT license.
-                        You can also download and use <a href="https://github.com/ultraabox/ultrabox_typescript" target="_blank">the source code</a> for Ultrabox, which this mod is based on, again under the MIT license.
-                        The original BeepBox source code by John Nesky can be found <a href="https://github.com/johnnesky/beepbox" target="_blank">here</a>.
-                    </p>     
-                    
                 </section>
             </main>
+            <aside class="bsky-column">
+				<h2>
+					Shared on Bluesky:
+				</h2>
+				<div>
+					<!-- <a class="bsky-timeline" data-width="300" data-height="2000" data-link-color="#9988ff" data-chrome="noheader nofooter transparent" data-dnt="true" data-theme="dark" href="https://twitter.com/beepboxco?ref_src=twsrc%5Etfw" target="_blank">Songs retweeted by @beepboxco</a> -->
+                    <bsky-embed
+						feed="at://did:plc:mbrx5fkqsdgk5l2dfhygecm6/app.bsky.feed.generator/aaabsv7gjrgl2"
+						mode="dark"
+						link-target="_blank"
+						link-image="false"
+						limit="5"
+						load-more="true"
+						disable-styles="false"
+						custom-styles="a.mt-4.rounded-md.border.border-slate-300.block {display: none;} .flex > div { max-width: 90%; } .whitespace-pre-wrap { word-wrap: break-word;}"
+					  >
+                    </bsky-embed>
+                    <script async>
+                    // only load bsky-embed if it's actually visible
+                    // (the downside of doing this is that you have to manually reload the page to load/unload the library)
+                    if (window.localStorage.getItem("showDescription") != "false") {
+                        const bsky_script = document.createElement("script");
+
+                        bsky_script.src = "https://cdn.jsdelivr.net/npm/bsky-embed@0.2.2/dist/bsky-embed.es.min.js";
+                        bsky_script.type = "module";
+
+                        document.head.appendChild(bsky_script);
+                    }
+                    </script>
+					<!-- <script type="module" src="https://cdn.jsdelivr.net/npm/bsky-embed/dist/bsky-embed.es.js" async></script> -->
+				</div>
+			</aside>
         </div>
     </div>
 

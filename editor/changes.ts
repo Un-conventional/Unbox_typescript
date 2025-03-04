@@ -1060,8 +1060,6 @@ export class ChangeRandomGeneratedInstrument extends Change {
                     // { item: "custom", weight: 10 },
                 ])].index;
                 /* randomly generated unisons don't work correctly - instead of trying to fix them, just ignore it
-                   it's likely that for randomly generated custom unisons, they'd need to be heavily biased/follow
-                   algorithms to sound somewhat useful on most cases, otherwise its useless to include.
 
                 if (instrument.unison == Config.unisons.length) {
                     instrument.unisonVoices = 2;
@@ -1850,7 +1848,7 @@ export class ChangeAddChannel extends ChangeGroup {
         const newModChannelCount: number = doc.song.modChannelCount + (isNoise || !isMod ? 0 : 1);
 
         if (newPitchChannelCount <= Config.pitchChannelCountMax && newNoiseChannelCount <= Config.noiseChannelCountMax && newModChannelCount <= Config.modChannelCountMax) {
-            const addedChannelIndex: number = isNoise ? doc.song.pitchChannelCount + doc.song.noiseChannelCount : doc.song.pitchChannelCount;
+            const addedChannelIndex: number = isMod ? doc.song.pitchChannelCount + doc.song.noiseChannelCount + doc.song.modChannelCount : (isNoise ? doc.song.pitchChannelCount + doc.song.noiseChannelCount : doc.song.pitchChannelCount);
             this.append(new ChangeChannelCount(doc, newPitchChannelCount, newNoiseChannelCount, newModChannelCount));
             if (addedChannelIndex - 1 >= index) {
                 this.append(new ChangeChannelOrder(doc, index, addedChannelIndex - 1, 1));
