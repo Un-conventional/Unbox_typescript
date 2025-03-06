@@ -31,7 +31,7 @@ npm install
 npm run build
 ```
 
-JummBox (and by extension, Ultrabox) makes a divergence from BeepBox that necessitates an additional dependency:
+JummBox (and by extension, Ultrabox and its mods) makes a divergence from BeepBox that necessitates an additional dependency:
 rather than using the (rather poor) default HTML select implementation, the custom
 library [select2](https://select2.org) is employed. select2 has an explicit dependency
 on [jQuery](https://jquery.com) as well, so you may need to install the following
@@ -47,7 +47,7 @@ npm install @types/jquery
 
 The code is divided into several folders. This architecture is identical to BeepBox's.
 
-The [synth/](synth) folder has just the code you need to be able to play UltraBox
+The [synth/](synth) folder has just the code you need to be able to play Unbox
 songs out loud, and you could use this code in your own projects, like a web
 game. After compiling the synth code, open website/synth_example.html to see a
 demo using it. To rebuild just the synth code, run:
@@ -77,10 +77,10 @@ The build process outputs JavaScript files into this folder.
 ## Dependencies
 
 Most of the dependencies are listed in [package.json](package.json), although
-I'd like to note that UltraBox also has an indirect, optional dependency on
+I'd like to note that Unbox also has an indirect, optional dependency on
 [lamejs](https://www.npmjs.com/package/lamejs) via
 [jsdelivr](https://www.jsdelivr.com/) for exporting .mp3 files. If the user
-attempts to export an .mp3 file, UltraBox will direct the browser to download
+attempts to export an .mp3 file, Unbox will direct the browser to download
 that dependency on demand.
 
 

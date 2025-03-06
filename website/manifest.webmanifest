@@ -1,7 +1,7 @@
 {
-	"name": "UltraBox",
-	"short_name": "UltraBox",
-	"description": "UltraBox is a mod of BeepBox that aims to combine every other beepmod into one.",
+	"name": "Unbox",
+	"short_name": "Unbox",
+	"description": "Unbox is a mod of UltraBox.",
 	"scope": "/",
 	"start_url": ".",
 	"display": "browser",

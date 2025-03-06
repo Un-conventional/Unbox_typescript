@@ -1,7 +1,7 @@
 {
-	"name": "UltraBox",
-	"version": "2.2.15",
-	"description": "UltraBox is a mod of BeepBox that aims to combine every other beepmod into one.",
+	"name": "Unbox",
+	"version": "0.0.9.75",
+	"description": "Unbox is a mod of UltraBox.",
 	"author": "Main",
 	"contributors": [
 		"Neputendo",
@@ -25,11 +25,11 @@
 		"deploy-files": "bash ./deploy_files.sh",
 		"start": "electron ./to_deploy",
 		"package": "electron-packager ./to_deploy --platform=darwin,linux,win32 --arch=ia32,x64 --asar --overwrite && npm run build-offline-html",
-		"package-host": "electron-packager ./to_deploy UltraBox --asar --overwrite && npm run build-offline-html"
+		"package-host": "electron-packager ./to_deploy Unbox --asar --overwrite && npm run build-offline-html"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/ultraabox/ultrabox_typescript.git"
+		"url": "git+https://github.com/Un-conventional/Unbox_typescript"
 	},
 	"devDependencies": {
 		"@electron/packager": "^18.3.5",
