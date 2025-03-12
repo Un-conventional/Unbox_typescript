@@ -12,6 +12,7 @@ export class ThemePrompt implements Prompt {
 	private readonly _themeSelect: HTMLSelectElement = select({ style: "width: 100%;" },
 		optgroup({ label: "Default Themes" },
 			option({ value: "unbox classic" }, "Unbox Dark"),
+			option({ value: "unbox glow" }, "Unbox Glow"),
 			option({ value: "unbox legacy" }, "Unbox Legacy"),
 		),
 		optgroup({ label: "Ultrabox Themes" },

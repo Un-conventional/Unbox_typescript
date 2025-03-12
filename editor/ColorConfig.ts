@@ -14,7 +14,7 @@ export interface ChannelColors extends BeepBoxOption {
 export class ColorConfig {
     public static colorLookup: Map<number, ChannelColors> = new Map<number, ChannelColors>();
 	public static usesColorFormula: boolean = false;
-	public static readonly defaultTheme: string = "unbox classic";
+	public static readonly defaultTheme: string = "unbox glow";
     public static readonly themes: { [name: string]: string } = {
 	"unbox classic": `
 		:root {
@@ -135,6 +135,126 @@ export class ColorConfig {
     		--disabled-note-primary: #9090A3;
     		--disabled-note-secondary: #303036;
 		}
+	`,
+	"unbox glow": `
+:root {
+        --page-margin: #000B0F;
+        --editor-background: #000B0F;
+        --hover-preview: #BCEBFF;
+        --playhead: #00B3FF99;
+        --primary-text: #9DEBDF;
+        --secondary-text: #999;
+        --inverted-text: #FFFC;
+        --text-selection: #00B3FF;
+        --box-selection-fill: #00B3FF;
+        --loop-accent: #00B3FF;
+        --link-accent: #00B3FF99;
+        --ui-widget-background: #1B282D;
+        --ui-widget-focus: #2E4D58;
+        --pitch-background: #1B282D;
+        --tonic: #62ADCD;
+        --fifth-note: #495A62;
+        --white-piano-key: #BAE7FA;
+        --black-piano-key: #0A4359;
+        --white-piano-key-text: #000000;
+        --black-piano-key-text: #BAE7FA;
+        --use-color-formula: false;
+        --track-editor-bg-pitch: #00B8FF24;
+        --track-editor-bg-pitch-dim: #091514;
+        --track-editor-bg-noise: #00B8FF24;
+        --track-editor-bg-noise-dim: #091514;
+        --track-editor-bg-mod: #00B8FF24;
+        --track-editor-bg-mod-dim: #091514;
+        --multiplicative-mod-slider: #62ADCD;
+        --overwriting-mod-slider: #495A62;
+        --indicator-primary: #7BC7CB;
+        --indicator-secondary: #00B8FF;
+        --select2-opt-group: #1B282D;
+        --input-box-outline: #00B8FF;
+        --mute-button-normal: #7BC7CB;
+        --mute-button-mod: #00B3FF;
+        --pitch1-secondary-channel: #0083BD99;
+        --pitch1-primary-channel: #2BF;
+        --pitch1-secondary-note: #0083BD5B;
+        --pitch1-primary-note: #2BF;
+        --pitch2-secondary-channel: #00AA6299;
+        --pitch2-primary-channel: #26FFA3;
+        --pitch2-secondary-note: #00AA625B;
+        --pitch2-primary-note: #26FFA3;
+        --pitch3-secondary-channel: #00910099;
+        --pitch3-primary-channel: #18F518;
+        --pitch3-secondary-note: #0091005B;
+        --pitch3-primary-note: #18F518;
+        --pitch4-secondary-channel: #A2970099;
+        --pitch4-primary-channel: #FFEF06;
+        --pitch4-secondary-note: #A297005B;
+        --pitch4-primary-note: #FFEF06;
+        --pitch5-secondary-channel: #9B4A0099;
+        --pitch5-primary-channel: #FF9535;
+        --pitch5-secondary-note: #9B4A005B;
+        --pitch5-primary-note: #FF9535;
+        --pitch6-secondary-channel: #AF250099;
+        --pitch6-primary-channel: #FF3A06;
+        --pitch6-secondary-note: #AF25005B;
+        --pitch6-primary-note: #FF3A06;
+        --pitch7-secondary-channel: #93008D99;
+        --pitch7-primary-channel: #F500EB;
+        --pitch7-secondary-note: #93008D5B;
+        --pitch7-primary-note: #F500EB;
+        --pitch8-secondary-channel: #70009B99;
+        --pitch8-primary-channel: #BC0EFF;
+        --pitch8-secondary-note: #70009B5B;
+        --pitch8-primary-note: #BC0EFF;
+        --pitch9-secondary-channel: #00319599;
+        --pitch9-primary-channel: #256CFF;
+        --pitch9-secondary-note: #0031955B;
+        --pitch9-primary-note: #256CFF;
+        --pitch10-secondary-channel: #004E9399;
+        --pitch10-primary-channel: #2599FF;
+        --pitch10-secondary-note: #004E935B;
+        --pitch10-primary-note: #2599FF;
+        --noise1-secondary-channel: #6F6F6F99;
+        --noise1-primary-channel: #BCEBFF;
+        --noise1-secondary-note: #BCEBFF5B;
+        --noise1-primary-note: #BCEBFF;
+        --noise2-secondary-channel: #99663399;
+        --noise2-primary-channel: #75D5FE;
+        --noise2-secondary-note: #75D5FE5B;
+        --noise2-primary-note: #75D5FE;
+        --noise3-secondary-channel: #4A6D8F99;
+        --noise3-primary-channel: #3591B8;
+        --noise3-secondary-note: #3591B85B;
+        --noise3-primary-note: #3591B8;
+        --noise4-secondary-channel: #7A4F9A99;
+        --noise4-primary-channel: #597D8C;
+        --noise4-secondary-note: #597D8C5B;
+        --noise4-primary-note: #5897B0;
+        --noise5-secondary-channel: #60783799;
+        --noise5-primary-channel: #75D5FE;
+        --noise5-secondary-note: #75D5FE5B;
+        --noise5-primary-note: #75D5FE;
+        --mod1-secondary-channel: #F500EB99;
+        --mod1-primary-channel: #F500EB;
+        --mod1-secondary-note: #F500EB5B;
+        --mod1-primary-note: #F500EB;
+        --mod2-secondary-channel: #6200F599;
+        --mod2-primary-channel: #6200F5;
+        --mod2-secondary-note: #6200F55B;
+        --mod2-primary-note: #6200F5;
+        --mod3-secondary-channel: #0400F599;
+        --mod3-primary-channel: #0400F5;
+        --mod3-secondary-note: #0400F55B;
+        --mod3-primary-note: #0400F5;
+        --mod4-secondary-channel: #006EF599;
+        --mod4-primary-channel: #006EF5;
+        --mod4-secondary-note: #006EF55B;
+        --mod4-primary-note: #006EF5;
+        --mod-label-primary: #2E4D58;
+        --mod-label-secondary-text: #1B282D;
+        --mod-label-primary-text: #BAE7FA;
+        --disabled-note-primary: #4A4A4A;
+        --disabled-note-secondary: #0009;
+	    }
 	`,
 	"unbox legacy": `
 		:root {
