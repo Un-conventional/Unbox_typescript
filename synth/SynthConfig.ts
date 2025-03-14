@@ -1597,8 +1597,8 @@ export class Config {
     public static readonly pitchShiftRange: number = 24 * 2 + 1; // -24 <-> +24
     public static readonly justIntonationSemitones: number[] = generateJustIntonationSemitones(Config.pitchShiftRange, Config.pitchesPerOctave);
     public static readonly pitchShiftCenter: number = Config.pitchShiftRange >> 1;
-    public static readonly detuneCenter: number = 400;
-    public static readonly detuneMax: number = 800;
+    public static readonly detuneCenter: number = 200;//400;
+    public static readonly detuneMax: number = 400;//800;
     public static readonly detuneMin: number = 0;
     public static readonly songDetuneMin: number = 0;
     public static readonly songDetuneMax: number = 500;
