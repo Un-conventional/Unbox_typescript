@@ -936,7 +936,7 @@ export class SongEditor {
     private readonly _pulseWidthDropdown: HTMLButtonElement = button({ style: "margin-left:53px; position: absolute; margin-top: 15px; height:1.5em; width: 10px; padding: 0px; font-size: 8px;", onclick: () => this._toggleDropdownMenu(DropdownID.PulseWidth) }, "▼");
     private readonly _pwmSliderInputBox: HTMLInputElement = input({ style: "width: 4em; font-size: 70%;", id: "pwmSliderInputBox", type: "number", step: "1", min: "1", max: (Config.pulseWidthRange * 2), value: "1" });
     private readonly _pulseWidthRow: HTMLDivElement = div({ class: "selectRow" }, div({},
-        span({ class: "tip", tabindex: "0", style: "height:1em; font-size: smaller; white-space: nowrap;", onclick: () => this._openPrompt("pulseWidth") }, "Pulse", div, "Width:"),
+        span({ class: "tip", tabindex: "0", style: "height:1em; font-size: smaller; white-space: nowrap;", onclick: () => this._openPrompt("pulseWidth") }, "Pulse Width:"),
         div({ style: `color: ${ColorConfig.secondaryText}; margin-top: -3px;` }, this._pwmSliderInputBox)
         ), this._pulseWidthDropdown, this._pulseWidthSlider.container);
     //private readonly _pulseWidthRow: HTMLDivElement = div({ class: "selectRow" }, span({ class: "tip", onclick: () => this._openPrompt("pulseWidth") }, "Pulse Width:"), this._pulseWidthDropdown, this._pulseWidthSlider.container);
@@ -946,7 +946,7 @@ export class SongEditor {
 
     private readonly _pitchShiftSlider: Slider = new Slider(input({ style: "margin: 0;", type: "range", min: "0", max: Config.pitchShiftRange - 1, value: "0", step: "1" }), this._doc, (oldValue: number, newValue: number) => new ChangePitchShift(this._doc, oldValue, newValue), true);
     private readonly _pitchShiftSliderInputBox: HTMLInputElement = input({ style: "width: 4em; font-size: 80%; ", id: "pitchShiftSliderInputBox", type: "number", min: 0 - Config.pitchShiftCenter, max: (Config.pitchShiftRange - 1) - Config.pitchShiftCenter, value: Config.pitchShiftCenter, step: "1" });
-    private readonly _pitchShiftSliderTip: HTMLDivElement = div({ class: "selectRow", style: "height: 1em" }, span({class: "tip", style: "font-size smaller;", onclick: () => this._openPrompt ("pitchShift") }, "pitchShift"))
+    private readonly _pitchShiftSliderTip: HTMLDivElement = div({ class: "selectRow", style: "height: 1em" }, span({class: "tip", style: "width: 4em; font-size: 90%; white-space: nowrap;", onclick: () => this._openPrompt ("pitchShift") }, "Pitch Shift"))
     private readonly _pitchShiftTonicMarkers: HTMLDivElement[] = [];
     private readonly _pitchShiftFifthMarkers: HTMLDivElement[] = [];
     private readonly _pitchShiftMarkerContainer: HTMLDivElement = div({ style: "display: flex; position: relative;" }, this._pitchShiftSlider.container, div({ class: "pitchShiftMarkerContainer" }, this._pitchShiftTonicMarkers, this._pitchShiftFifthMarkers));

@@ -2258,7 +2258,7 @@ export class Instrument {
                 this.pitchShift = clamp(0, Config.pitchShiftRange, Config.pitchShiftCenter);
             }
         }
-        if (instrumentObject["detuneCents"] != undefined) { //Here?
+        if (instrumentObject["detuneCents"] != undefined) {
             this.detune = clamp(Config.detuneMin, Config.detuneMax + 1, Math.round(Synth.centsToDetune(+instrumentObject["detuneCents"])));
         }
 
@@ -2312,7 +2312,7 @@ export class Instrument {
             this.panDelay = 0;
         }
 
-        if (instrumentObject["detune"] != undefined) { //Here?
+        if (instrumentObject["detune"] != undefined) {
             this.detune = clamp(Config.detuneMin, Config.detuneMax + 1, (instrumentObject["detune"] | 0));
         }
         else if (instrumentObject["detuneCents"] == undefined) {
@@ -5070,7 +5070,7 @@ export class Song {
                             instrument.pitchShift = clamp(0, Config.pitchShiftRange, base64CharCodeToInt[compressed.charCodeAt(charIndex++)] + 12);
                         }
                     }
-                    if (effectsIncludeDetune(instrument.effects)) { //here?
+                    if (effectsIncludeDetune(instrument.effects)) {
                         if (fromBeepBox) {
                             // Convert from BeepBox's formula
                             instrument.detune = clamp(Config.detuneMin, Config.detuneMax + 1, base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
@@ -5183,7 +5183,7 @@ export class Song {
                     // Do nothing? This song tag code is deprecated for now.
                 }
             } break;
-            case SongTagCode.detune: { //here?
+            case SongTagCode.detune: {
                 const instrument: Instrument = this.channels[instrumentChannelIterator].instruments[instrumentIndexIterator];
 
                 if ((fromJummBox && beforeFive) || (beforeFour && fromGoldBox)) {
