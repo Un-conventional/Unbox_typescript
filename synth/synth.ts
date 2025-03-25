@@ -1428,10 +1428,10 @@ export class Instrument {
     public aliases: boolean = false;
     public pulseWidth: number = (Config.pulseWidthRange * 2);
     public decimalOffset: number = 0;
-    //This is the order in the sequence   1  2  3     4      5      6   7      8     9      10  11     12    13     14  15     16    17     18
-    public dutyCycleSequence: number[] = [0, 1, 6.25, 12.5, 18.75, 25, 31.25, 37.5, 43.75, 50, 56.25, 62.5, 68.75, 75, 81.25, 87.5, 93.75, 99]; // 18 in total, treat 0% pulse as 100% pulse in which it "disables" the pulse width. 
-    //This is the speed ranges for cycle speed 0-
-    public dutyCycleSpeed: number = 13; // Cycle Speed?
+     //This is the order in the sequence   1  2  3     4      5      6   7      8     9      10  11     12    13     14  15     16    17     18
+    //public dutyCycleSequence: number[] = [0, 1, 6.25, 12.5, 18.75, 25, 31.25, 37.5, 43.75, 50, 56.25, 62.5, 68.75, 75, 81.25, 87.5, 93.75, 99]; // 18 in total, treat 0% pulse as 100% pulse in which it "disables" the pulse width. 
+     //This is the speed ranges for cycle speed 0-
+    //public dutyCycleSpeed: number = 13; // Cycle Speed?
     public supersawDynamism: number = Config.supersawDynamismMax;
 	public supersawSpread: number = Math.ceil(Config.supersawSpreadMax / 2.0);
 	public supersawShape: number = 0;
@@ -1657,11 +1657,11 @@ export class Instrument {
                 this.pulseWidth = Config.pulseWidthRange;
                 this.decimalOffset = 0;
                 break;
-            case InstrumentType.dutyCycle:
+            /*case InstrumentType.dutyCycle:
                 this.chord = Config.chords.dictionary["arpeggio"].index;
                 this.pulseWidth = Config.pulseWidthRange;
                 this.decimalOffset = 0;
-                break;
+                break;*/
             case InstrumentType.pickedString:
                 this.chord = Config.chords.dictionary["strum"].index;
                 this.harmonicsWave.reset();
@@ -1967,7 +1967,7 @@ export class Instrument {
                 instrumentObject["unisonExpression"] = this.unisonExpression;
                 instrumentObject["unisonSign"] = this.unisonSign;
             }
-        } else if (this.type == InstrumentType.dutyCycle) {
+        /*} else if (this.type == InstrumentType.dutyCycle) {
             instrumentObject["pulseWidth"] = this.pulseWidth;
             instrumentObject["decimalOffset"] = this.decimalOffset;
             instrumentObject["unison"] = this.unison == Config.unisons.length ? "custom" : Config.unisons[this.unison].name;
@@ -1977,7 +1977,7 @@ export class Instrument {
                 instrumentObject["unisonOffset"] = this.unisonOffset;
                 instrumentObject["unisonExpression"] = this.unisonExpression;
                 instrumentObject["unisonSign"] = this.unisonSign;
-            }
+            }*/
         } else if (this.type == InstrumentType.supersaw) {
 			instrumentObject["pulseWidth"] = this.pulseWidth;
             instrumentObject["decimalOffset"] = this.decimalOffset;
@@ -3474,11 +3474,11 @@ export class Song {
                     buffer.push(base64IntToCharCode[instrument.decimalOffset >> 6], base64IntToCharCode[instrument.decimalOffset & 0x3f]); 
                     buffer.push(SongTagCode.unison, base64IntToCharCode[instrument.unison]);
                     if (instrument.unison == Config.unisons.length) encodeUnisonSettings(buffer, instrument.unisonVoices, instrument.unisonSpread, instrument.unisonOffset, instrument.unisonExpression, instrument.unisonSign);
-                } else if (instrument.type == InstrumentType.dutyCycle) {
+                /*} else if (instrument.type == InstrumentType.dutyCycle) {
                     buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth >> 6], base64IntToCharCode[instrument.pulseWidth & 0x3f]);
                     buffer.push(base64IntToCharCode[instrument.decimalOffset >> 6], base64IntToCharCode[instrument.decimalOffset & 0x3f]);
                     buffer.push(SongTagCode.unison, base64IntToCharCode[instrument.unison]);
-                    if (instrument.unison == Config.unisons.length) encodeUnisonSettings(buffer, instrument.unisonVoices, instrument.unisonSpread, instrument.unisonOffset, instrument.unisonExpression, instrument.unisonSign);
+                    if (instrument.unison == Config.unisons.length) encodeUnisonSettings(buffer, instrument.unisonVoices, instrument.unisonSpread, instrument.unisonOffset, instrument.unisonExpression, instrument.unisonSign);*/
                 } else if (instrument.type == InstrumentType.supersaw) {
 					buffer.push(SongTagCode.supersaw, base64IntToCharCode[instrument.supersawDynamism], base64IntToCharCode[instrument.supersawSpread], base64IntToCharCode[instrument.supersawShape]);
 					buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth >> 6], base64IntToCharCode[instrument.pulseWidth & 0x3f]);
@@ -7679,7 +7679,7 @@ class InstrumentState {
     public vibratoTime: number = 0;
     public nextVibratoTime: number = 0;
     public envelopeTime: number = 0;
-    public dutyCycleTime: number = 0; //Cycle Counter
+    //public dutyCycleTime: number = 0; //Cycle Counter
 
     public eqFilterVolume: number = 1.0;
     public eqFilterVolumeDelta: number = 0.0;
@@ -8357,12 +8357,12 @@ class InstrumentState {
             this.unisonOffset = instrument.unisonOffset;
             this.unisonExpression = instrument.unisonExpression;
             this.unisonSign = instrument.unisonSign;
-        } else if (instrument.type == InstrumentType.dutyCycle) {
+        /*} else if (instrument.type == InstrumentType.dutyCycle) {
             this.unisonVoices = instrument.unisonVoices;
             this.unisonSpread = instrument.unisonSpread;
             this.unisonOffset = instrument.unisonOffset;
             this.unisonExpression = instrument.unisonExpression;
-            this.unisonSign = instrument.unisonSign;
+            this.unisonSign = instrument.unisonSign;*/
         } else if (instrument.type == InstrumentType.customChipWave) {
             this.wave = (this.aliases) ? instrument.customChipWave! : instrument.customChipWaveIntegral!;
             this.volumeScale = 0.05;
@@ -8703,7 +8703,7 @@ export class Synth {
                     // Instrument type specific
                     || ((tgtInstrument.type != InstrumentType.fm && tgtInstrument.type != InstrumentType.fm6op) && (str == "fm slider 1" || str == "fm slider 2" || str == "fm slider 3" || str == "fm slider 4" || str == "fm feedback"))
                     || tgtInstrument.type != InstrumentType.fm6op && (str == "fm slider 5" || str == "fm slider 6")
-                    || ((tgtInstrument.type != InstrumentType.pwm && tgtInstrument.type != InstrumentType.dutyCycle && tgtInstrument.type != InstrumentType.supersaw) && (str == "pulse width" || str == "decimal offset"))
+                    || ((tgtInstrument.type != InstrumentType.pwm &&/* tgtInstrument.type != InstrumentType.dutyCycle && */tgtInstrument.type != InstrumentType.supersaw) && (str == "pulse width" || str == "decimal offset"))
                     || ((tgtInstrument.type != InstrumentType.supersaw) && (str == "dynamism" || str == "spread" || str == "saw shape"))
                     // Arp check
                     || (!tgtInstrument.getChord().arpeggiates && (str == "arp speed" || str == "reset arp"))
@@ -9723,7 +9723,7 @@ export class Synth {
                         // dutyCycleTime = counter
                         // dutyCycleSpeed = cycle speed?
                         // Should "dutyCycle speed" be called that or call it "Cycle Time" like in Sandbox?
-                        if (instrument.type == InstrumentType.dutyCycle) {
+                        /*if (instrument.type == InstrumentType.dutyCycle) {
                             const dutyCycleSize: number = instrument.dutyCycleSequence.length
                             let dutyCycleSpeed: number = Config.dutyCycleSpeedScale[instrument.dutyCycleSpeed];
                             //if(this.isAnyModActive(Config.modulators.dictionary["dutyCycle speed"].index, channel)) {
@@ -9744,7 +9744,7 @@ export class Synth {
                                 }
 
                             }
-                        }
+                        }*/
 
                         // Update arpeggio time, which is used to calculate arpeggio position
                         let useArpeggioSpeed: number = instrument.arpeggioSpeed;
@@ -10656,8 +10656,8 @@ export class Synth {
             baseExpression = Config.harmonicsBaseExpression;
         } else if (instrument.type == InstrumentType.pwm) {
             baseExpression = Config.pwmBaseExpression;
-        } else if (instrument.type == InstrumentType.dutyCycle) {
-            baseExpression = Config.pwmBaseExpression;
+        /*} else if (instrument.type == InstrumentType.dutyCycle) {
+            baseExpression = Config.pwmBaseExpression;*/
         } else if (instrument.type == InstrumentType.supersaw) {
 			baseExpression = Config.supersawBaseExpression;
         } else if (instrument.type == InstrumentType.pickedString) {
@@ -11268,7 +11268,7 @@ export class Synth {
 
             //Shouldn't it be possible to use that framework to automate volume? I wonder if an AY envelope is possible on that...
 
-            if (instrument.type == InstrumentType.dutyCycle) {
+            /*if (instrument.type == InstrumentType.dutyCycle) {
                 const basePulseWidth: number = getPulseWidthRatio(instrument.dutyCycleSequence[Math.floor(instrumentState.dutyCycleTime)]);
 
                 let pulseWidthModStart: number = basePulseWidth;
@@ -11278,7 +11278,7 @@ export class Synth {
                 const pulseWidthEnd: number = pulseWidthModEnd;
                 tone.pulseWidth = pulseWidthStart;
                 tone.pulseWidthDelta = (pulseWidthEnd - pulseWidthStart) / roundedSamplesPerTick;
-            }
+            }*/
             if (instrument.type == InstrumentType.pickedString) {
                 // Check for sustain mods
                 let useSustainStart: number = instrument.stringSustain;
@@ -11297,7 +11297,7 @@ export class Synth {
             }
 
             const startFreq: number = Instrument.frequencyFromPitch(startPitch);
-            if (instrument.type == InstrumentType.chip || instrument.type == InstrumentType.customChipWave || instrument.type == InstrumentType.harmonics || instrument.type == InstrumentType.pickedString || instrument.type == InstrumentType.spectrum || instrument.type == InstrumentType.pwm || instrument.type == InstrumentType.dutyCycle|| instrument.type == InstrumentType.noise) {
+            if (instrument.type == InstrumentType.chip || instrument.type == InstrumentType.customChipWave || instrument.type == InstrumentType.harmonics || instrument.type == InstrumentType.pickedString || instrument.type == InstrumentType.spectrum || instrument.type == InstrumentType.pwm ||/* instrument.type == InstrumentType.dutyCycle||*/ instrument.type == InstrumentType.noise) {
                 // These instruments have two waves at different frequencies for the unison feature.
                 //const unison: Unison = Config.unisons[instrument.unison];
                 const unisonVoices: number = instrument.unisonVoices;
@@ -11633,8 +11633,8 @@ export class Synth {
             return Synth.harmonicsSynth;
         } else if (instrument.type == InstrumentType.pwm) {
             return Synth.pulseWidthSynth;
-        } else if (instrument.type == InstrumentType.dutyCycle) {
-            return Synth.pulseWidthSynth;
+        /*} else if (instrument.type == InstrumentType.dutyCycle) {
+            return Synth.pulseWidthSynth;*/
         } else if (instrument.type == InstrumentType.supersaw) {
 			return Synth.supersawSynth;
         } else if (instrument.type == InstrumentType.pickedString) {

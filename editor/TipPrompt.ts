@@ -548,14 +548,14 @@ export class TipPrompt implements Prompt {
 				);
 			} break;
 			//--- Change this to Macro/Sequcence later --- 
-			// case "dutyCycle": {
-				//message = div(
-					//h2("Duty Cycle"),
-					//p("This setting controls the shape and sound of a pulse wave automatically with set ranges within a repeating cycle."), 
-					//p("more detail here"),
-					//p("This works like pulse width but you can have the changes done automatically with or without the use of a mod channel."),
-				//);
-			//} break;
+			/* case "dutyCycle": {
+				message = div(
+					h2("Duty Cycle"),
+					p("This setting controls the shape and sound of a pulse wave automatically with set ranges within a repeating cycle."), 
+					p("more detail here"),
+					p("This works like pulse width but you can have the changes done automatically with or without the use of a mod channel."),
+				);
+			} break;*/
 
 			default:
 				// Check for modSetinfo#

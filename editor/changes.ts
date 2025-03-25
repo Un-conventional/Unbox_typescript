@@ -1023,7 +1023,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                 { item: InstrumentType.chip, weight: 2 },
                 // { item: InstrumentType.noise, weight: 1 },
                 { item: InstrumentType.pwm, weight: 2 },
-                { item: InstrumentType.dutyCycle, weight: 4},
+                //{ item: InstrumentType.dutyCycle, weight: 4},
                 { item: InstrumentType.supersaw, weight: 2 },
                 { item: InstrumentType.customChipWave, weight: 2 },
                 { item: InstrumentType.harmonics, weight: 2 },
@@ -1036,7 +1036,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
 			
             instrument.fadeIn = (Math.random() < 0.5) ? 0 : selectCurvedDistribution(0, Config.fadeInRange - 1, 0, 2);
             instrument.fadeOut = selectCurvedDistribution(0, Config.fadeOutTicks.length - 1, Config.fadeOutNeutral, 2);
-            if (type == InstrumentType.chip || type == InstrumentType.harmonics || type == InstrumentType.pickedString || type == InstrumentType.customChipWave || type == InstrumentType.pwm || type == InstrumentType.dutyCycle || type == InstrumentType.spectrum) { // TODO: add noise
+            if (type == InstrumentType.chip || type == InstrumentType.harmonics || type == InstrumentType.pickedString || type == InstrumentType.customChipWave || type == InstrumentType.pwm || /*type == InstrumentType.dutyCycle ||*/ type == InstrumentType.spectrum) { // TODO: add noise
                 instrument.unison = Config.unisons.dictionary[selectWeightedRandom([
                     { item: "none", weight: 25 },
                     { item: "shimmer", weight: 10 },
@@ -1219,7 +1219,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                             // advloop addition
 				} break;
 				case InstrumentType.pwm:
-                case InstrumentType.dutyCycle:
+                //case InstrumentType.dutyCycle:
                 case InstrumentType.supersaw: {
 					if (type == InstrumentType.supersaw) {
 						instrument.supersawDynamism = selectCurvedDistribution(0, Config.supersawDynamismMax, Config.supersawDynamismMax, 2);
@@ -2291,7 +2291,7 @@ export class ChangeDecimalOffset extends ChangeInstrumentSlider {
         if (oldValue != newValue) this._didSomething();
     }
 }
-export class ChangeDutyCycleSpeed extends Change {
+/*export class ChangeDutyCycleSpeed extends Change {
     constructor(doc: SongDocument, oldValue: number, newValue: number) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
@@ -2304,7 +2304,7 @@ export class ChangeDutyCycleSpeed extends Change {
             this._didSomething();
         }
     }
-}
+}*/
 
 export class ChangeSupersawDynamism extends ChangeInstrumentSlider {
 	constructor(doc: SongDocument, oldValue: number, newValue: number) {
