@@ -390,12 +390,13 @@ export class EditorConfig {
         },
         {
             name: "Sam Coupé (WIP)", presets: <DictionaryArray<Preset>>toNameMap([
-                //Phillips SAA1099- These waveforms are what you can make in the Sam Coupé
+                //Phillips SAA1099- These waveforms are what you can make in the Sam Coupé 8 step saw and triangle
+                { name: "SAA1099 Triangle", generalMidi: false, settings: { "type": "chip", "eqFilter": [], "effects": ["aliasing"], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "SAA1099 Triangle", "unison": "none", "envelopes": [] } },
+                { name: "SAA1099 Sawtooth", generalMidi: false, settings: { "type": "chip", "eqFilter": [], "effects": ["aliasing"], "transition": "interrupt", "fadeInSeconds": 0, "fadeOutTicks": -1, "chord": "arpeggio", "wave": "SAA1099 Sawtooth", "unison": "none", "envelopes": [] } },
+                //{ name: "SAA1099 Noise Square", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
-                //{ name: "name", generalMidi: false, settings:  },
-                //{ name: "name", generalMidi: false, settings:  },
-                
+
             ])
         },
         {
