@@ -3055,8 +3055,8 @@ export class Song {
         this.reverb = 0;
         this.beatsPerBar = 8;
         this.barCount = 16;
-        this.patternsPerChannel = 8;
-        this.rhythm = 1;
+        this.patternsPerChannel = 16;
+        this.rhythm = 7;
         this.layeredInstruments = false;
         this.patternInstruments = false;
 
@@ -3064,9 +3064,9 @@ export class Song {
         document.title = this.title + " - " + EditorConfig.versionDisplayName;
 
         if (andResetChannels) {
-            this.pitchChannelCount = 3;
+            this.pitchChannelCount = 4;
             this.noiseChannelCount = 1;
-            this.modChannelCount = 0;
+            this.modChannelCount = 1;
             for (let channelIndex: number = 0; channelIndex < this.getChannelCount(); channelIndex++) {
                 const isNoiseChannel: boolean = channelIndex >= this.pitchChannelCount && channelIndex < this.pitchChannelCount + this.noiseChannelCount;
                 const isModChannel: boolean = channelIndex >= this.pitchChannelCount + this.noiseChannelCount;

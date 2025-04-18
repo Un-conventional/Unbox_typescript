@@ -14,6 +14,7 @@ export class ThemePrompt implements Prompt {
 			option({ value: "unbox classic" }, "Unbox Dark"),
 			option({ value: "unbox glow" }, "Unbox Glow"),
 			option({ value: "unbox legacy" }, "Unbox Legacy"),
+			option({ value: "unbox vitals"}, "Unbox Vitals"),
 		),
 		optgroup({ label: "Ultrabox Themes" },
 			option({ value: "ultrabox dark" }, "UltraBox"),
