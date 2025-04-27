@@ -3051,7 +3051,7 @@ export class Song {
         this.octave = 0;
         this.loopStart = 0;
         this.loopLength = 4;
-        this.tempo = 120;
+        this.tempo = 250;
         this.reverb = 0;
         this.beatsPerBar = 8;
         this.barCount = 16;

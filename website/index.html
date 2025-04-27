@@ -74,7 +74,7 @@
             margin-top: 0.5em;
             margin-bottom: 0.5em;
             -webkit-text-stroke-width: 0;
-            color: var(--mod-title, #9c64f7);
+            color: var(--mod-title, #7bc7cb);
         }
 
         h2 {
@@ -351,7 +351,7 @@
         // Slarmoo's Box plants
         //"✨","🌈","🌧️","🪨","🐍","🌲","🌳",
         // Unbox Plants - Ask me which ones to be added to Ultra if they are to be added
-        "🌵","🔔","🪨 🧻 ✂️","👁️ 🎯 🫵 🌵","⚠️","🛆 🏆","🪓","🌳 🪓","Team triangle wins!","🐛⬅️SN63A07",", It's Not UnBox!","Try BotB","Try NepBox","5️⃣6️⃣","🍪","Try your Worst","Do your Best","Try your Best, Do your Worst - BotB","Did you save?","Be whelmed"];
+        "🌵","🔔","🪨 🧻 ✂️","👁️ 🎯 🫵 🌵","⚠️","🛆 🏆","🪓","🌳 🪓"," - Team triangle wins!"," - 🐛⬅️SN63A07"," - It's Not UnBox!"," - Try BotB","Try NepBox","5️⃣6️⃣","🍪"," - Try your Worst"," - Do your Best"," - Try your Best, Do your Worst - BotB"," - Did you save?"," - Be whelmed"," - Bamhurger"];
 
         if (Math.floor(Math.random() * 3) == 0) {
             document.getElementById("goldboxPlant").innerHTML = "  " + plants[(Math.floor(Math.random() * plants.length))];  
@@ -362,6 +362,9 @@
         // Unbox birthday (january 20th)
         if ((date.getDate() == 20) && date.getMonth() == 0) {
             document.getElementById("goldboxPlant").innerHTML = "  🎂🎉🍰🧁🎈🎁🥳";  
+        }
+        if ((date.getDate() == 2) && date.getmonth() == 10) {
+            document.getElementById("goldboxPlant").innerHTML = "🎂";
         }
 
         function changeHotdogSize() {
