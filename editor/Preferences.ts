@@ -51,7 +51,7 @@ export class Preferences {
 	
 	public reload(): void {
 		this.autoPlay = window.localStorage.getItem("autoPlay") == "true";
-		this.autoFollow = window.localStorage.getItem("autoFollow") != "false";
+		this.autoFollow = window.localStorage.getItem("autoFollow") == "true";
 		this.enableNotePreview = window.localStorage.getItem("enableNotePreview") != "false";
 		this.showFifth = window.localStorage.getItem("showFifth") == "true";
 		this.notesOutsideScale = window.localStorage.getItem("notesOutsideScale") == "true";
@@ -64,7 +64,7 @@ export class Preferences {
 		this.instrumentImportExport = window.localStorage.getItem("instrumentImportExport") == "true";
 		this.instrumentButtonsAtTop = window.localStorage.getItem("instrumentButtonsAtTop") == "true"
 		this.enableChannelMuting = window.localStorage.getItem("enableChannelMuting") == "true";
-		this.displayBrowserUrl = window.localStorage.getItem("displayBrowserUrl") != "false";
+		this.displayBrowserUrl = window.localStorage.getItem("displayBrowserUrl") == "true";
 		this.pressControlForShortcuts = window.localStorage.getItem("pressControlForShortcuts") == "true";
 		this.enableMidi = window.localStorage.getItem("enableMidi") != "false";
 		this.showRecordButton = window.localStorage.getItem("showRecordButton") == "true";
@@ -74,14 +74,14 @@ export class Preferences {
 		this.metronomeWhileRecording = window.localStorage.getItem("metronomeWhileRecording") != "false";
 		this.notesFlashWhenPlayed = window.localStorage.getItem("notesFlashWhenPlayed") == "true";
 		this.showOscilloscope = window.localStorage.getItem("showOscilloscope") == "true";
-		this.showSampleLoadingStatus = window.localStorage.getItem("showSampleLoadingStatus") != "false";
-		this.showDescription = window.localStorage.getItem("showDescription") != "false";
+		this.showSampleLoadingStatus = window.localStorage.getItem("showSampleLoadingStatus") == "true";
+		this.showDescription = window.localStorage.getItem("showDescription") == "true";
 		this.showInstrumentScrollbars = window.localStorage.getItem("showInstrumentScrollbars") == "true";
-		this.closePromptByClickoff = window.localStorage.getItem("closePromptByClickoff") == "true";
-		this.frostedGlassBackground = window.localStorage.getItem("frostedGlassBackground") == "true";
-		this.keyboardLayout = window.localStorage.getItem("keyboardLayout") || "wickiHayden";
+		this.closePromptByClickoff = window.localStorage.getItem("closePromptByClickoff") != "false";
+		this.frostedGlassBackground = window.localStorage.getItem("frostedGlassBackground") != "false";
+		this.keyboardLayout = window.localStorage.getItem("keyboardLayout") || "pianoTransposingC";
 		this.bassOffset = (+(<any>window.localStorage.getItem("bassOffset"))) || 0;
-		this.layout = window.localStorage.getItem("layout") || "small";
+		this.layout = window.localStorage.getItem("layout") || "wide";
 		this.colorTheme = window.localStorage.getItem("colorTheme") || ColorConfig.defaultTheme;
 		this.customTheme = window.localStorage.getItem("customTheme");
         this.customTheme2 = window.localStorage.getItem("customTheme2");

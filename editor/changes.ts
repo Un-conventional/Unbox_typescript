@@ -1347,8 +1347,8 @@ export class ChangeRandomGeneratedInstrument extends Change {
 						instrument.operators[i].amplitude = selectCurvedDistribution(0, Config.operatorAmplitudeMax, Config.operatorAmplitudeMax - 1, 2);
                         instrument.operators[i].waveform = Config.operatorWaves.dictionary[selectWeightedRandom([
                             { item: "sine", weight: 10 },
-                            { item: "triangle", weight: 6 },
-                            { item: "pulse width", weight: 6 },
+                            { item: "triangle", weight: 14 },
+                            { item: "pulse width", weight: 16 },
                             { item: "sawtooth", weight: 3 },
                             { item: "ramp", weight: 3 },
                             { item: "trapezoid", weight: 4 },
@@ -1356,17 +1356,29 @@ export class ChangeRandomGeneratedInstrument extends Change {
                         ])].index;
 						if (instrument.operators[i].waveform == 2/*"pulse width"*/) {
 							instrument.operators[i].pulseWidth = selectWeightedRandom([
-								{ item: 0, weight: 3 },
-								{ item: 1, weight: 5 },
-								{ item: 2, weight: 7 },
-								{ item: 3, weight: 10 },
-								{ item: 4, weight: 15 },
-								{ item: 5, weight: 25 }, // 50%
-								{ item: 6, weight: 15 },
+								{ item: 0, weight: 1 },
+								{ item: 1, weight: 2 },
+								{ item: 2, weight: 3 },
+								{ item: 3, weight: 4 },
+								{ item: 4, weight: 5 },
+								{ item: 5, weight: 6 },
+								{ item: 6, weight: 8 },
 								{ item: 7, weight: 10 },
-								{ item: 8, weight: 7 },
-								{ item: 9, weight: 5 },
-								{ item: 9, weight: 3 },
+								{ item: 8, weight: 13 },
+								{ item: 9, weight: 17 },
+								{ item: 10, weight: 21 },
+                                { item: 11, weight: 25 }, // 50%
+                                { item: 12, weight: 21 },
+                                { item: 13, weight: 17 },
+                                { item: 14, weight: 13 },
+                                { item: 15, weight: 10 },
+                                { item: 16, weight: 8 },
+                                { item: 17, weight: 6 },
+                                { item: 18, weight: 5 },
+                                { item: 19, weight: 4 },
+                                { item: 20, weight: 3 },
+                                { item: 21, weight: 2 },
+                                { item: 22, weight: 1 },
 							]);
                         }
 					}
@@ -1417,8 +1429,8 @@ export class ChangeRandomGeneratedInstrument extends Change {
 						}
                         instrument.operators[i].waveform = Config.operatorWaves.dictionary[selectWeightedRandom([
                             { item: "sine", weight: 10 },
-                            { item: "triangle", weight: 6 },
-                            { item: "pulse width", weight: 6 },
+                            { item: "triangle", weight: 14 },
+                            { item: "pulse width", weight: 16 },
                             { item: "sawtooth", weight: 3 },
                             { item: "ramp", weight: 3 },
                             { item: "trapezoid", weight: 4 },
@@ -1426,17 +1438,29 @@ export class ChangeRandomGeneratedInstrument extends Change {
                         ])].index;
 						if (instrument.operators[i].waveform == 2) {
 							instrument.operators[i].pulseWidth = selectWeightedRandom([
-								{ item: 0, weight: 3 },
-								{ item: 1, weight: 5 },
-								{ item: 2, weight: 7 },
-								{ item: 3, weight: 10 },
-								{ item: 4, weight: 15 },
-								{ item: 5, weight: 25 }, // 50%
-								{ item: 6, weight: 15 },
+								{ item: 0, weight: 1 },
+								{ item: 1, weight: 2 },
+								{ item: 2, weight: 3 },
+								{ item: 3, weight: 4 },
+								{ item: 4, weight: 5 },
+								{ item: 5, weight: 6 },
+								{ item: 6, weight: 8 },
 								{ item: 7, weight: 10 },
-								{ item: 8, weight: 7 },
-								{ item: 9, weight: 5 },
-								{ item: 9, weight: 3 },
+								{ item: 8, weight: 13 },
+								{ item: 9, weight: 17 },
+								{ item: 10, weight: 21 },
+                                { item: 11, weight: 25 }, // 50%
+                                { item: 12, weight: 21 },
+                                { item: 13, weight: 17 },
+                                { item: 14, weight: 13 },
+                                { item: 15, weight: 10 },
+                                { item: 16, weight: 8 },
+                                { item: 17, weight: 6 },
+                                { item: 18, weight: 5 },
+                                { item: 19, weight: 4 },
+                                { item: 20, weight: 3 },
+                                { item: 21, weight: 2 },
+                                { item: 22, weight: 1 },
 							]);
 						}
 					}
@@ -4617,8 +4641,8 @@ export class ChangeVolume extends Change {
 export class ChangeSongTitle extends Change {
     constructor(doc: SongDocument, oldValue: string, newValue: string) {
         super();
-        if (newValue.length > 30) {
-            newValue = newValue.substring(0, 30);
+        if (newValue.length > 63) {
+            newValue = newValue.substring(0, 63);
         }
 
         doc.song.title = newValue;
@@ -4631,8 +4655,8 @@ export class ChangeSongTitle extends Change {
 export class ChangeChannelName extends Change {
     constructor(doc: SongDocument, oldValue: string, newValue: string) {
         super();
-        if (newValue.length > 15) {
-            newValue = newValue.substring(0, 15);
+        if (newValue.length > 63) {
+            newValue = newValue.substring(0, 63);
         }
 
         doc.song.channels[doc.muteEditorChannel].name = newValue;

@@ -27,6 +27,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/icon_32.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link href="https://fonts.googleapis.com/css?family=B612" rel="stylesheet" media="none" onload="if (this.media != 'all') this.media='all';" /> <!-- this is a trick to load CSS asynchronously. -->
+    <link href="https://fonts.googleapis.com/css2?family=Linefont:wdth@25&display=swap" rel="stylesheet" media="none" onload="if (this.media != 'all') this.media='all';" />
+    <link href="https://fonts.googleapis.com/css2?family=Wavefont:wght,ROND@4..1000,0&display=swap" rel="stylesheet" media="none" onload="if (this.media != 'all') this.media='all';" />
+
     <style type="text/css">
 
         html {
@@ -152,6 +155,26 @@
                 flex-direction: column;
                 align-items: center;
             }
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Linefont:wdth,wght@25,4..1000&display=swap');
+        /*LineFont*/
+        @font-face {
+            font-family: 'Linefont';
+            font-style: normal;
+            font-weight: 400;
+            font-stretch: 25%;
+            font-display: swap;
+            src: url(https://fonts.gstatic.com/s/linefont/v8/dg4I_pzpoqcLKUIzVfFMh1TF2rkhli25jn3CKTTWSumsFuSnY4UMbus.woff2) format('woff2');
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Wavefont:wght,ROND@4..1000,0&display=swap');
+        /*WaveFont*/
+        /* fallback (it says this in the link) */
+        @font-face {
+            font-family: 'Wavefont';
+            font-style: normal;
+            font-weight: 4 1000;
+            font-display: swap;
+            src: url(https://fonts.gstatic.com/s/wavefont/v12/L0xQDF00m0cP6hefyOCpRezQNuizSrqDyx8FHbFu21B3L4m0SEzuW4I.woff2) format('woff2');
         }
     </style>
 </head>
@@ -330,43 +353,46 @@
         // Randomize display of header
         // 1-in-9 chance to appear // maybe 1 in 3?
         // Might keep or remove non Unbox plants?
-        const plants = [
-        // jummbox/goldbox plants    
-        //"🍂", "🌿", "🌺", "🍃", "🍄", "🍀🌷", "🌈🍂🍁🍀🌷🍄🐲🌈🍃🌺🍄","1️⃣3️⃣1️⃣2️⃣",
-        // blubox plants
-        //"≽(◕ ᴗ ◕)≼", "≽(ᴗ _ ᴗ)≼", "≽(⌐ _ ⌐)≼", "≽(ᵕ ‿ ᵕ)≼", 
-        // familiarbox plant (there were others, but the code of familiarbox is long gone)
-        // this is a reference to (now outdated?) lore jinx made for one of their projects 
-        //"☀️⭐🕒👁️",
-        // suggested by mel, meant to supplement the lack of a worm logo
-        //"🪱",
-        //// I believe this is from paandorasbox (might have also been present in familiarbox?)
-        //" :wackybox:",
-        // plant suggested by mel, in reference to the "(don't eat) thegubbys" meme
-        //"🐟",
-        // blubox desktop plants 
-        //"⚡","🔵","💫",
-        // dogebox2 plants 
-        //"🍕","🌭","🍔","🍟",
-        // Slarmoo's Box plants
-        //"✨","🌈","🌧️","🪨","🐍","🌲","🌳",
-        // Unbox Plants - Ask me which ones to be added to Ultra if they are to be added
-        "🌵","🔔","🪨 🧻 ✂️","👁️ 🎯 🫵 🌵","⚠️","🛆 🏆","🪓","🌳 🪓"," - Team triangle wins!"," - 🐛⬅️SN63A07"," - It's Not UnBox!"," - Try BotB","Try NepBox","5️⃣6️⃣","🍪"," - Try your Worst"," - Do your Best"," - Try your Best, Do your Worst - BotB"," - Did you save?"," - Be whelmed"," - Bamhurger"];
+        const plants = [" 🌵"," 🔔"," 🪨 🧻 ✂️"," 👁️ 🎯 🫵 🌵"," ⚠️"," 🛆 🏆"," 🪓"," 🌳 🪓 ⚠️"," - Team triangle wins!"," - 🐛⬅️SN63A07"," 🦆"," "," - It's Not UnBox!"," - Try BotB"," - Try NepBox!"," - Try UltraBox!"," - Try Slarmoo's Box!"," - Try Midbox!"," - Try AbyssBox!"," 5️⃣6️⃣"," - Here, have a Cookie 🍪"," 🍪"," - Try your Worst"," - Do your Best"," - Try your Best, Do your Worst - BotB"," - Did you save?"," - Be whelmed"," - Eat a Bamhurger!"," - Use the Buzzer"," - Check out the Wiki!","Did you check the Guide?"];
 
-        if (Math.floor(Math.random() * 3) == 0) {
+        if (Math.floor(Math.random() * 1) == 0) { //Reset to 3 before release
             document.getElementById("goldboxPlant").innerHTML = "  " + plants[(Math.floor(Math.random() * plants.length))];  
         }
 
         const date = new Date();
 
-        // Unbox birthday (january 20th)
-        if ((date.getDate() == 20) && date.getMonth() == 0) {
-            document.getElementById("goldboxPlant").innerHTML = "  🎂🎉🍰🧁🎈🎁🥳";  
-        }
-        if ((date.getDate() == 2) && date.getmonth() == 10) {
-            document.getElementById("goldboxPlant").innerHTML = "🎂";
-        }
+        //Christmas, Halloween
 
+        if ((date.getDate() == 1) && date.getMonth() == 0) { //Jan 1
+            document.getElementById("goldboxPlant").innerHTML = " 🎈Happy New Year!🎈🥳";  
+        }
+        if ((date.getDate() == 20) && date.getMonth() == 0) { // Unbox birthday Jan 20
+            document.getElementById("goldboxPlant").innerHTML = " 🎂🎉🍰🧁🎈🎁🥳,"," 🎂"," 🎉"," 🍰"," 🧁"," 🎈"," 🎁"," 🥳";  
+        }
+        if ((date.getDate() == 14) && date.getmonth() == 2) { // Pi day
+            document.getElementById("goldboxPlant").innerHTML = " π"," 🥧"," π🥧"," - It's PIE DAY! 🥧";
+        }
+        if ((date.getDate() == 14) && date.getmonth() == 2) { // Saint Patrick's Day
+            document.getElementById("goldboxPlant").innerHTML = " ☘️";
+        }
+        if ((date.getDate() == 1) && date.getmonth() == 3) { // April Fools
+            document.getElementById("goldboxPlant").innerHTML = " 🥸";
+        }
+        if ((date.getDate() == 22) && date.getmonth() == 3) { // Earth day
+            document.getElementById("goldboxPlant").innerHTML = " 🌎";
+        }
+        if ((date.getDate() == 2) && date.getmonth() == 9) { // Oct 2
+            document.getElementById("goldboxPlant").innerHTML = " 🎂";
+        }
+        if ((date.getDate() == 31) && date.getmonth() == 9) { // Oct 31 Halloween
+            document.getElementById("goldboxPlant").innerHTML = " 🌕"," 🦇"," 👻"," ⚰️"," 🧛"," 🐈‍⬛"," 🕸️"," 🎃"," 🍬"," 🍫"," 🍭";
+        }
+        if ((date.getDate() == 24) && date.getMonth() == 11) { // Dec 24
+            document.getElementById("goldboxPlant").innerHTML = " 🥛"," 🍪";  
+        }
+        if ((date.getDate() == 25) && date.getMonth() == 11) { // Dec 25
+            document.getElementById("goldboxPlant").innerHTML = " 🎄"," 🎁"," 🎄🎁";  
+        }
         function changeHotdogSize() {
             var image = document.getElementById('Hotdog');
             image.width = Math.random() * (750 - 20) + 20;

@@ -685,7 +685,7 @@ export class Operator {
         this.frequency = 4; //defualt to 1x
         this.amplitude = (index <= 1) ? Config.operatorAmplitudeMax : 0;
         this.waveform = 0;
-        this.pulseWidth = 5;
+        this.pulseWidth = 11;
     }
 
     public copy(other: Operator): void {
@@ -2559,7 +2559,7 @@ export class Instrument {
                         // GoldBox compatibility
                         if (operatorObject["waveform"] == "square") {
                             operator.waveform = Config.operatorWaves.dictionary["pulse width"].index;
-                            operator.pulseWidth = 5;
+                            operator.pulseWidth = 11;
                         } else if (operatorObject["waveform"] == "rounded") {
                             operator.waveform = Config.operatorWaves.dictionary["quasi-sine"].index;
                         } else {
@@ -2573,7 +2573,7 @@ export class Instrument {
                 if (operatorObject["pulseWidth"] != undefined) {
                     operator.pulseWidth = operatorObject["pulseWidth"] | 0;
                 } else {
-                    operator.pulseWidth = 5;
+                    operator.pulseWidth = 11;
                 }
             }
         }
