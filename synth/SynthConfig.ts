@@ -1351,7 +1351,6 @@ export class Config {
 	]);
     public static readonly effectNames: ReadonlyArray<string> = ["reverb", "chorus", "panning", "distortion", "bitcrusher", "note filter", "echo", "pitch shift", "detune", "vibrato", "transition type", "chord type"];
     public static readonly effectOrder: ReadonlyArray<EffectType> = [EffectType.panning, EffectType.transition, EffectType.chord, EffectType.pitchShift, EffectType.detune, EffectType.vibrato, EffectType.noteFilter, EffectType.distortion, EffectType.bitcrusher, EffectType.chorus, EffectType.echo, EffectType.reverb];
-    public static readonly noteSizeMax: number = 6;
     public static readonly noteSizeMax: number = 6; //Should make this a setting to be enabled, should be 6 at default - New value 9?.
 	public static readonly volumeRange: number = 50;
 	// Beepbox's old volume scale used factor -0.5 and was [0~7] had roughly value 6 = 0.125 power. This new value is chosen to have -21 be the same,
@@ -1649,7 +1648,6 @@ export class Config {
     public static readonly songDetuneMin: number = 0;
     public static readonly songDetuneMax: number = 500;
     public static readonly unisonVoicesMin: number = 1;
-    public static readonly unisonVoicesMax: number = 2;
     public static readonly unisonVoicesMax: number = 2;//9?
     public static readonly unisonSpreadMin: number = -96;
     public static readonly unisonSpreadMax: number = 96; 

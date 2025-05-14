@@ -1583,6 +1583,22 @@ export class ChangeTransition extends Change {
     }
 }
 
+/* No idea what I am doing regarding this.
+export class ChangeSlidetickSpeed extends Change {
+    constructor(doc: SongDocument, oldValue: number, newValue: number) {
+        super();
+        const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
+        instrument.slideSpeed = newValue;
+        doc.synth.unsetMod(Config.modulators.dictionary["slide speed"].index, doc.channel, doc.getCurrentInstrument());
+
+        doc.notifier.changed();
+        if (oldValue != newValue) {
+            instrument.preset = instrument.type;
+            this._didSomething();
+        }
+    }
+}*/
+
 export class ChangeToggleEffects extends Change {
     constructor(doc: SongDocument, toggleFlag: number, useInstrument: Instrument | null) {
         super();
