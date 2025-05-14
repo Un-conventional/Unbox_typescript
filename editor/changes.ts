@@ -4660,7 +4660,6 @@ export class ChangeSongTitle extends Change {
     }
 }
 
-export class ChangeChannelName extends Change {
 export class ChangeChannelNameFromMuteEditor extends Change {
     constructor(doc: SongDocument, oldValue: string, newValue: string) {
         super();
