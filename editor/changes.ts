@@ -4661,6 +4661,7 @@ export class ChangeSongTitle extends Change {
 }
 
 export class ChangeChannelName extends Change {
+export class ChangeChannelNameFromMuteEditor extends Change {
     constructor(doc: SongDocument, oldValue: string, newValue: string) {
         super();
         if (newValue.length > 63) {
@@ -4668,6 +4669,21 @@ export class ChangeChannelName extends Change {
         }
 
         doc.song.channels[doc.muteEditorChannel].name = newValue;
+        doc.recalcChannelNames = true;
+
+        doc.notifier.changed();
+        if (oldValue != newValue) this._didSomething();
+    }
+}
+
+export class ChangeChannelName extends Change {
+    constructor(doc: SongDocument, oldValue: string, newValue: string) {
+        super();
+        if (newValue.length > 63) {
+            newValue = newValue.substring(0, 63);
+        }
+
+        doc.song.channels[doc.channel].name = newValue;
         doc.recalcChannelNames = true;
 
         doc.notifier.changed();

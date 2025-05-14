@@ -46,7 +46,7 @@ import { SpectrumEditor, SpectrumEditorPrompt } from "./SpectrumEditor";
 import { CustomThemePrompt } from "./CustomThemePrompt";
 import { ThemePrompt } from "./ThemePrompt";
 import { TipPrompt } from "./TipPrompt";
-import { ChangeTempo, ChangeKeyOctave, ChangeChorus, ChangeEchoDelay, ChangeEchoSustain, ChangeReverb, ChangeVolume, ChangePan, ChangePatternSelection, ChangePatternsPerChannel, ChangePatternNumbers, ChangeSupersawDynamism, ChangeSupersawSpread, ChangeSupersawShape, ChangePulseWidth, ChangeFeedbackAmplitude, ChangeOperatorAmplitude, ChangeOperatorFrequency, ChangeDrumsetEnvelope, ChangePasteInstrument, ChangePreset, pickRandomPresetValue, ChangeRandomGeneratedInstrument, ChangeEQFilterType, ChangeNoteFilterType, ChangeEQFilterSimpleCut, ChangeEQFilterSimplePeak, ChangeNoteFilterSimpleCut, ChangeNoteFilterSimplePeak, ChangeScale, ChangeDetectKey, ChangeKey, ChangeRhythm, ChangeFeedbackType, ChangeAlgorithm, ChangeChipWave, ChangeNoiseWave, ChangeTransition, ChangeToggleEffects, ChangeVibrato, ChangeUnison, ChangeChord, ChangeSong, ChangePitchShift, ChangeDetune, ChangeDistortion, ChangeStringSustain, ChangeBitcrusherFreq, ChangeBitcrusherQuantization, ChangeAddEnvelope, ChangeEnvelopeSpeed, ChangeDiscreteEnvelope, ChangeAddChannelInstrument, ChangeRemoveChannelInstrument, ChangeCustomWave, ChangeOperatorWaveform, ChangeOperatorPulseWidth, ChangeSongTitle, ChangeVibratoDepth, ChangeVibratoSpeed, ChangeVibratoDelay, ChangeVibratoType, ChangePanDelay, ChangeArpeggioSpeed, ChangeFastTwoNoteArp, ChangeClicklessTransition, ChangeAliasing, ChangeSetPatternInstruments, ChangeHoldingModRecording, ChangeChipWavePlayBackwards, ChangeChipWaveStartOffset, ChangeChipWaveLoopEnd, ChangeChipWaveLoopStart, ChangeChipWaveLoopMode, ChangeChipWaveUseAdvancedLoopControls, ChangeDecimalOffset, ChangeUnisonVoices, ChangeUnisonSpread, ChangeUnisonOffset, ChangeUnisonExpression, ChangeUnisonSign, Change6OpFeedbackType, Change6OpAlgorithm, ChangeCustomAlgorythmorFeedback} from "./changes"; //ChangeDutyCycleSpeed
+import { ChangeTempo, ChangeKeyOctave, ChangeChorus, ChangeEchoDelay, ChangeEchoSustain, ChangeReverb, ChangeVolume, ChangePan, ChangePatternSelection, ChangePatternsPerChannel, ChangePatternNumbers, ChangeSupersawDynamism, ChangeSupersawSpread, ChangeSupersawShape, ChangePulseWidth, ChangeFeedbackAmplitude, ChangeOperatorAmplitude, ChangeOperatorFrequency, ChangeDrumsetEnvelope, ChangePasteInstrument, ChangePreset, pickRandomPresetValue, ChangeRandomGeneratedInstrument, ChangeEQFilterType, ChangeNoteFilterType, ChangeEQFilterSimpleCut, ChangeEQFilterSimplePeak, ChangeNoteFilterSimpleCut, ChangeNoteFilterSimplePeak, ChangeScale, ChangeDetectKey, ChangeKey, ChangeRhythm, ChangeFeedbackType, ChangeAlgorithm, ChangeChipWave, ChangeNoiseWave, ChangeTransition, ChangeToggleEffects, ChangeVibrato, ChangeUnison, ChangeChord, ChangeSong, ChangePitchShift, ChangeDetune, ChangeDistortion, ChangeStringSustain, ChangeBitcrusherFreq, ChangeBitcrusherQuantization, ChangeAddEnvelope, ChangeEnvelopeSpeed, ChangeDiscreteEnvelope, ChangeAddChannelInstrument, ChangeRemoveChannelInstrument, ChangeCustomWave, ChangeOperatorWaveform, ChangeOperatorPulseWidth, ChangeSongTitle, ChangeVibratoDepth, ChangeVibratoSpeed, ChangeVibratoDelay, ChangeVibratoType, ChangePanDelay, ChangeArpeggioSpeed, ChangeFastTwoNoteArp, ChangeClicklessTransition, ChangeAliasing, ChangeSetPatternInstruments, ChangeHoldingModRecording, ChangeChipWavePlayBackwards, ChangeChipWaveStartOffset, ChangeChipWaveLoopEnd, ChangeChipWaveLoopStart, ChangeChipWaveLoopMode, ChangeChipWaveUseAdvancedLoopControls, ChangeDecimalOffset, ChangeUnisonVoices, ChangeUnisonSpread, ChangeUnisonOffset, ChangeUnisonExpression, ChangeUnisonSign, Change6OpFeedbackType, Change6OpAlgorithm, ChangeCustomAlgorythmorFeedback, ChangeChannelName } from "./changes"; //ChangeDutyCycleSpeed -- ChangeSlidetickSpeed
 
 import { TrackEditor } from "./TrackEditor";
 import { oscilloscopeCanvas } from "../global/Oscilloscope";
@@ -1212,10 +1212,13 @@ export class SongEditor {
             this._instrumentExportButton,
             this._instrumentImportButton,
         ),
+    );    
+
+    private readonly _instrumentSettingsInputBox: InputBox = new InputBox(input({ style: "font-weight:bold; border:none; width: 96%; background-color:${ColorConfig.editorBackground}; color:${ColorConfig.primaryText}; text-align:center", type: "text", value: "", placeholder: "Instrument Settings" }), this._doc, (oldValue: string, newValue: string) => new ChangeChannelName(this._doc, oldValue, newValue));
+    private readonly _instrumentSettingsTextRow: HTMLDivElement = div({ id: "instrumentSettingsText", style: `padding: 4px 0; height: 20%; max-width: 15em; word-break: break-word; text-align: center; color: ${ColorConfig.secondaryText};` },
+        this._instrumentSettingsInputBox.input,
     );
-    private readonly _instrumentSettingsTextRow: HTMLDivElement = div({ id: "instrumentSettingsText", style: `padding: 3px 0; max-width: 15em; text-align: center; color: ${ColorConfig.secondaryText};` },
-        "Instrument Settings"
-    );
+
     private readonly _instrumentTypeSelectRow: HTMLDivElement = div({ class: "selectRow", id: "typeSelectRow" },
         span({ class: "tip", onclick: () => this._openPrompt("instrumentType") }, "Type:"),
         div(
@@ -1377,6 +1380,7 @@ export class SongEditor {
         this._promptContainer,
     );
 
+    private _wasModChannel: boolean | null = null;
     private _wasPlaying: boolean = false;
     private _currentPromptName: string | null = null;
     private _highlightedInstrumentIndex: number = -1;
@@ -2381,18 +2385,25 @@ export class SongEditor {
                 this._instrumentSettingsGroup.insertBefore(this._instrumentExportGroup, this._instrumentSettingsGroup.firstChild);
                 this._instrumentSettingsGroup.insertBefore(this._instrumentCopyGroup, this._instrumentSettingsGroup.firstChild);
             } else {
-                this._instrumentSettingsGroup.appendChild(this._instrumentCopyGroup);
+                //this._instrumentSettingsGroup.appendChild(this._instrumentCopyGroup);
                 this._instrumentSettingsGroup.appendChild(this._instrumentExportGroup);
             }
+            /* OLD
             this._instrumentSettingsGroup.insertBefore(this._instrumentsButtonRow, this._instrumentSettingsGroup.firstChild);
             this._instrumentSettingsGroup.insertBefore(this._instrumentSettingsTextRow, this._instrumentSettingsGroup.firstChild);
 
             if (this._doc.song.channels[this._doc.channel].name == "") {
-                this._instrumentSettingsTextRow.textContent = "Instrument Settings";
-            }
-            else {
-                this._instrumentSettingsTextRow.textContent = this._doc.song.channels[this._doc.channel].name;
-            }
+                this.channelNameInputBox.updateValue("Instrument Settings");
+            } else {
+                this.channelNameInputBox.updateValue(this._doc.song.channels[this._doc.channel].name);
+            }*/
+           if  (this._wasModChannel == null || this._wasModChannel) {
+                this._instrumentSettingsGroup.appendChild(this._instrumentCopyGroup);
+                this._instrumentSettingsGroup.insertBefore(this._instrumentsButtonRow, this._instrumentSettingsGroup.firstChild);
+                this._instrumentSettingsGroup.insertBefore(this._instrumentSettingsTextRow, this._instrumentSettingsGroup.firstChild);
+           }
+
+            this._instrumentSettingsInputBox.updateValue(this._doc.song.channels[this._doc.channel].name);
 
             this._modulatorGroup.style.display = "none";
 
@@ -2890,18 +2901,26 @@ export class SongEditor {
                 this._modulatorGroup.insertBefore(this._instrumentExportGroup, this._modulatorGroup.firstChild);
                 this._modulatorGroup.insertBefore(this._instrumentCopyGroup, this._modulatorGroup.firstChild);
             } else {
-                this._modulatorGroup.appendChild(this._instrumentCopyGroup);
+                //this._modulatorGroup.appendChild(this._instrumentCopyGroup);
                 this._modulatorGroup.appendChild(this._instrumentExportGroup);
             }
 
+            /* OLD
             this._modulatorGroup.insertBefore(this._instrumentsButtonRow, this._modulatorGroup.firstChild);
             this._modulatorGroup.insertBefore(this._instrumentSettingsTextRow, this._modulatorGroup.firstChild);
             if (this._doc.song.channels[this._doc.channel].name == "") {
-                this._instrumentSettingsTextRow.textContent = "Modulator Settings";
+                this.channelNameInputBox.updateValue("Modulator Settings");
+            } else {
+                this.channelNameInputBox.updateValue(this._doc.song.channels[this._doc.channel].name);
+            }*/
+
+            if (this._wasModChannel == null || !this._wasModChannel) {
+                this._modulatorGroup.appendChild(this._instrumentCopyGroup);
+                this._modulatorGroup.insertBefore(this._instrumentsButtonRow, this._modulatorGroup.firstChild);
+                this._modulatorGroup.insertBefore(this._instrumentSettingsTextRow, this._modulatorGroup.firstChild);
             }
-            else {
-                this._instrumentSettingsTextRow.textContent = this._doc.song.channels[this._doc.channel].name;
-            }
+
+            this._instrumentSettingsInputBox.updateValue(this._doc.song.channels[this._doc.channel].name);
 
             this._chipNoiseSelectRow.style.display = "none";
             this._chipWaveSelectRow.style.display = "none";
@@ -3505,6 +3524,8 @@ export class SongEditor {
          // Writeback to mods if control key is held while moving a slider.
          this.handleModRecording();
 
+         this._wasModChannel = this._doc.song.getChannelIsMod(this._doc.channel);
+
         }
     
         public handleModRecording(): void {
@@ -3806,7 +3827,7 @@ export class SongEditor {
         }
 
         // Defer to actively editing song title, channel name, or mod label
-        if (document.activeElement == this._songTitleInputBox.input || this._patternEditor.editingModLabel || document.activeElement == this._muteEditor._channelNameInput.input) {
+        if (document.activeElement == this._songTitleInputBox.input || document.activeElement == this._instrumentSettingsInputBox.input || this._patternEditor.editingModLabel || document.activeElement == this._muteEditor._channelNameInput.input) {
             // Enter/esc returns focus to form
             if (event.keyCode == 13 || event.keyCode == 27) {
                 this.mainLayer.focus();
