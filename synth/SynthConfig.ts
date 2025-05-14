@@ -57,7 +57,8 @@ export const enum EnvelopeType {
     hard,
     linear,
     rise,
-    blip
+    blip,
+    sequence,
 }
 
 export const enum InstrumentType {
@@ -1544,6 +1545,7 @@ export class Config {
         { name: "blip 1", type: EnvelopeType.blip, speed: 6.0 },
         { name: "blip 2", type: EnvelopeType.blip, speed: 16.0 },
         { name: "blip 3", type: EnvelopeType.blip, speed: 32.0 },
+        { name: "sequence", type: EnvelopeType.sequence, speed:0}, //Probably more than speed needs to be added
     ]);
 	public static readonly feedbacks: DictionaryArray<Feedback> = toNameMap([
 		{ name: "1⟲", indices: [[1], [], [], []] },

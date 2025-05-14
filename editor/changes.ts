@@ -828,6 +828,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                         { item: "decay 1", weight: 4 },
                         { item: "decay 2", weight: 2 },
                         { item: "decay 3", weight: 1 },
+                        { item: "sequence", weight: 1},
                     ])].index);
                 }
             }
@@ -873,6 +874,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                 { item: "linear 2", weight: 2 },
                 { item: "linear 3", weight: 2 },
                 { item: "linear-1", weight: 1 },
+                { item: "sequence", weight: 1},
 			])].index);
             }
             if (Math.random() < 0.1) {
@@ -945,6 +947,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                     { item: "linear 3", weight: 1 },
                     { item: "rise 1", weight: 1 },
                     { item: "rise 2", weight: 1 },
+                    { item: "sequence", weight: 1},
                 ])].index);
             }
 
@@ -1107,6 +1110,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                         { item: "decay 3", weight: 1 },
                         { item: "linear 1", weight: 1 },
                         { item: "linear 2", weight: 1 },
+                        { item: "sequence", weight: 1},
                     ])].index);
                 }
             }
@@ -1175,6 +1179,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                 { item: "rise 1", weight: 3 },
                 { item: "rise 2", weight: 2 },
                 { item: "rise 3", weight: 1 },
+                { item: "sequence", weight: 1},
 			])].index);
 			}
             if (Math.random() < 0.1) {
@@ -1269,6 +1274,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                         { item: "rise 1", weight: 3 },
                         { item: "rise 2", weight: 2 },
                         { item: "rise 3", weight: 1 },
+                        { item: "sequence", weight: 1},
 					])].index);
 				}
 				} break;
@@ -1425,6 +1431,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                             { item: "rise 1", weight: 2 },
                             { item: "rise 2", weight: 2 },
                             { item: "rise 3", weight: 1 },
+                            { item: "sequence", weight: 1},
 						])].index);
 						}
                         instrument.operators[i].waveform = Config.operatorWaves.dictionary[selectWeightedRandom([
@@ -1506,6 +1513,7 @@ export class ChangeRandomGeneratedInstrument extends Change {
                         { item: "rise 1", weight: 2 },
                         { item: "rise 2", weight: 2 },
                         { item: "rise 3", weight: 1 },
+                        { item: "sequence", weight: 1},
 					])].index);
 					}
 				} break;

@@ -2948,7 +2948,7 @@ export class Song {
             if (this.channels[modChannel].instruments[modInstrument].modulators[modCount] == tempoIndex) {
                 vol = this.tempo - Config.modulators[tempoIndex].convertRealFactor;
             }
-
+            
             if (vol != undefined)
                 return vol;
             else
@@ -7503,6 +7503,19 @@ class EnvelopeComputer {
                 lin = lin < 1.0 ? lin : 1.0;
                 return lin;
             }
+            case EnvelopeType.sequence: return 1.0 + (0.01 + beats);
+            /*
+
+            Math.min(Math.max(this, min), max)???
+            SequenceMin = 0
+            SequenceMax = 1
+            Time since start of Note or Beats since start of tone (TempoSync?)
+            Add lines for the search for sequence data
+            
+            Sequence looping and release to be looked at later when there is more data to poke.
+            */
+
+                //1.0 - (1.0 + beats); funny sawtooth envelope for Pulse width.
             default: throw new Error("Unrecognized operator envelope type.");
         }
 
