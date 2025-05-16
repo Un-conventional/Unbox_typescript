@@ -7933,8 +7933,8 @@ class InstrumentState {
         //const secondsPerTick: number = samplesPerTick / synth.samplesPerSecond;
         //const currentPart: number = synth.getCurrentPart();
         //this.envelopeComputer.computeEnvelopes(instrument, currentPart, tickTimeStart, secondsPerTick, tone);
-        //const envelopeStarts: number[] = this.envelopeComputer.envelopeStarts;
-        //const envelopeEnds: number[] = this.envelopeComputer.envelopeEnds;
+        const envelopeStarts: number[] = this.envelopeComputer.envelopeStarts;
+        const envelopeEnds: number[] = this.envelopeComputer.envelopeEnds;
 
         const usesDistortion: boolean = effectsIncludeDistortion(this.effects);
         const usesBitcrusher: boolean = effectsIncludeBitcrusher(this.effects);
