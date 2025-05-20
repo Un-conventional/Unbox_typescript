@@ -1269,9 +1269,9 @@ export class Config {
     public static readonly filterSimpleCutRange: number = 11;
     public static readonly filterSimplePeakRange: number = 8;
 
-    public static readonly fadeInRange: number = 10;
-    public static readonly fadeOutTicks: ReadonlyArray<number> = [-24, -12, -6, -3, -1, 0 ,6, 12, 24, 48, 72, 96];
-    public static readonly fadeOutNeutral: number = 5;
+    public static readonly fadeInRange: number = 20;
+    public static readonly fadeOutTicks: ReadonlyArray<number> = [-128, -96, -72, -48, -24, -12, -6, -3, -1, /* 0,  */1, 3, 6, 12, 24, 48, 72, 96, 128]; // Old one - [-24, -12, -6, -3, -1, 6, 12, 24, 48, 72, 96];
+    public static readonly fadeOutNeutral: number = 8;//9 when divide by 0 fixed --
     public static readonly drumsetFadeOutTicks: number = 48;
 	public static readonly transitions: DictionaryArray<Transition> = toNameMap([ //Add a slider for 'slideTicks'?
         { name: "normal", isSeamless: false, continues: false, slides: false, slideTicks: 3, includeAdjacentPatterns: false },
