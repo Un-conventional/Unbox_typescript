@@ -386,6 +386,16 @@ export class TipPrompt implements Prompt {
 					p("Note that, while this setting is limited in the sense that it controls all envelopes at once, you can still achieve a variety of outcomes by trying combinations of modes of each envelope type, which typically differ only in speed."),
 				);
 			} break;
+			case "perEnvelopeSpeed": {
+				message = div(
+					h2("Individual Envelope Speed"),
+					p("This setting is applied per envelope rather than all of them simultaneously, unlike the envelope speed in the top dropdown."),
+					p("This controls the speed of this envelope as a multiplier of the global envelope speed and the envelope curve"),
+					p("The speed of an envelope changes how fast its runs. In BeepBox, this is equivalent to the numbers beside each envelope type's name."),
+					p("You can see an equivalence chart on the ", HTML.a({ href: "./faq.html", target: "_blank" }, "FAQ"), " page"),
+					p("This setting will not appear for note size, pitch, punch, or none envelopes"),
+				);
+			} break;
 			case "usedInstrument": {
 				message = div(
 					h3("'Is this instrument used somewhere else?'"),
@@ -547,13 +557,116 @@ export class TipPrompt implements Prompt {
 					p("This setting is a volume multiplier applied to the second voice. This setting will only work correctly with two voices."),
 				);
 			} break;
-			//--- Change this to Macro/Sequcence later --- 
-			/* case "dutyCycle": {
+			case "envelopeInvert": {
 				message = div(
-					h2("Duty Cycle"),
-					p("This setting controls the shape and sound of a pulse wave automatically with set ranges within a repeating cycle."), 
-					p("more detail here"),
-					p("This works like pulse width but you can have the changes done automatically with or without the use of a mod channel."),
+					h2("Envelope Inversion"),
+					p("This setting will invert the envelope curve. So instead of, for example, lower pitches leading to a smaller output, lower pitches can lead to a greater output."),
+				);
+			} break;
+			case "envelopeRange": {
+				message = div(
+					h2("Envelope Bounds"),
+					p("These two settings stretch or shrink the envelope vertically, allowing for different ranges of affect."),
+					p("This will NOT work properly if lower bound is greater than upper bound."),
+				)
+			} break;
+			case "modEnvelope": {
+				message = div(
+					h2("Envelope Target"),
+					p("This setting specifies which envelope of the specified instrument you would like to change."),
+				);
+			} break;
+			case "randomSteps": {
+				message = div(
+					h2("Random Envelope Steps"),
+					p("This setting changes how many \"steps\", or different possible values can be outputted. For example, a step size of 2 will output either 0 or 1, and a step size of 3 either 0, 0.5, or 1. Every step is equidistant from each other"),
+				);
+			} break;
+			case "randomSeed": {
+				message = div(
+					h2("Random Envelope Seed"),
+					p("There are 64 seeds, or pseudorandom patterns that you can choose from when enveloping a setting."),
+					p("The same seed will output the same value per tick or pitch if the other envelope settings are also the same, meaning that if two different songs use the same seed for their envelope they will have the same \"randomization\"."),
+				);
+			} break;
+			case "lfoEnvelopeWaveform": {
+				message = div(
+					h2("LFO Envelope Waveform"),
+					p("LFO envelopes can output a variety of different waveforms, from old tremolo's sine to more complex ones."),
+					p("These waves are: sines, squares, triangles, sawtooths, trapezoids, and stepped variants of triangles and sawtooths."),
+				);
+			} break;
+			case "randomEnvelopeType": {
+				message = div(
+					h2("Random Envelope Type"),
+					p("Random Envelopes can switch between being determined by the time in the song, the pitch of the note, or per note trigger."),
+				);
+			} break;
+			/* case "ringMod": {
+				message = div(
+					h2("Ring Modulation"),
+					p(`This setting multiplies a selected wave's frequency with an instrument frequency, this is useful for "bell-like" instruments.`),
+				);
+			} break;
+			case "RingModHz": {
+				message = div(
+					h2("Ring Modulation (Hertz)"),
+					p(`This setting changes the Hertz of the multiplied frequency.`),
+					// p(`The offset allows you to increment the Hertz by 1.`),
+				);
+			} break; */
+			/* case "pitchRange": {
+				message = div(
+					h2("Pitch Envelope Start and End"),
+					p("These two settings will adjust where the start and end of the pitch envelope affects. Everything below start envelope will be the value of the lower bound, everything above end envelope will be upper bound, and everything inbetween will scale linearly based on pitch (the opposite is true if inverted)."),
+					p("This will NOT work properly if pitch start is greater than pitch end."),
+					p("These values are different than the MIDI numbers. These correspond to how many paino keys from the bottom of the song player a specific pitch is"),
+				);
+			} break; */
+			/* case "noteSizeRange": {
+				message = div(
+					h2("Note Size Envelope Start and End"),
+					p("These two settings work vert similarly to the pitch range bounds, except for note size envelopes instead. Everything below start envelope will be the value of the lower bound, everything above end envelope will be upper bound, and everything inbetween will scale linearly based on note size (the opposite is true if inverted)."),
+					p("This will NOT work properly if note size start is greater than note size end."),
+				);
+			} break; */
+			/* case "granular": {
+				message = div(
+					h2("Granular Synthesis"),
+					p(`This effect is based on granular synthesis! It takes random points from a wave and rearranges them to form "sonic clouds".`),
+					p(`This particular slider controls the wet/dry mix of the granulation.`)
+				);
+			} break;
+			case "grainSize": {
+				message = div(
+					h2("Grain Size"),
+					p(`This setting controls the size of the grain.`),
+				);
+			} break;
+			case "grainAmount": {
+				message = div(
+					h2("Grain Freq"),
+					p(`This setting controls about how often a grain (a group of audio samples) is added to the output, from rarely to multiple at once.`),
+				);
+			} break;
+			case "grainRange": {
+				message = div(
+					h2("Grain Range"),
+					p(`This setting controls the range of randomization for grain sizes. `),
+				); */
+			/* case "songeq": {
+				message = div(
+					h2("Song Eq Filter"),
+					p("Filters are a way of emphasizing or diminishing different parts of a sound. Musical notes have a fundamental (base) frequency, but the sound of a musical note also has parts at higher frequencies and filters can adjust the volume of each of these parts based on their frequency."),
+					p("Click in the filter editor to insert, delete, or drag a filter control point. The horizontal position of the point determines which frequencies it affects, and the vertical position determines how the volume is affected at that frequency."),
+					p("Insert a new point on the left side of the filter editor to add a \"high-pass\" filter point, which additionally reduces the volume of lower frequencies, or insert a new point on the right side to add a \"low-pass\" filter point which reduces the volume of higher frequencies."),
+					p("The Song Eq Filter applies to all instruments. This can be handy for getting the sound of a certain genre or fading in and out in combination with modulation"),
+				);
+			} break; */
+			/* case "Sequence": {
+				message = div(
+					h2("Sequence"),
+					p("Sequence thinggy based off of Slarmoo's Box's new Envelopes."), 
 				);
 			} break;*/
 
