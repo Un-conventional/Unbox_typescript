@@ -1,6 +1,6 @@
 // Copyright (c) 2012-2022 John Nesky and contributing authors, distributed under the MIT license, see accompanying the LICENSE.md file.
 
-import { Algorithm, Dictionary, FilterType, SustainType, InstrumentType, EffectType, AutomationTarget, Config, effectsIncludeDistortion, LFOEnvelopeTypes, RandomEnvelopeTypes } from "../synth/SynthConfig";
+import { Algorithm, Dictionary, FilterType, SustainType, InstrumentType, EffectType, AutomationTarget, Config, effectsIncludeDistortion } from "../synth/SynthConfig";
 import { NotePin, Note, makeNotePin, Pattern, FilterSettings, FilterControlPoint, SpectrumWave, HarmonicsWave, Instrument, Channel, Song, Synth, clamp } from "../synth/synth";
 import { Preset, PresetCategory, EditorConfig } from "./EditorConfig";
 import { Change, ChangeGroup, ChangeSequence, UndoableChange } from "./Change";
@@ -712,7 +712,7 @@ export class ChangePreset extends Change {
 }
 
 export class ChangeRandomGeneratedInstrument extends Change {
-    constructor(doc: SongDocument, usesCurrentInstrumentType: boolean) {
+    constructor(doc: SongDocument) {
         super();
 
         interface ItemWeight<T> {
@@ -815,18 +815,21 @@ export class ChangeRandomGeneratedInstrument extends Change {
                 instrument.pitchShift = selectCurvedDistribution(0, Config.pitchShiftRange - 1, Config.pitchShiftCenter, 2);
                 if (instrument.pitchShift != Config.pitchShiftCenter) {
                     instrument.effects |= 1 << EffectType.pitchShift;
-                    instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["pitchShift"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                        { item: "note size", weight: 1 },
-                        { item: "random", weight: 2},
-                        { item: "flare", weight: 2 },
-                        { item: "twang", weight: 16 },
-                        { item: "swell", weight: 2 },
-                        { item: "lfo", weight: 1 },
-                        { item: "decay", weight: 4 },
-                        { item: "blip", weight: 8},
-                        { item: "fall", weight: 2 },
+                    instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["pitchShift"].index, 0, Config.envelopes.dictionary[selectWeightedRandom([
+                        { item: "flare 1", weight: 2 },
+                        { item: "flare 2", weight: 1 },
+                        { item: "flare 3", weight: 1 },
+                        { item: "twang 1", weight: 16 },
+                        { item: "twang 2", weight: 8 },
+                        { item: "twang 3", weight: 4 },
+                        { item: "tremolo1", weight: 1 },
+                        { item: "tremolo2", weight: 1 },
+                        { item: "tremolo3", weight: 1 },
+                        { item: "decay 1", weight: 4 },
+                        { item: "decay 2", weight: 2 },
+                        { item: "decay 3", weight: 1 },
                         { item: "sequence", weight: 1},
-                    ])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 50, 13)]);
+                    ])].index);
                 }
             }
             if (Math.random() < 0.1) {
@@ -844,20 +847,35 @@ export class ChangeRandomGeneratedInstrument extends Change {
                 applyFilterPoints(instrument.noteFilter, [
                     new PotentialFilterPoint(1.0, FilterType.lowPass, midFreq, maxFreq, 8000.0, -1),
                 ]);
-                instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["noteFilterAllFreqs"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-				{ item: "note size", weight: 2 },
-                    { item: "pitch", weight: 2 },
-                    { item: "punch", weight: 4 },
-                    { item: "flare", weight: 4 },
-                    { item: "twang", weight: 16 },
-                    { item: "swell", weight: 4 },
-                    { item: "lfo", weight: 8 },
-                    { item: "decay", weight: 8 },
-                    { item: "wibble", weight: 4 },
-                    { item: "linear", weight: 4 },
-                    { item: "fall", weight: 4 },
-                    { item: "sequence", weight: 1},
-			])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 30, 30)]);
+                instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["noteFilterAllFreqs"].index, 0, Config.envelopes.dictionary[selectWeightedRandom([
+				{ item: "punch", weight: 4 },
+				{ item: "flare 1", weight: 2 },
+				{ item: "flare 2", weight: 2 },
+				{ item: "flare 3", weight: 2 },
+				{ item: "twang 1", weight: 8 },
+				{ item: "twang 2", weight: 8 },
+				{ item: "twang 3", weight: 8 },
+				{ item: "swell 1", weight: 2 },
+				{ item: "swell 2", weight: 2 },
+				{ item: "swell 3", weight: 1 },
+				{ item: "tremolo1", weight: 1 },
+				{ item: "tremolo2", weight: 1 },
+				{ item: "tremolo3", weight: 1 },
+				{ item: "tremolo4", weight: 1 },
+				{ item: "tremolo5", weight: 1 },
+				{ item: "tremolo6", weight: 1 },
+				{ item: "decay 1", weight: 4 },
+				{ item: "decay 2", weight: 4 },
+                { item: "decay 3", weight: 4 },
+                { item: "wibble 1", weight: 2 },
+                { item: "wibble 2", weight: 2 },
+                { item: "wibble 3", weight: 2 },
+                { item: "linear 1", weight: 2 },
+                { item: "linear 2", weight: 2 },
+                { item: "linear 3", weight: 2 },
+                { item: "linear-1", weight: 1 },
+                { item: "sequence", weight: 1},
+			])].index);
             }
             if (Math.random() < 0.1) {
                 instrument.effects |= 1 << EffectType.distortion;
@@ -910,18 +928,27 @@ export class ChangeRandomGeneratedInstrument extends Change {
                 ])].index;
 
                 if (instrument.unison != Config.unisons.dictionary["none"].index && Math.random() > 0.4)
-                instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["unison"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                    { item: "note size", weight: 2 },
-                    { item: "pitch", weight: 2 },
-                    { item: "twang", weight: 6 },
-                    { item: "swell", weight: 1 },
-                    { item: "decay", weight: 6 },
-                    { item: "wibble", weight: 4 },
-                    { item: "linear", weight: 6 },
-                    { item: "rise", weight: 2 },
-                    { item: "fall", weight: 2 },
+                instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["unison"].index, 0, Config.envelopes.dictionary[selectWeightedRandom([
+                    { item: "twang -1", weight: 3 },
+                    { item: "twang 1", weight: 3 },
+                    { item: "twang 2", weight: 2 },
+                    { item: "swell 1", weight: 1 },
+                    { item: "decay -1", weight: 3 },
+                    { item: "decay 1", weight: 3 },
+                    { item: "decay 2", weight: 2 },
+                    { item: "wibble-1", weight: 2 },
+                    { item: "wibble 1", weight: 2 },
+                    { item: "wibble 2", weight: 1 },
+                    { item: "wibble 3", weight: 1 },
+                    { item: "linear-2", weight: 2 },
+                    { item: "linear-1", weight: 2 },
+                    { item: "linear 1", weight: 2 },
+                    { item: "linear 2", weight: 1 },
+                    { item: "linear 3", weight: 1 },
+                    { item: "rise 1", weight: 1 },
+                    { item: "rise 2", weight: 1 },
                     { item: "sequence", weight: 1},
-                ])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 57, 6)]);
+                ])].index);
             }
 
 			function normalize(harmonics: number[]): void {
@@ -1058,7 +1085,6 @@ export class ChangeRandomGeneratedInstrument extends Change {
                 instrument.transition = Config.transitions.dictionary[selectWeightedRandom([
                     { item: "interrupt", weight: 1 },
                     { item: "slide", weight: 2 },
-                    { item: "continue", weight: 1},
                 ])].index;
             }
             if (Math.random() < 0.2) {
@@ -1072,18 +1098,20 @@ export class ChangeRandomGeneratedInstrument extends Change {
                 instrument.pitchShift = selectCurvedDistribution(0, Config.pitchShiftRange - 1, Config.pitchShiftCenter, 1);
                 if (instrument.pitchShift != Config.pitchShiftCenter) {
                     instrument.effects |= 1 << EffectType.pitchShift;
-                    instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["pitchShift"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                        { item: "note size", weight: 2 },
-                        { item: "pitch", weight: 2 },
-                        { item: "random", weight: 3},
-                        { item: "flare", weight: 4 },
-                        { item: "twang", weight: 20 },
-                        { item: "decay", weight: 6 },
-                        { item: "linear", weight: 1 },
-                        { item: "blip", weight: 10 },
-                        { item: "fall", weight: 2 },
+                    instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["pitchShift"].index, 0, Config.envelopes.dictionary[selectWeightedRandom([
+                        { item: "flare 1", weight: 2 },
+                        { item: "flare 2", weight: 1 },
+                        { item: "flare 3", weight: 1 },
+                        { item: "twang 1", weight: 16 },
+                        { item: "twang 2", weight: 8 },
+                        { item: "twang 3", weight: 4 },
+                        { item: "decay 1", weight: 4 },
+                        { item: "decay 2", weight: 2 },
+                        { item: "decay 3", weight: 1 },
+                        { item: "linear 1", weight: 1 },
+                        { item: "linear 2", weight: 1 },
                         { item: "sequence", weight: 1},
-                    ])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 50, 13)]);
+                    ])].index);
                 }
             }
             if (Math.random() < 0.25) {
@@ -1099,31 +1127,6 @@ export class ChangeRandomGeneratedInstrument extends Change {
             if (Math.random() < 0.1) {
                 instrument.effects |= 1 << EffectType.distortion;
                 instrument.distortion = selectCurvedDistribution(1, Config.distortionRange - 1, Config.distortionRange - 1, 2);
-                if (Math.random() < 0.3) {
-                    let envelopeLowerBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                    let envelopeUpperBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                    if (envelopeLowerBound >= envelopeUpperBound) {
-                        envelopeLowerBound = 0;
-                        envelopeUpperBound = 1;
-                    }
-                    instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["distortion"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                        { item: "note size", weight: 3 },
-                        { item: "pitch", weight: 4 },
-                        { item: "random", weight: 1 },
-                        { item: "punch", weight: 2 },
-                        { item: "flare", weight: 3 },
-                        { item: "twang", weight: 10 },
-                        { item: "swell", weight: 8 },
-                        { item: "lfo", weight: 7 },
-                        { item: "decay", weight: 5 },
-                        { item: "wibble", weight: 5 },
-                        { item: "linear", weight: 4 },
-                        { item: "rise", weight: 8 },
-                        { item: "fall", weight: 2 },
-                        { item: "sequence", weight: 1},
-                    ])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 45, 20)], envelopeLowerBound, envelopeUpperBound, selectCurvedDistribution(2, 16, 2, 6), selectCurvedDistribution(1, 63, 32, 31),
-                        selectWeightedRandom([{ item: LFOEnvelopeTypes.sine, weight: 2 }, { item: LFOEnvelopeTypes.triangle, weight: 5 }]));
-                }
             }
             if (effectsIncludeDistortion(instrument.effects) && Math.random() < 0.8) {
                 instrument.effects |= 1 << EffectType.noteFilter;
@@ -1137,168 +1140,67 @@ export class ChangeRandomGeneratedInstrument extends Change {
                 applyFilterPoints(instrument.noteFilter, [
                     new PotentialFilterPoint(1.0, FilterType.lowPass, midFreq, maxFreq, 8000.0, -1),
                 ]);
-                let envelopeLowerBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                let envelopeUpperBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                if (envelopeLowerBound >= envelopeUpperBound) {
-                    envelopeLowerBound = 0;
-                    envelopeUpperBound = 1;
-                }
-                instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["noteFilterAllFreqs"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                    { item: "note size", weight: 2 },
-                    { item: "pitch", weight: 2 },
-                    { item: "punch", weight: 6 },
-                    { item: "flare", weight: 3 },
-                    { item: "twang", weight: 7 },
-                    { item: "swell", weight: 8 },
-                    { item: "lfo", weight: 12 },
-                    { item: "decay", weight: 3 },
-                    { item: "wibble", weight: 5 },
-                    { item: "linear", weight: 4 },
-                    { item: "rise", weight: 8},
-                    { item: "fall", weight: 2 },
-                    { item: "sequence", weight: 1},
-			])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 30, 30)], envelopeLowerBound, envelopeUpperBound, 2, 2,
-                    selectWeightedRandom([{ item: LFOEnvelopeTypes.sine, weight: 8 }, { item: LFOEnvelopeTypes.triangle, weight: 4 }, { item: LFOEnvelopeTypes.sawtooth, weight: 2 }, { item: LFOEnvelopeTypes.square, weight: 1}]));
+                instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["noteFilterAllFreqs"].index, 0, Config.envelopes.dictionary[selectWeightedRandom([
+                { item: "punch", weight: 6 },
+                { item: "flare -1", weight: 1 },
+				{ item: "flare 1", weight: 2 },
+				{ item: "flare 2", weight: 4 },
+                { item: "flare 3", weight: 2 },
+                { item: "twang -1", weight: 1 },
+				{ item: "twang 1", weight: 2 },
+				{ item: "twang 2", weight: 4 },
+                { item: "twang 3", weight: 4 },
+                { item: "swell -1", weight: 4 },
+				{ item: "swell 1", weight: 4 },
+				{ item: "swell 2", weight: 2 },
+                { item: "swell 3", weight: 1 },
+                { item: "tremolo0", weight: 1 },
+				{ item: "tremolo1", weight: 1 },
+				{ item: "tremolo2", weight: 1 },
+				{ item: "tremolo3", weight: 1 },
+				{ item: "tremolo4", weight: 1 },
+				{ item: "tremolo5", weight: 1 },
+                { item: "tremolo6", weight: 1 },
+                { item: "decay -1", weight: 1 },
+				{ item: "decay 1", weight: 1 },
+				{ item: "decay 2", weight: 2 },
+                { item: "decay 3", weight: 2 },
+                { item: "wibble-1", weight: 2 },
+                { item: "wibble 1", weight: 4 },
+                { item: "wibble 2", weight: 4 },
+                { item: "wibble 3", weight: 4 },
+                { item: "linear-2", weight: 1 },
+                { item: "linear-1", weight: 1 },
+                { item: "linear 1", weight: 2 },
+                { item: "linear 2", weight: 3 },
+                { item: "linear 3", weight: 2 },
+                { item: "rise -2", weight: 4 },
+                { item: "rise -1", weight: 4 },
+                { item: "rise 1", weight: 3 },
+                { item: "rise 2", weight: 2 },
+                { item: "rise 3", weight: 1 },
+                { item: "sequence", weight: 1},
+			])].index);
 			}
             if (Math.random() < 0.1) {
                 instrument.effects |= 1 << EffectType.bitcrusher;
                 instrument.bitcrusherFreq = selectCurvedDistribution(0, Config.bitcrusherFreqRange - 1, 0, 2);
                 instrument.bitcrusherQuantization = selectCurvedDistribution(0, Config.bitcrusherQuantizationRange - 1, Config.bitcrusherQuantizationRange >> 1, 2);
-                let envelopeLowerBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                let envelopeUpperBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                if (envelopeLowerBound >= envelopeUpperBound) {
-                    envelopeLowerBound = 0;
-                    envelopeUpperBound = 1;
-                }
-                if (Math.random() < 0.3) {
-                    instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["bitcrusherFrequency"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                        { item: "note size", weight: 4 },
-                        { item: "pitch", weight: 3 },
-                        { item: "random", weight: 12 },
-                        { item: "flare", weight: 3 },
-                        { item: "twang", weight: 7 },
-                        { item: "swell", weight: 4 },
-                        { item: "lfo", weight: 12 },
-                        { item: "decay", weight: 2 },
-                        { item: "wibble", weight: 1 },
-                        { item: "linear", weight: 6 },
-                        { item: "rise", weight: 5 },
-                        { item: "blip", weight: 12 },
-                        { item: "fall", weight: 2 },
-                        { item: "sequence", weight: 1},
-                    ])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 20, 34)], envelopeLowerBound, envelopeUpperBound, selectCurvedDistribution(2, 16, 2, 6), selectCurvedDistribution(1, 63, 32, 31),
-                        selectWeightedRandom([{ item: LFOEnvelopeTypes.sine, weight: 3 }, { item: LFOEnvelopeTypes.triangle, weight: 1 }]));
-                }
-                if (Math.random() < 0.5) {
-                    instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["bitcrusherQuantization"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                        { item: "note size", weight: 8 },
-                        { item: "pitch", weight: 3 },
-                        { item: "random", weight: 12 },
-                        { item: "flare", weight: 3 },
-                        { item: "twang", weight: 7 },
-                        { item: "swell", weight: 4 },
-                        { item: "lfo", weight: 12 },
-                        { item: "decay", weight: 2 },
-                        { item: "wibble", weight: 1 },
-                        { item: "linear", weight: 6 },
-                        { item: "rise", weight: 5 },
-                        { item: "blip", weight: 12 },
-                        { item: "fall", weight: 2 },
-                        { item: "sequence", weight: 1},
-                    ])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 20, 34)], envelopeLowerBound, envelopeUpperBound, selectCurvedDistribution(2, 16, 2, 6), selectCurvedDistribution(1, 63, 32, 31),
-                        selectWeightedRandom([{ item: LFOEnvelopeTypes.sine, weight: 3 }, { item: LFOEnvelopeTypes.triangle, weight: 1 }]));
-                } else if (type == InstrumentType.spectrum) {
-                    instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["noteVolume"].index, 0, Config.newEnvelopes.dictionary["note size"].index, true);
-                    instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["bitcrusherQuantization"].index, 0, Config.newEnvelopes.dictionary["note size"].index, true);
-                 }
             }
             if (Math.random() < 0.1) {
                 instrument.effects |= 1 << EffectType.chorus;
                 instrument.chorus = selectCurvedDistribution(1, Config.chorusRange - 1, Config.chorusRange - 1, 1);
-                if (Math.random() < 0.1) {
-                    let envelopeLowerBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                    let envelopeUpperBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                    if (envelopeLowerBound >= envelopeUpperBound) {
-                        envelopeLowerBound = 0;
-                        envelopeUpperBound = 1;
-                    }
-                    instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["chorus"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                        { item: "note size", weight: 3 },
-                        { item: "pitch", weight: 4 },
-                        { item: "random", weight: 1 },
-                        { item: "punch", weight: 2 },
-                        { item: "flare", weight: 3 },
-                        { item: "twang", weight: 10 },
-                        { item: "swell", weight: 8 },
-                        { item: "lfo", weight: 7 },
-                        { item: "decay", weight: 5 },
-                        { item: "wibble", weight: 5 },
-                        { item: "linear", weight: 4 },
-                        { item: "rise", weight: 8 },
-                        { item: "fall", weight: 2 },
-                        { item: "sequence", weight: 1},
-                    ])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 45, 20)], envelopeLowerBound, envelopeUpperBound, selectCurvedDistribution(2, 16, 2, 6), selectCurvedDistribution(1, 63, 32, 31),
-                        selectWeightedRandom([{ item: LFOEnvelopeTypes.sine, weight: 2 }, { item: LFOEnvelopeTypes.triangle, weight: 5 }]));
-                }
             }
             if (Math.random() < 0.1) {
                 instrument.echoSustain = selectCurvedDistribution(0, Config.echoSustainRange - 1, Config.echoSustainRange >> 1, 2);
                 instrument.echoDelay = selectCurvedDistribution(0, Config.echoDelayRange - 1, Config.echoDelayRange >> 1, 2);
                 if (instrument.echoSustain != 0 || instrument.echoDelay != 0) {
                     instrument.effects |= 1 << EffectType.echo;
-                    if (Math.random() < 0.04) {
-                        let envelopeLowerBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                        let envelopeUpperBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                        if (envelopeLowerBound >= envelopeUpperBound) {
-                            envelopeLowerBound = 0;
-                            envelopeUpperBound = 1;
-                        }
-                        instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["echoDelay"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                            { item: "note size", weight: 4 },
-                            { item: "pitch", weight: 8 },
-                            { item: "random", weight: 7 },
-                            { item: "twang", weight: 3 },
-                            { item: "swell", weight: 3 },
-                            { item: "lfo", weight: 4 },
-                            { item: "decay", weight: 1 },
-                            { item: "wibble", weight: 1 },
-                            { item: "linear", weight: 2 },
-                            { item: "rise", weight: 1 },
-                            { item: "fall", weight: 2 },
-                            { item: "sequence", weight: 1},
-                        ])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 45, 20)], envelopeLowerBound, envelopeUpperBound, selectCurvedDistribution(2, 16, 2, 6), selectCurvedDistribution(1, 63, 32, 31),
-                            selectWeightedRandom([{ item: LFOEnvelopeTypes.sine, weight: 8 }, { item: LFOEnvelopeTypes.triangle, weight: 3 }]));
-                    }
                 }
             }
             if (Math.random() < 0.5) {
                 instrument.effects |= 1 << EffectType.reverb;
                 instrument.reverb = selectCurvedDistribution(1, Config.reverbRange - 1, 1, 1);
-                if (Math.random() < 0.03) {
-                    let envelopeLowerBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                    let envelopeUpperBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                    if (envelopeLowerBound >= envelopeUpperBound) {
-                        envelopeLowerBound = 0;
-                        envelopeUpperBound = 1;
-                    }
-                    instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["reverb"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                        { item: "note size", weight: 3 },
-                        { item: "pitch", weight: 4 },
-                        { item: "random", weight: 1 },
-                        { item: "punch", weight: 2 },
-                        { item: "flare", weight: 3 },
-                        { item: "twang", weight: 10 },
-                        { item: "swell", weight: 8 },
-                        { item: "lfo", weight: 7 },
-                        { item: "decay", weight: 5 },
-                        { item: "wibble", weight: 5 },
-                        { item: "linear", weight: 4 },
-                        { item: "rise", weight: 8 },
-                        { item: "fall", weight: 2 },
-                        { item: "sequence", weight: 1},
-                    ])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 45, 20)], envelopeLowerBound, envelopeUpperBound, selectCurvedDistribution(2, 16, 2, 6), selectCurvedDistribution(1, 63, 32, 31),
-                        selectWeightedRandom([{ item: LFOEnvelopeTypes.sine, weight: 2 }, { item: LFOEnvelopeTypes.triangle, weight: 5 }]));
-                }
             }
 			function normalize(harmonics: number[]): void {
 				let max: number = 0;
@@ -1333,39 +1235,48 @@ export class ChangeRandomGeneratedInstrument extends Change {
                     instrument.decimalOffset = 0;
 
                     if (Math.random() < 0.6) {
-                        instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["pulseWidth"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                            { item: "note size", weight: 2 },
-                            { item: "pitch", weight: 1 },
-                            { item: "random", weight: 3 },
-                            { item: "punch", weight: 6 },
-                            { item: "flare", weight: 3 },
-                            { item: "twang", weight: 6 },
-                            { item: "swell", weight: 8 },
-                            { item: "lfo", weight: 6 },
-                            { item: "decay", weight: 2 },
-                            { item: "wibble", weight: 6 },
-                            { item: "linear", weight: 3 },
-                            { item: "rise", weight: 5 },
-                            { item: "blip", weight: 10 },
-                            { item: "fall", weight: 4 },
-                            { item: "sequence", weight: 1},
-                        ])].index, false, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]),
-                            Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 40, 20)],
-                            selectWeightedRandom([
-                                { item: 0, weight: 8 },
-                                { item: 0.1, weight: 4 },
-                                { item: 0.2, weight: 3 },
-                                { item: 0.3, weight: 1 },
-                                { item: 0.4, weight: 2 },
-                                { item: 0.5, weight: 6 },
-                            ]), selectWeightedRandom([
-                                { item: 0.6, weight: 1 },
-                                { item: 0.7, weight: 2 },
-                                { item: 0.8, weight: 3 },
-                                { item: 0.9, weight: 5 },
-                                { item: 1, weight: 8 }]), selectCurvedDistribution(2, 16, 2, 6), selectCurvedDistribution(1, 63, 32, 31),
-                            selectWeightedRandom([{ item: RandomEnvelopeTypes.time, weight: 8 }, { item: RandomEnvelopeTypes.pitch, weight: 2 }]));                        
-                    }
+                        instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["pulseWidth"].index, 0, Config.envelopes.dictionary[selectWeightedRandom([
+                        { item: "punch", weight: 6 },
+                        { item: "flare -1", weight: 1 },
+                        { item: "flare 1", weight: 2 },
+                        { item: "flare 2", weight: 4 },
+                        { item: "flare 3", weight: 2 },
+                        { item: "twang -1", weight: 1 },
+                        { item: "twang 1", weight: 2 },
+                        { item: "twang 2", weight: 4 },
+                        { item: "twang 3", weight: 4 },
+                        { item: "swell -1", weight: 4 },
+                        { item: "swell 1", weight: 4 },
+                        { item: "swell 2", weight: 2 },
+                        { item: "swell 3", weight: 1 },
+                        { item: "tremolo0", weight: 1 },
+                        { item: "tremolo1", weight: 1 },
+                        { item: "tremolo2", weight: 1 },
+                        { item: "tremolo3", weight: 1 },
+                        { item: "tremolo4", weight: 1 },
+                        { item: "tremolo5", weight: 1 },
+                        { item: "tremolo6", weight: 1 },
+                        { item: "decay -1", weight: 1 },
+                        { item: "decay 1", weight: 1 },
+                        { item: "decay 2", weight: 2 },
+                        { item: "decay 3", weight: 2 },
+                        { item: "wibble-1", weight: 2 },
+                        { item: "wibble 1", weight: 4 },
+                        { item: "wibble 2", weight: 4 },
+                        { item: "wibble 3", weight: 4 },
+                        { item: "linear-2", weight: 1 },
+                        { item: "linear-1", weight: 1 },
+                        { item: "linear 1", weight: 2 },
+                        { item: "linear 2", weight: 3 },
+                        { item: "linear 3", weight: 2 },
+                        { item: "rise -2", weight: 4 },
+                        { item: "rise -1", weight: 4 },
+                        { item: "rise 1", weight: 3 },
+                        { item: "rise 2", weight: 2 },
+                        { item: "rise 3", weight: 1 },
+                        { item: "sequence", weight: 1},
+					])].index);
+				}
 				} break;
 				case InstrumentType.pickedString:
                 case InstrumentType.harmonics: {
@@ -1477,55 +1388,52 @@ export class ChangeRandomGeneratedInstrument extends Change {
 							]);
                         }
 					}
-					for (let i: number = algorithm.carrierCount; i < Config.operatorCount + (type == InstrumentType.fm6op ? 2 : 0); i++) {
-                        instrument.operators[i].frequency = selectCurvedDistribution(3, Config.operatorFrequencies.length - 1, 0, 3);
-                        instrument.operators[i].amplitude = (Math.pow(Math.random(), 2) * Config.operatorAmplitudeMax) | 0;
+					for (let i: number = algorithm.carrierCount; i < Config.operatorCount + (type == InstrumentType.fm6op? 2 : 0); i++) {
+						instrument.operators[i].frequency = selectCurvedDistribution(3, Config.operatorFrequencies.length - 1, 0, 3);
+						instrument.operators[i].amplitude = (Math.pow(Math.random(), 2) * Config.operatorAmplitudeMax) | 0;
                         if (instrument.envelopeCount < Config.maxEnvelopeCount && Math.random() < 0.4) {
-                            let envelopeLowerBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                            let envelopeUpperBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                            if (envelopeLowerBound >= envelopeUpperBound) {
-                                envelopeLowerBound = 0;
-                                envelopeUpperBound = 1;
-                            }
-                            instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["operatorAmplitude"].index, i, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                                { item: "punch", weight: 2 },
-                                { item: "pitch", weight: 1 },
-                                { item: "flare", weight: 3 },
-                                { item: "twang", weight: 4 },
-                                { item: "swell", weight: 4 },
-                                { item: "lfo", weight: 6 },
-                                { item: "decay", weight: 2 },
-                                { item: "wibble", weight: 5 },
-                                { item: "linear", weight: 3 },
-                                { item: "rise", weight: 5 },
-                                { item: "fall", weight: 2 },
-                                { item: "sequence", weight: 1},
-                            ])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 30, 30)], envelopeLowerBound, envelopeUpperBound, 2, 2,
-                                selectWeightedRandom([{ item: LFOEnvelopeTypes.sine, weight: 8 }, { item: LFOEnvelopeTypes.triangle, weight: 4 }, { item: LFOEnvelopeTypes.sawtooth, weight: 2 }, { item: LFOEnvelopeTypes.square, weight: 1 }]));
-                        }
-                        if (instrument.envelopeCount < Config.maxEnvelopeCount && Math.random() < 0.15) {
-                            let envelopeLowerBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                            let envelopeUpperBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                            if (envelopeLowerBound >= envelopeUpperBound) {
-                                envelopeLowerBound = 0;
-                                envelopeUpperBound = 1;
-                            }
-                            instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["operatorFrequency"].index, i, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                                { item: "punch", weight: 2 },
-                                { item: "pitch", weight: 1 },
-                                { item: "flare", weight: 3 },
-                                { item: "twang", weight: 10 },
-                                { item: "swell", weight: 5 },
-                                { item: "lfo", weight: 6 },
-                                { item: "decay", weight: 2 },
-                                { item: "wibble", weight: 5 },
-                                { item: "linear", weight: 3 },
-                                { item: "rise", weight: 5 },
-                                { item: "fall", weight: 2 },
-                                { item: "sequence", weight: 1},
-                            ])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 30, 30)], envelopeLowerBound, envelopeUpperBound, 2, 2,
-                                selectWeightedRandom([{ item: LFOEnvelopeTypes.sine, weight: 8 }, { item: LFOEnvelopeTypes.triangle, weight: 4 }, { item: LFOEnvelopeTypes.sawtooth, weight: 4 }, { item: LFOEnvelopeTypes.square, weight: 1 }]));
-                        }
+                            instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["operatorAmplitude"].index, i, Config.envelopes.dictionary[selectWeightedRandom([
+                            { item: "punch", weight: 2 },
+                            { item: "flare -1", weight: 1 },
+                            { item: "flare 1", weight: 2 },
+                            { item: "flare 2", weight: 2 },
+                            { item: "flare 3", weight: 2 },
+                            { item: "twang -1", weight: 1 },
+                            { item: "twang 1", weight: 2 },
+                            { item: "twang 2", weight: 2 },
+                            { item: "twang 3", weight: 2 },
+                            { item: "swell -1", weight: 2 },
+                            { item: "swell 1", weight: 2 },
+                            { item: "swell 2", weight: 2 },
+                            { item: "swell 3", weight: 1 },
+                            { item: "tremolo0", weight: 1 },
+                            { item: "tremolo1", weight: 1 },
+                            { item: "tremolo2", weight: 1 },
+                            { item: "tremolo3", weight: 1 },
+                            { item: "tremolo4", weight: 1 },
+                            { item: "tremolo5", weight: 1 },
+                            { item: "tremolo6", weight: 1 },
+                            { item: "decay -1", weight: 1 },
+                            { item: "decay 1", weight: 1 },
+                            { item: "decay 2", weight: 2 },
+                            { item: "decay 3", weight: 2 },
+                            { item: "wibble-1", weight: 2 },
+                            { item: "wibble 1", weight: 2 },
+                            { item: "wibble 2", weight: 2 },
+                            { item: "wibble 3", weight: 2 },
+                            { item: "linear-2", weight: 1 },
+                            { item: "linear-1", weight: 1 },
+                            { item: "linear 1", weight: 2 },
+                            { item: "linear 2", weight: 2 },
+                            { item: "linear 3", weight: 1 },
+                            { item: "rise -2", weight: 2 },
+                            { item: "rise -1", weight: 2 },
+                            { item: "rise 1", weight: 2 },
+                            { item: "rise 2", weight: 2 },
+                            { item: "rise 3", weight: 1 },
+                            { item: "sequence", weight: 1},
+						])].index);
+						}
                         instrument.operators[i].waveform = Config.operatorWaves.dictionary[selectWeightedRandom([
                             { item: "sine", weight: 10 },
                             { item: "triangle", weight: 14 },
@@ -1565,29 +1473,49 @@ export class ChangeRandomGeneratedInstrument extends Change {
 					}
 					instrument.feedbackAmplitude = (Math.pow(Math.random(), 3) * Config.operatorAmplitudeMax) | 0;
                     if (instrument.envelopeCount < Config.maxEnvelopeCount && Math.random() < 0.4) {
-                        let envelopeLowerBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                        let envelopeUpperBound = selectCurvedDistribution(0, 20, 8, 5) / 10;
-                        if (envelopeLowerBound >= envelopeUpperBound) {
-                            envelopeLowerBound = 0;
-                            envelopeUpperBound = 1;
-                        }
-                        instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["feedbackAmplitude"].index, 0, Config.newEnvelopes.dictionary[selectWeightedRandom([
-                            { item: "note size", weight: 4 },
-                            { item: "punch", weight: 2 },
-                            { item: "pitch", weight: 1 },
-                            { item: "flare", weight: 2 },
-                            { item: "twang", weight: 2 },
-                            { item: "swell", weight: 4 },
-                            { item: "lfo", weight: 3 },
-                            { item: "decay", weight: 3 },
-                            { item: "wibble", weight: 3 },
-                            { item: "linear", weight: 2 },
-                            { item: "rise", weight: 3 },
-                            { item: "fall", weight: 3 },
-                            { item: "sequence", weight: 1},
-                        ])].index, true, 0, -1, selectWeightedRandom([{ item: false, weight: 8 }, { item: true, weight: 1 }]), Config.perEnvelopeSpeedIndices[selectCurvedDistribution(1, 63, 30, 30)], envelopeLowerBound, envelopeUpperBound, 2, 2,
-                            selectWeightedRandom([{ item: LFOEnvelopeTypes.sine, weight: 8 }, { item: LFOEnvelopeTypes.triangle, weight: 4 }, { item: LFOEnvelopeTypes.sawtooth, weight: 2 }, { item: LFOEnvelopeTypes.square, weight: 1 }]));
-                    }
+                        instrument.addEnvelope(Config.instrumentAutomationTargets.dictionary["feedbackAmplitude"].index, 0, Config.envelopes.dictionary[selectWeightedRandom([
+                        { item: "none", weight: 4 },
+                        { item: "punch", weight: 2 },
+                        { item: "flare -1", weight: 1 },
+                        { item: "flare 1", weight: 2 },
+                        { item: "flare 2", weight: 2 },
+                        { item: "flare 3", weight: 2 },
+                        { item: "twang -1", weight: 1 },
+                        { item: "twang 1", weight: 2 },
+                        { item: "twang 2", weight: 2 },
+                        { item: "twang 3", weight: 2 },
+                        { item: "swell -1", weight: 2 },
+                        { item: "swell 1", weight: 2 },
+                        { item: "swell 2", weight: 2 },
+                        { item: "swell 3", weight: 1 },
+                        { item: "tremolo0", weight: 1 },
+                        { item: "tremolo1", weight: 1 },
+                        { item: "tremolo2", weight: 1 },
+                        { item: "tremolo3", weight: 1 },
+                        { item: "tremolo4", weight: 1 },
+                        { item: "tremolo5", weight: 1 },
+                        { item: "tremolo6", weight: 1 },
+                        { item: "decay -1", weight: 1 },
+                        { item: "decay 1", weight: 1 },
+                        { item: "decay 2", weight: 2 },
+                        { item: "decay 3", weight: 2 },
+                        { item: "wibble-1", weight: 2 },
+                        { item: "wibble 1", weight: 2 },
+                        { item: "wibble 2", weight: 2 },
+                        { item: "wibble 3", weight: 2 },
+                        { item: "linear-2", weight: 1 },
+                        { item: "linear-1", weight: 1 },
+                        { item: "linear 1", weight: 2 },
+                        { item: "linear 2", weight: 2 },
+                        { item: "linear 3", weight: 1 },
+                        { item: "rise -2", weight: 2 },
+                        { item: "rise -1", weight: 2 },
+                        { item: "rise 1", weight: 2 },
+                        { item: "rise 2", weight: 2 },
+                        { item: "rise 3", weight: 1 },
+                        { item: "sequence", weight: 1},
+					])].index);
+					}
 				} break;
                 case InstrumentType.customChipWave: {
                     // The custom chip randomizing is a little different. It uses a random algorithm
@@ -2329,14 +2257,14 @@ export class ChangeAliasing extends Change {
 }
 
 export class ChangeDiscreteEnvelope extends Change {
-    constructor(doc: SongDocument, newValue: boolean, index: number) {
+    constructor(doc: SongDocument, newValue: boolean) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        const oldValue = instrument.envelopes[index].discrete;
+        const oldValue = instrument.discreteEnvelope;
 
         doc.notifier.changed();
         if (oldValue != newValue) {
-            instrument.envelopes[index].discrete = newValue;
+            instrument.discreteEnvelope = newValue;
             instrument.preset = instrument.type;
             this._didSomething();
         }
@@ -2389,20 +2317,6 @@ class ChangeInstrumentSlider extends Change {
             this._instrument.preset = this._instrument.type;
             this._doc.notifier.changed();
         }
-    }
-}
-
-//for envelope mod recording
-class IndexableChange extends ChangeInstrumentSlider { //Don't know if I need this
-    constructor(index: number, _doc: SongDocument) {
-        super(_doc);
-        this.index = index;
-    }
-
-    private index: number = 0;
-
-    public getIndex(): number {
-        return this.index;
     }
 }
 
@@ -3435,41 +3349,6 @@ export class ChangeModFilter extends Change {
 
             // Go through each pattern where this instrument is set, and clean up any notes that are out of bounds
             let cap: number = doc.song.getVolumeCapForSetting(true, instrument.modulators[mod], instrument.modFilterTypes[mod]);
-
-            for (let i: number = 0; i < doc.song.patternsPerChannel; i++) {
-                const pattern: Pattern = doc.song.channels[doc.channel].patterns[i];
-                if (pattern.instruments[0] == doc.getCurrentInstrument()) {
-                    for (let j: number = 0; j < pattern.notes.length; j++) {
-                        const note: Note = pattern.notes[j];
-                        if (note.pitches[0] == Config.modCount - mod - 1) {
-                            for (let k: number = 0; k < note.pins.length; k++) {
-                                const pin: NotePin = note.pins[k];
-                                if (pin.size > cap)
-                                    pin.size = cap;
-                            }
-                        }
-                    }
-                }
-            }
-
-            doc.notifier.changed();
-            this._didSomething();
-        }
-    }
-}
-
-export class ChangeModEnvelope extends Change {
-    constructor(doc: SongDocument, mod: number, envelope: number) {
-        super();
-
-        let instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-
-        if (instrument.modEnvelopeNumbers[mod] != envelope) {
-
-            instrument.modEnvelopeNumbers[mod] = envelope;
-
-            // Go through each pattern where this instrument is set, and clean up any notes that are out of bounds
-            let cap: number = doc.song.getVolumeCapForSetting(true, instrument.modulators[mod], instrument.modEnvelopeNumbers[mod]);
 
             for (let i: number = 0; i < doc.song.patternsPerChannel; i++) {
                 const pattern: Pattern = doc.song.channels[doc.channel].patterns[i];
@@ -5024,7 +4903,7 @@ export class ChangeAddEnvelope extends Change {
     constructor(doc: SongDocument) {
         super();
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        instrument.addEnvelope(0, 0, 0, true, 0, instrument.isNoiseInstrument ? Config.drumCount : Config.maxPitch, false, 1, 0);
+        instrument.addEnvelope(0, 0, 0);
         instrument.preset = instrument.type;
         doc.notifier.changed();
         this._didSomething();
@@ -5040,16 +4919,6 @@ export class ChangeRemoveEnvelope extends Change {
             instrument.envelopes[i].target = instrument.envelopes[i + 1].target;
             instrument.envelopes[i].index = instrument.envelopes[i + 1].index;
             instrument.envelopes[i].envelope = instrument.envelopes[i + 1].envelope;
-            instrument.envelopes[i].pitchEnvelopeStart = instrument.envelopes[i + 1].pitchEnvelopeStart;
-            instrument.envelopes[i].pitchEnvelopeEnd = instrument.envelopes[i + 1].pitchEnvelopeEnd;
-            instrument.envelopes[i].inverse = instrument.envelopes[i + 1].inverse;
-            instrument.envelopes[i].perEnvelopeSpeed = instrument.envelopes[i + 1].perEnvelopeSpeed;
-            instrument.envelopes[i].perEnvelopeLowerBound = instrument.envelopes[i + 1].perEnvelopeLowerBound;
-            instrument.envelopes[i].perEnvelopeUpperBound = instrument.envelopes[i + 1].perEnvelopeUpperBound;
-            instrument.envelopes[i].steps = instrument.envelopes[i + 1].steps;
-            instrument.envelopes[i].seed = instrument.envelopes[i + 1].seed;
-            instrument.envelopes[i].waveform = instrument.envelopes[i + 1].waveform;
-            instrument.envelopes[i].discrete = instrument.envelopes[i + 1].discrete;
         }
         // TODO: Shift any envelopes that were targeting other envelope indices after the removed one.
         instrument.preset = instrument.type;
@@ -5081,154 +4950,6 @@ export class ChangeSetEnvelopeType extends Change {
         const oldValue: number = instrument.envelopes[envelopeIndex].envelope;
         if (oldValue != newValue) {
             instrument.envelopes[envelopeIndex].envelope = newValue;
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
-    }
-}
-
-export class ChangeEnvelopePitchStart extends Change {
-    constructor(doc: SongDocument, startNote: number, index: number) {
-        super();
-        const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        const oldStartNote: number = instrument.envelopes[index].pitchEnvelopeStart;
-        instrument.envelopes[index].pitchEnvelopeStart = startNote;
-        if (oldStartNote != startNote) {
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
-    }
-}
-
-
-export class ChangeEnvelopePitchEnd extends Change {
-    constructor(doc: SongDocument, endNote: number, index: number) {
-        super();
-        const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        const oldEndNote: number = instrument.envelopes[index].pitchEnvelopeEnd;
-        instrument.envelopes[index].pitchEnvelopeEnd = endNote;
-        if (oldEndNote != endNote) {
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
-    }
-}
-
-export class ChangeEnvelopeInverse extends Change {
-    constructor(doc: SongDocument, value: boolean, index: number) {
-        super();
-        const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        const oldValue: boolean = instrument.envelopes[index].inverse;
-        instrument.envelopes[index].inverse = value;
-        if (oldValue != value) {
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
-    }
-}
-
-/* export class ChangeDiscreteEnvelope extends Change {
-    constructor(doc: SongDocument, newValue: boolean, index: number) {
-        super();
-        const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        const oldValue = instrument.envelopes[index].discrete;
-
-        doc.notifier.changed();
-        if (oldValue != newValue) {
-            instrument.envelopes[index].discrete = newValue;
-            instrument.preset = instrument.type;
-            this._didSomething();
-        }
-    }
-} */
-
-export class ChangePerEnvelopeSpeed extends IndexableChange {
-    constructor(doc: SongDocument, oldSpeed: number, speed: number, index: number) {
-        super(index, doc);
-        this._instrument.envelopes[index].perEnvelopeSpeed = speed;
-        doc.synth.unsetMod(Config.modulators.dictionary["individual envelope speed"].index, doc.channel, doc.getCurrentInstrument());
-        doc.notifier.changed();
-        if (oldSpeed != speed) this._didSomething();
-    }
-}
-
-export class ChangeEnvelopeLowerBound extends IndexableChange {
-    constructor(doc: SongDocument, oldBound: number, bound: number, index: number) {
-        super(index, doc);
-        bound = bound > Config.perEnvelopeBoundMax ? Config.perEnvelopeBoundMax : bound < Config.perEnvelopeBoundMin ? Config.perEnvelopeBoundMin : Math.round(bound * 10) != bound * 10 ? Config.perEnvelopeBoundMin : bound;
-        this._instrument.envelopes[index].perEnvelopeLowerBound = bound;
-        doc.synth.unsetMod(Config.modulators.dictionary["individual envelope lower bound"].index, doc.channel, doc.getCurrentInstrument());
-        doc.notifier.changed();
-        if (oldBound != bound) this._didSomething();
-    }
-}
-
-export class ChangeEnvelopeUpperBound extends IndexableChange {
-    constructor(doc: SongDocument, oldBound: number, bound: number, index: number) {
-        super(index, doc);
-        bound = bound > Config.perEnvelopeBoundMax ? Config.perEnvelopeBoundMax : bound < Config.perEnvelopeBoundMin ? Config.perEnvelopeBoundMin : Math.round(bound * 10) != bound * 10 ? Config.perEnvelopeBoundMin : bound;
-        this._instrument.envelopes[index].perEnvelopeUpperBound = bound;
-        doc.synth.unsetMod(Config.modulators.dictionary["individual envelope upper bound"].index, doc.channel, doc.getCurrentInstrument());
-        doc.notifier.changed();
-        if (oldBound != bound) this._didSomething();
-    }
-}
-
-export class ChangeRandomEnvelopeSteps extends Change {
-    constructor(doc: SongDocument, steps: number, index: number) {
-        super();
-        const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        const oldSteps: number = instrument.envelopes[index].steps;
-        steps = steps > Config.randomEnvelopeStepsMax ? Config.randomEnvelopeStepsMax : steps < 1 ? 2 : Math.floor(steps);
-        instrument.envelopes[index].steps = steps;
-        if (oldSteps != steps) {
-            instrument.preset = instrument.type;
-            doc.notifier.changed();
-            this._didSomething();
-        }
-    }
-}
-
-export class ChangeRandomEnvelopeSeed extends Change {
-    constructor(doc: SongDocument, seed: number, index: number) {
-        super();
-        const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        const oldSeed: number = instrument.envelopes[index].seed;
-        seed = seed > Config.randomEnvelopeSeedMax ? Config.randomEnvelopeSeedMax : seed < 1 ? 2 : Math.floor(seed);
-        instrument.envelopes[index].seed = seed;
-        if (oldSeed != seed) {
-            //changing the seed does not change the preset
-            doc.notifier.changed();
-            this._didSomething();
-        }
-    }
-}
-
-export class PasteEnvelope extends Change {
-    constructor(doc: SongDocument, envelope: any, index: number) {
-        super();
-        const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        instrument.envelopes[index].fromJsonObject(envelope, "slarmoosbox");
-        
-        
-        instrument.preset = instrument.type;
-        doc.notifier.changed();
-        this._didSomething();
-    }
-}
-
-export class ChangeSetEnvelopeWaveform extends Change {
-    constructor(doc: SongDocument, waveform: any, index: number) {
-        super();
-        const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
-        const oldWaveform: number = instrument.envelopes[index].waveform;
-        waveform = parseInt(waveform + ""); //make sure waveform isn't a string
-        instrument.envelopes[index].waveform = waveform;
-        if (oldWaveform != waveform) {
             instrument.preset = instrument.type;
             doc.notifier.changed();
             this._didSomething();
