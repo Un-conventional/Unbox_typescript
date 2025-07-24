@@ -1211,8 +1211,8 @@ export class Config {
         //SAA1099
         { name: "SAA1099 Triangle"  , expression: 2.0, samples: centerWave([0.42857, 0.57143, 0.71429, 0.85714, 1, 1, 0.85714, 0.71429, 0.57143, 0.42857, 0.28571, 0.14286, 0, 0, 0.14286, 0.28571]) },
         { name: "SAA1099 Sawtooth"  , expression: 2.0, samples: centerWave([0.42857, 0.57143, 0.71429, 0.85714, 1, 0, 0.14286, 0.28571]) },
-        //???
-
+        //wtbeep
+        //{ name: "wtbeep", expression: 2.0, samples: centerWave([0]) },
         //???
 
         //???
@@ -1270,8 +1270,8 @@ export class Config {
     public static readonly filterSimplePeakRange: number = 8;
 
     public static readonly fadeInRange: number = 20;
-    public static readonly fadeOutTicks: ReadonlyArray<number> = [-128, -96, -72, -48, -24, -12, -6, -3, -1, /* 0,  */1, 3, 6, 12, 24, 48, 72, 96, 128]; // Old one - [-24, -12, -6, -3, -1, 6, 12, 24, 48, 72, 96];
-    public static readonly fadeOutNeutral: number = 8;//9 when divide by 0 fixed --
+    public static readonly fadeOutTicks: ReadonlyArray<number> = [-24, -12, -6, -3, -1, 6, 12, 24, 48, 72, 96]; // new one - [-128, -96, -72, -48, -24, -12, -6, -3, -1, /* 0,  */1, 3, 6, 12, 24, 48, 72, 96, 128];
+    public static readonly fadeOutNeutral: number = 4;//9 when divide by 0 fixed -- 4 standard
     public static readonly drumsetFadeOutTicks: number = 48;
 	public static readonly transitions: DictionaryArray<Transition> = toNameMap([ //Add a slider for 'slideTicks'?
         { name: "normal", isSeamless: false, continues: false, slides: false, slideTicks: 3, includeAdjacentPatterns: false },
