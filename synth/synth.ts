@@ -3056,7 +3056,7 @@ export class Song {
         this.beatsPerBar = 8;
         this.barCount = 16;
         this.patternsPerChannel = 16;
-        this.rhythm = 7;
+        this.rhythm = 1;
         this.layeredInstruments = false;
         this.patternInstruments = false;
 
@@ -7261,8 +7261,8 @@ class EnvelopeComputer {
     public nextSlideRatioStart: number = 0.0;
     public nextSlideRatioEnd: number = 0.0;
 
-    public envelopeStarts: number[] = [];
-    public envelopeEnds: number[] = [];
+    public readonly envelopeStarts: number[] = []; //??
+    public readonly envelopeEnds: number[] = []; //??
     private readonly _modifiedEnvelopeIndices: number[] = [];
     private _modifiedEnvelopeCount: number = 0;
     public lowpassCutoffDecayVolumeCompensation: number = 1.0;
@@ -7793,7 +7793,7 @@ class InstrumentState {
         }
     }
 
-    public readonly envelopeComputer: EnvelopeComputer = new EnvelopeComputer();
+    //public readonly envelopeComputer: EnvelopeComputer = new EnvelopeComputer();
 
     public allocateNecessaryBuffers(synth: Synth, instrument: Instrument, samplesPerTick: number): void {
         if (effectsIncludePanning(instrument.effects)) {
@@ -7892,7 +7892,7 @@ class InstrumentState {
         this.nextVibratoTime = 0;
         this.arpTime = 0;
         this.envelopeTime = 0;
-        this.envelopeComputer.reset();
+        //this.envelopeComputer.reset();
 
         if (this.chorusDelayLineDirty) {
             for (let i: number = 0; i < this.chorusDelayLineL!.length; i++) this.chorusDelayLineL![i] = 0.0;
@@ -7933,8 +7933,8 @@ class InstrumentState {
         //const secondsPerTick: number = samplesPerTick / synth.samplesPerSecond;
         //const currentPart: number = synth.getCurrentPart();
         //this.envelopeComputer.computeEnvelopes(instrument, currentPart, tickTimeStart, secondsPerTick, tone);
-        const envelopeStarts: number[] = this.envelopeComputer.envelopeStarts;
-        const envelopeEnds: number[] = this.envelopeComputer.envelopeEnds;
+        //const envelopeStarts: number[] = this.envelopeComputer.envelopeStarts; //???
+        //const envelopeEnds: number[] = this.envelopeComputer.envelopeEnds; //???
 
         const usesDistortion: boolean = effectsIncludeDistortion(this.effects);
         const usesBitcrusher: boolean = effectsIncludeBitcrusher(this.effects);
@@ -7953,8 +7953,8 @@ class InstrumentState {
                 useDistortionEnd = synth.getModValue(Config.modulators.dictionary["distortion"].index, channelIndex, instrumentIndex, true);
             }
 
-            const distortionSliderStart = Math.min(1.0, envelopeStarts[EnvelopeComputeIndex.distortion] * useDistortionStart / (Config.distortionRange - 1));
-            const distortionSliderEnd = Math.min(1.0, envelopeEnds[EnvelopeComputeIndex.distortion] * useDistortionEnd / (Config.distortionRange - 1));
+            const distortionSliderStart = Math.min(1.0, /*envelopeStarts[EnvelopeComputeIndex.distortion] **/ useDistortionStart / (Config.distortionRange - 1));
+            const distortionSliderEnd = Math.min(1.0, /*envelopeEnds[EnvelopeComputeIndex.distortion] **/ useDistortionEnd / (Config.distortionRange - 1));
             const distortionStart: number = Math.pow(1.0 - 0.895 * (Math.pow(20.0, distortionSliderStart) - 1.0) / 19.0, 2.0);
             const distortionEnd: number = Math.pow(1.0 - 0.895 * (Math.pow(20.0, distortionSliderEnd) - 1.0) / 19.0, 2.0);
             const distortionDriveStart: number = (1.0 + 2.0 * distortionSliderStart) / Config.distortionBaseVolume;
@@ -7966,8 +7966,8 @@ class InstrumentState {
         }
 
         if (usesBitcrusher) {
-            let freqSettingStart: number = instrument.bitcrusherFreq * Math.sqrt(envelopeStarts[EnvelopeComputeIndex.bitcrusherFrequency]);
-            let freqSettingEnd: number = instrument.bitcrusherFreq * Math.sqrt(envelopeEnds[EnvelopeComputeIndex.bitcrusherFrequency]);
+            let freqSettingStart: number = instrument.bitcrusherFreq /** Math.sqrt(envelopeStarts[EnvelopeComputeIndex.bitcrusherFrequency])*/;
+            let freqSettingEnd: number = instrument.bitcrusherFreq /** Math.sqrt(envelopeEnds[EnvelopeComputeIndex.bitcrusherFrequency])*/;
 
             // Check for freq crush mods
             if (synth.isModActive(Config.modulators.dictionary["freq crush"].index, channelIndex, instrumentIndex)) {
@@ -7975,8 +7975,8 @@ class InstrumentState {
                 freqSettingEnd = synth.getModValue(Config.modulators.dictionary["freq crush"].index, channelIndex, instrumentIndex, true);
             }
 
-            let quantizationSettingStart: number = instrument.bitcrusherQuantization * Math.sqrt(envelopeStarts[EnvelopeComputeIndex.bitcrusherQuantization]);
-            let quantizationSettingEnd: number = instrument.bitcrusherQuantization * Math.sqrt(envelopeEnds[EnvelopeComputeIndex.bitcrusherQuantization]);
+            let quantizationSettingStart: number = instrument.bitcrusherQuantization /** Math.sqrt(envelopeStarts[EnvelopeComputeIndex.bitcrusherQuantization])*/;
+            let quantizationSettingEnd: number = instrument.bitcrusherQuantization /** Math.sqrt(envelopeEnds[EnvelopeComputeIndex.bitcrusherQuantization])*/;
 
             // Check for bitcrush mods
             if (synth.isModActive(Config.modulators.dictionary["bit crush"].index, channelIndex, instrumentIndex)) {
@@ -8117,8 +8117,8 @@ class InstrumentState {
         let delayInputMultEnd: number = 1.0;
 
         if (usesPanning) {
-            const panEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.panning] * 2.0 - 1.0;
-            const panEnvelopeEnd:   number = envelopeEnds[EnvelopeComputeIndex.panning] * 2.0 - 1.0;
+            //const panEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.panning] * 2.0 - 1.0;
+            //const panEnvelopeEnd:   number = envelopeEnds[EnvelopeComputeIndex.panning] * 2.0 - 1.0;
 
             let usePanStart: number = instrument.pan;
             let usePanEnd: number = instrument.pan;
@@ -8128,8 +8128,8 @@ class InstrumentState {
                 usePanEnd = synth.getModValue(Config.modulators.dictionary["pan"].index, channelIndex, instrumentIndex, true);
             }
 
-            let panStart: number = Math.max(-1.0, Math.min(1.0, (usePanStart - Config.panCenter) / Config.panCenter * panEnvelopeStart));
-            let panEnd: number = Math.max(-1.0, Math.min(1.0, (usePanEnd - Config.panCenter) / Config.panCenter * panEnvelopeEnd));
+            let panStart: number = Math.max(-1.0, Math.min(1.0, (usePanStart - Config.panCenter) / Config.panCenter /** panEnvelopeStart*/));
+            let panEnd: number = Math.max(-1.0, Math.min(1.0, (usePanEnd - Config.panCenter) / Config.panCenter /** panEnvelopeEnd  */));
 
             const volumeStartL: number = Math.cos((1 + panStart) * Math.PI * 0.25) * 1.414;
             const volumeStartR: number = Math.cos((1 - panStart) * Math.PI * 0.25) * 1.414;
@@ -8163,8 +8163,8 @@ class InstrumentState {
         }
 
         if (usesChorus) {
-            const chorusEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.chorus];
-            const chorusEnvelopeEnd:   number = envelopeEnds[EnvelopeComputeIndex.chorus];
+            //const chorusEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.chorus];
+            //const chorusEnvelopeEnd:   number = envelopeEnds[EnvelopeComputeIndex.chorus];
             let useChorusStart: number = instrument.chorus;
             let useChorusEnd: number = instrument.chorus;
             // Check for chorus mods
@@ -8173,8 +8173,8 @@ class InstrumentState {
                 useChorusEnd = synth.getModValue(Config.modulators.dictionary["chorus"].index, channelIndex, instrumentIndex, true);
             }
 
-            let chorusStart: number = Math.min(1.0, chorusEnvelopeStart * useChorusStart / (Config.chorusRange - 1));
-            let chorusEnd: number = Math.min(1.0, chorusEnvelopeEnd * useChorusEnd / (Config.chorusRange - 1));
+            let chorusStart: number = Math.min(1.0, /*chorusEnvelopeStart **/ useChorusStart / (Config.chorusRange - 1));
+            let chorusEnd: number = Math.min(1.0, /*chorusEnvelopeEnd   **/ useChorusEnd / (Config.chorusRange - 1));
             chorusStart = chorusStart * 0.6 + (Math.pow(chorusStart, 6.0)) * 0.4;
             chorusEnd = chorusEnd * 0.6 + (Math.pow(chorusEnd, 6.0)) * 0.4;
             const chorusCombinedMultStart = 1.0 / Math.sqrt(3.0 * chorusStart * chorusStart + 1.0);
@@ -8188,8 +8188,8 @@ class InstrumentState {
         let maxEchoMult = 0.0;
         let averageEchoDelaySeconds: number = 0.0;
         if (usesEcho) {
-            const echoSustainEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.echoSustain];
-            const echoSustainEnvelopeEnd:   number = envelopeEnds[EnvelopeComputeIndex.echoSustain];
+            //const echoSustainEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.echoSustain];
+            //const echoSustainEnvelopeEnd:   number = envelopeEnds[EnvelopeComputeIndex.echoSustain];
             let useEchoSustainStart: number = instrument.echoSustain;
             let useEchoSustainEnd: number = instrument.echoSustain;
             // Check for echo mods
@@ -8197,8 +8197,8 @@ class InstrumentState {
                 useEchoSustainStart = Math.max( 0.0, synth.getModValue(Config.modulators.dictionary["echo"].index, channelIndex, instrumentIndex, false) );
                 useEchoSustainEnd = Math.max( 0.0, synth.getModValue(Config.modulators.dictionary["echo"].index, channelIndex, instrumentIndex, true) );
             }
-            const echoMultStart: number = Math.min(1.0, Math.pow(echoSustainEnvelopeStart * useEchoSustainStart / Config.echoSustainRange, 1.1)) * 0.9;
-            const echoMultEnd: number = Math.min(1.0, Math.pow(echoSustainEnvelopeEnd * useEchoSustainEnd / Config.echoSustainRange, 1.1)) * 0.9;
+            const echoMultStart: number = Math.min(1.0, Math.pow(/*echoSustainEnvelopeStart **/ useEchoSustainStart / Config.echoSustainRange, 1.1)) * 0.9;
+            const echoMultEnd: number = Math.min(1.0, Math.pow(/*echoSustainEnvelopeEnd   **/ useEchoSustainEnd / Config.echoSustainRange, 1.1)) * 0.9;
             this.echoMult = echoMultStart;
             this.echoMultDelta = Math.max(0.0, (echoMultEnd - echoMultStart) / roundedSamplesPerTick);
             maxEchoMult = Math.max(echoMultStart, echoMultEnd);
@@ -8241,8 +8241,8 @@ class InstrumentState {
 
         let maxReverbMult = 0.0;
         if (usesReverb) {
-            const reverbEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.reverb];
-            const reverbEnvelopeEnd:   number = envelopeEnds[EnvelopeComputeIndex.reverb];
+            //const reverbEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.reverb];
+            //const reverbEnvelopeEnd:   number = envelopeEnds[EnvelopeComputeIndex.reverb];
 
             let useReverbStart: number = instrument.reverb;
             let useReverbEnd: number = instrument.reverb;
@@ -8258,8 +8258,8 @@ class InstrumentState {
                 useReverbEnd *= (synth.getModValue(Config.modulators.dictionary["song reverb"].index, undefined, undefined, true) - Config.modulators.dictionary["song reverb"].convertRealFactor) / Config.reverbRange;
             }
 
-            const reverbStart: number = Math.min(1.0, Math.pow(reverbEnvelopeStart * useReverbStart / Config.reverbRange, 0.667)) * 0.425;
-            const reverbEnd: number = Math.min(1.0, Math.pow(reverbEnvelopeEnd * useReverbEnd / Config.reverbRange, 0.667)) * 0.425;
+            const reverbStart: number = Math.min(1.0, Math.pow(/*reverbEnvelopeStart **/ useReverbStart / Config.reverbRange, 0.667)) * 0.425;
+            const reverbEnd: number = Math.min(1.0, Math.pow(/*reverbEnvelopeEnd   **/ useReverbEnd / Config.reverbRange, 0.667)) * 0.425;
 
             this.reverbMult = reverbStart;
             this.reverbMultDelta = (reverbEnd - reverbStart) / roundedSamplesPerTick;
@@ -8346,7 +8346,7 @@ class InstrumentState {
         this.delayInputMult = delayInputMultStart;
         this.delayInputMultDelta = (delayInputMultEnd - delayInputMultStart) / roundedSamplesPerTick;
 
-        this.envelopeComputer.clearEnvelopes();
+        //this.envelopeComputer.clearEnvelopes(); //not needed
     }
 
     public updateWaves(instrument: Instrument, samplesPerSecond: number): void {

@@ -128,13 +128,13 @@ export const enum EnvelopeComputeIndex {
     supersawDynamism,
 	supersawSpread,
 	supersawShape,
-    panning,
-    distortion,
-    bitcrusherQuantization,
-    bitcrusherFrequency,
-    chorus,
-    echoSustain,
-    reverb,
+    //panning,
+    //distortion,
+    //bitcrusherQuantization,
+    //bitcrusherFrequency,
+    //chorus,
+    //echoSustain,
+    //reverb,
     length,
 }
 
@@ -937,12 +937,12 @@ export class Config {
 	public static readonly ticksPerArpeggio: number = 3;
 	public static readonly arpeggioPatterns: ReadonlyArray<ReadonlyArray<number>> = [[0], [0, 1], [0, 1, 2, 1], [0, 1, 2, 3], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6, 7] ];
 	public static readonly rhythms: DictionaryArray<Rhythm> = toNameMap([                                                                                                                                           //Per "whole note"
-        { name: "x4", stepsPerBeat: 0.25, /*ticksPerArpeggio: 12, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1]],*/ roundUpThresholds: [3] },                                                                  //1?   Whole (Should add a double note? (X8- overkill))
-        { name: "x2", stepsPerBeat: 0.5, /*ticksPerArpeggio: 12, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1]],*/ roundUpThresholds: [3] },                                                                   //2?   Half
-        { name: "x1.3", stepsPerBeat: 0.75, /*ticksPerArpeggio: 12, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1]],*/ roundUpThresholds: [3] },                                                                //3?   Quarter Trip
-		{ name: "x1", stepsPerBeat: 1, /*ticksPerArpeggio: 6, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1]],*/ roundUpThresholds: [3] },                                                                      //4?   Quarter
-        { name: "÷1.3", stepsPerBeat: 1.5, /*ticksPerArpeggio: 6, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1]],*/ roundUpThresholds: [3] },                                                                  //6?   Eight Trip
-		{ name: "÷2", stepsPerBeat: 2, /*ticksPerArpeggio: 5, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1]],*/ roundUpThresholds: [3, 9] },                                                                   //8?   Eight
+        //{ name: "x4", stepsPerBeat: 0.25, /*ticksPerArpeggio: 12, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1]],*/ roundUpThresholds: [3] },                                                                  //1?   Whole (Should add a double note? (X8- overkill))
+        //{ name: "x2", stepsPerBeat: 0.5, /*ticksPerArpeggio: 12, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1]],*/ roundUpThresholds: [3] },                                                                   //2?   Half
+        //{ name: "x1.3", stepsPerBeat: 0.75, /*ticksPerArpeggio: 12, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1]],*/ roundUpThresholds: [3] },                                                                //3?   Quarter Trip
+		//{ name: "x1", stepsPerBeat: 1, /*ticksPerArpeggio: 6, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1]],*/ roundUpThresholds: [3] },                                                                      //4?   Quarter
+        //{ name: "÷1.3", stepsPerBeat: 1.5, /*ticksPerArpeggio: 6, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1]],*/ roundUpThresholds: [3] },                                                                  //6?   Eight Trip
+		//{ name: "÷2", stepsPerBeat: 2, /*ticksPerArpeggio: 5, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1]],*/ roundUpThresholds: [3, 9] },                                                                   //8?   Eight
 		{ name: "÷3 (Triplets)", stepsPerBeat: 3, /*ticksPerArpeggio: 4, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1], [0, 1, 2, 3]]*/ roundUpThresholds: [/*0*/ 5, /*8*/ 12, /*16*/ 18 /*24*/] },            //12?  Sixteen Trip
 		{ name: "÷4 (Standard)", stepsPerBeat: 4, /*ticksPerArpeggio: 3, arpeggioPatterns: [[0], [0, 0, 1, 1], [0, 1, 2, 1], [0, 1, 2, 3]]*/ roundUpThresholds: [/*0*/ 3, /*6*/ 9, /*12*/ 17, /*18*/ 21 /*24*/] },  //16?  Sixteen
 		{ name: "÷6", stepsPerBeat: 6, /*ticksPerArpeggio: 4, arpeggioPatterns: [[0], [0, 1], [0, 1, 2, 1], [0, 1, 2, 3]]*/ roundUpThresholds: null },                                                              //24?  Thirty-second Trip
@@ -953,7 +953,7 @@ export class Config {
       //{ name: "÷32", stepsPerBeat: 32, /*ticksPerArpeggio: 3, arpeggioPatterns: [[0], [0, 1], [0, 1, 2, 1], [0, 1, 2, 3]]*/ roundUpThresholds: null }, //Broken                                                   //128? Hundred twenty-eight
       //{ name: "÷48" , stepsPerBeat: 48, /*ticksPerArpeggio: 1, arpeggioPatterns:[[0], [0, 1], [0, 1, 2, 1], [0, 1, 2, 3]]*/ roundUpThresholds: null }, //Broken                                                   //192? Two Hundred fifty-sixth trip
         //Broken- Need to resolve beat division issue and make unit note size/division changable per song and optimize whatever is "slow" about this.                                                               //256? Two Hundred Fifty-sixth 
-        //WIth "idea" Thsese may be removed.                                                                                                                                                                        //512 1024 2048 4096 exist but no.
+        //WIth "idea" Thsese may be removed. Extra ones other than "stock" need work                                                                                                                                //512 1024 2048 4096 exist but no.
 	]);
 
     public static readonly instrumentTypeNames: ReadonlyArray<string> = ["chip", "FM", "noise", "spectrum", "drumset", "harmonics", "PWM",/* "duty cycle",*/ "Picked String", "supersaw", "custom chip", "mod", "FM6op"];
@@ -1280,14 +1280,16 @@ export class Config {
         { name: "slide", isSeamless: true, continues: false, slides: true, slideTicks: 3, includeAdjacentPatterns: true },
         { name: "slide in pattern", isSeamless: true, continues: false, slides: true, slideTicks: 3, includeAdjacentPatterns: false },
 
-        { name: "continue in pattern", isSeamless: true, continues: true, slides: false, slideTicks: 3, includeAdjacentPatterns: false },
+    /*  { name: "continue in pattern", isSeamless: true, continues: true, slides: false, slideTicks: 3, includeAdjacentPatterns: false },
         { name: "slide & continue",         isSeamless: true, continues: true, slides: true, slideTicks: 3, includeAdjacentPatterns: true },
         { name: "slide & con in patt",      isSeamless: true, continues: true, slides: true, slideTicks: 3, includeAdjacentPatterns: false },
         
         { name: "slow slide",               isSeamless: true, continues: false, slides: true, slideTicks: 12, includeAdjacentPatterns: true },
         { name: "slow slide in pattern",    isSeamless: true, continues: false, slides: true, slideTicks: 12, includeAdjacentPatterns: false },
         { name: "slow slide & continue",    isSeamless: true, continues: true, slides: true, slideTicks: 12, includeAdjacentPatterns: true },
-        { name: "slow slide & con in patt", isSeamless: true, continues: true, slides: true, slideTicks: 12, includeAdjacentPatterns: false }
+        { name: "slow slide & con in patt", isSeamless: true, continues: true, slides: true, slideTicks: 12, includeAdjacentPatterns: false } 
+        // Something happened here and I don't like it if it broke something. 
+        */
 	]);
 	public static readonly vibratos: DictionaryArray<Vibrato> = toNameMap([
         { name: "none", amplitude: 0.0, type: 0, delayTicks: 0 },
@@ -1698,13 +1700,13 @@ export class Config {
         { name: "supersawDynamism",         computeIndex: EnvelopeComputeIndex.supersawDynamism,        displayName: "dynamism",         /*perNote:  true,*/ interleave: false, isFilter: false, /*range: Config.supersawDynamismMax + 1, */    maxCount: 1, effect: null,                      compatibleInstruments: [InstrumentType.supersaw]},
 		{ name: "supersawSpread",           computeIndex: EnvelopeComputeIndex.supersawSpread,          displayName: "spread",           /*perNote:  true,*/ interleave: false, isFilter: false, /*range: Config.supersawSpreadMax + 1,   */    maxCount: 1, effect: null,                      compatibleInstruments: [InstrumentType.supersaw]},
 		{ name: "supersawShape",            computeIndex: EnvelopeComputeIndex.supersawShape,           displayName: "saw↔pulse",        /*perNote:  true,*/ interleave: false, isFilter: false, /*range: Config.supersawShapeMax + 1,    */    maxCount: 1, effect: null,                      compatibleInstruments: [InstrumentType.supersaw]},    
-        { name: "panning",                  computeIndex: EnvelopeComputeIndex.panning,                 displayName: "panning",          /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.panMax + 1,             */     maxCount: 1, effect: EffectType.chorus,         compatibleInstruments: null },
-        { name: "distortion",               computeIndex: EnvelopeComputeIndex.distortion,              displayName: "distortion",       /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.distortionRange,*/             maxCount: 1, effect: EffectType.distortion,     compatibleInstruments: null },
-        { name: "bitcrusherQuantization",   computeIndex: EnvelopeComputeIndex.bitcrusherQuantization,  displayName: "bit crush",        /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.bitcrusherQuantizationRange,*/ maxCount: 1, effect: EffectType.bitcrusher,     compatibleInstruments: null },
-        { name: "bitcrusherFrequency",      computeIndex: EnvelopeComputeIndex.bitcrusherFrequency,     displayName: "freq crush",       /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.bitcrusherFreqRange,*/         maxCount: 1, effect: EffectType.bitcrusher,     compatibleInstruments: null },
-        { name: "chorus",                   computeIndex: EnvelopeComputeIndex.chorus,                  displayName: "chorus",           /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.chorusRange,*/                 maxCount: 1, effect: EffectType.chorus,         compatibleInstruments: null },
-        { name: "echoSustain",              computeIndex: EnvelopeComputeIndex.echoSustain,             displayName: "echo",             /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.echoSustainRange,*/            maxCount: 1, effect: EffectType.echo,           compatibleInstruments: null },
-        { name: "reverb",                   computeIndex: EnvelopeComputeIndex.reverb,                  displayName: "reverb",           /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.reverbRange,*/                 maxCount: 1, effect: EffectType.reverb,         compatibleInstruments: null },
+        //{ name: "panning",                  computeIndex: EnvelopeComputeIndex.panning,                 displayName: "panning",          /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.panMax + 1,             */     maxCount: 1, effect: EffectType.chorus,         compatibleInstruments: null },
+        //{ name: "distortion",               computeIndex: EnvelopeComputeIndex.distortion,              displayName: "distortion",       /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.distortionRange,*/             maxCount: 1, effect: EffectType.distortion,     compatibleInstruments: null },
+        //{ name: "bitcrusherQuantization",   computeIndex: EnvelopeComputeIndex.bitcrusherQuantization,  displayName: "bit crush",        /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.bitcrusherQuantizationRange,*/ maxCount: 1, effect: EffectType.bitcrusher,     compatibleInstruments: null },
+        //{ name: "bitcrusherFrequency",      computeIndex: EnvelopeComputeIndex.bitcrusherFrequency,     displayName: "freq crush",       /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.bitcrusherFreqRange,*/         maxCount: 1, effect: EffectType.bitcrusher,     compatibleInstruments: null },
+        //{ name: "chorus",                   computeIndex: EnvelopeComputeIndex.chorus,                  displayName: "chorus",           /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.chorusRange,*/                 maxCount: 1, effect: EffectType.chorus,         compatibleInstruments: null },
+        //{ name: "echoSustain",              computeIndex: EnvelopeComputeIndex.echoSustain,             displayName: "echo",             /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.echoSustainRange,*/            maxCount: 1, effect: EffectType.echo,           compatibleInstruments: null },
+        //{ name: "reverb",                   computeIndex: EnvelopeComputeIndex.reverb,                  displayName: "reverb",           /*perNote: false,*/ interleave: false, isFilter: false, /*range: Config.reverbRange,*/                 maxCount: 1, effect: EffectType.reverb,         compatibleInstruments: null },
         // Controlling filter gain is less obvious and intuitive than controlling filter freq, so to avoid confusion I've disabled it for now...
         //{name: "noteFilterGain",         computeIndex:       EnvelopeComputeIndex.noteFilterGain0,        displayName: "n. filter # vol",  /*perNote:  true,*/ interleave: false, isFilter:  true, range: Config.filterGainRange,             maxCount: Config.filterMaxPoints, effect: EffectType.noteFilter, compatibleInstruments: null},
         /*
