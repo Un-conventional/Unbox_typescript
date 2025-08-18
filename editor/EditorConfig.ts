@@ -865,14 +865,14 @@ export class EditorConfig {
                 
             ])
         },
-        {
+        /* {
             name: "Synth-Perc", presets: <DictionaryArray<Preset>>toNameMap([
                 //_ instruments I made/like. Need Heavy hitting percussion that doesn't need samples...
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "SYNC", generalMidi: false, settings:  },
 
             ])
-        },
+        }, */
         {
             name: "Crunchy", presets: <DictionaryArray<Preset>>toNameMap([
                 //Crunchy instruments I made/like.
@@ -952,14 +952,14 @@ export class EditorConfig {
                 
             ])
         },
-        {
+        /* {
             name: "Strings", presets: <DictionaryArray<Preset>>toNameMap([
                 //String instruments I made/like.
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
                 
             ])
-        },
+        }, */
         {
             name: "Bellows", presets: <DictionaryArray<Preset>>toNameMap([
                 //Bellows instruments I made/like.
@@ -973,7 +973,7 @@ export class EditorConfig {
                 
             ])
         },
-        {
+        /* {
             name: "Reed", presets: <DictionaryArray<Preset>>toNameMap([
                 //_ instruments I made/like.
                 //{ name: "Harmonica", generalMidi: false, settings:  },// May need a new effect for it to be completely accurate - hand muting for one such as that WAOOOU sound.
@@ -983,47 +983,47 @@ export class EditorConfig {
                 //{ name: "name", generalMidi: false, settings:  },
                 
             ])
-        },
-        {
+        }, */
+        /* {
             name: "Brasswind", presets: <DictionaryArray<Preset>>toNameMap([
                 //Brass-like instruments I made/like.
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
                 
             ])
-        },
-        {
+        }, */
+        /* {
             name: "Woodwind_Reed", presets: <DictionaryArray<Preset>>toNameMap([
                 //Reed-like instruments I made/like.
                 //{ name: "", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
                 
             ])
-        },
-        {
+        }, */
+        /* {
             name: "Woodwind_Flute", presets: <DictionaryArray<Preset>>toNameMap([
                 //Flute-like instruments I made/like.
                 //{ name: "Calliope", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
                 
             ])
-        },
-        {
+        }, */
+        /* {
             name: "Chordophone", presets: <DictionaryArray<Preset>>toNameMap([
                 //Keyboard instruments I made/like.
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
                 
             ])
-        },
-        {
+        }, */
+        /* {
             name: "Membranophone", presets: <DictionaryArray<Preset>>toNameMap([
                 //Drum instruments I made/like.
                 //{ name: "name", generalMidi: false, settings:  },
                 //{ name: "name", generalMidi: false, settings:  },
                 
             ])
-        },
+        }, */
         {
             name: "Idiophone", presets: <DictionaryArray<Preset>>toNameMap([
                 //Idiophone instruments I made/like. No midi
@@ -1164,14 +1164,13 @@ export class EditorConfig {
                 { name: "Volume", generalMidi: false, settings: {"type":"custom chip","eqFilter":[{"type":"low-pass","cutoffHz":9513.66,"linearGain":0.1768}],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[{"type":"low-pass","cutoffHz":9513.66,"linearGain":0.1768}],"effects":["transition type"],"transition":"interrupt","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"square","unison":"none","customChipWave":{"0":24,"1":21,"2":17,"3":15,"4":12,"5":10,"6":8,"7":7,"8":6,"9":4,"10":3,"11":2,"12":1,"13":0,"14":-2,"15":-3,"16":-5,"17":-6,"18":-7,"19":-9,"20":-10,"21":-11,"22":-12,"23":-14,"24":-15,"25":-17,"26":-18,"27":-20,"28":-21,"29":-23,"30":-24,"31":-24,"32":-20,"33":-18,"34":-15,"35":-12,"36":-8,"37":-6,"38":-2,"39":0,"40":2,"41":3,"42":5,"43":6,"44":7,"45":9,"46":10,"47":11,"48":12,"49":13,"50":14,"51":15,"52":16,"53":17,"54":18,"55":19,"56":20,"57":21,"58":21,"59":22,"60":22,"61":23,"62":23,"63":24},"customChipWaveIntegral":{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":0,"8":0,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0,"23":0,"24":0,"25":0,"26":0,"27":0,"28":0,"29":0,"30":0,"31":0,"32":0,"33":0,"34":0,"35":0,"36":0,"37":0,"38":0,"39":0,"40":0,"41":0,"42":0,"43":0,"44":0,"45":0,"46":0,"47":0,"48":0,"49":0,"50":0,"51":0,"52":0,"53":0,"54":0,"55":0,"56":0,"57":0,"58":0,"59":0,"60":0,"61":0,"62":0,"63":0,"64":0},"envelopes":[]} },
             ])
         },
-        {
+        /* {
             name: "MISC(WIP)", presets: <DictionaryArray<Preset>>toNameMap([
-                /*{ name: "name", generalMidi: false, settings:  },
+                { name: "name", generalMidi: false, settings:  },
                 { name: "name", generalMidi: false, settings:  },
                 { name: "SYNC", generalMidi: false, settings:  },
-                */
             ])
-        },
+        },*/
         {
             name: "🪚", presets: <DictionaryArray<Preset>>toNameMap([
                 { name: "M Tooth", generalMidi: false, settings: {"type":"chip","eqFilter":[],"eqFilterType":false,"eqSimpleCut":10,"eqSimplePeak":0,"envelopeSpeed":12,"discreteEnvelope":false,"eqSubFilters0":[],"effects":["transition type"],"transition":"normal","clicklessTransition":false,"panDelay":10,"fadeInSeconds":0,"fadeOutTicks":-1,"wave":"M Tooth","unison":"none","isUsingAdvancedLoopControls":false,"chipWaveLoopStart":0,"chipWaveLoopEnd":48,"chipWaveLoopMode":0,"chipWavePlayBackwards":false,"chipWaveStartOffset":0,"envelopes":[]} },

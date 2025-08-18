@@ -5875,6 +5875,7 @@ export class ColorConfig {
 			--ui-widget-focus: #2d293b;
 			--pitch-background: #44444A;
 			--tonic: #c2a855;
+			--fifth-note: #a0cd7c;
 			--white-piano-key-text: #131200;
 			--black-piano-key-text: #fff;
 			--pitch-channel-limit: 10;
