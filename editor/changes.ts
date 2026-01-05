@@ -1896,7 +1896,10 @@ export class ChangeAddChannel extends ChangeGroup {
         const newModChannelCount: number = doc.song.modChannelCount + (isNoise || !isMod ? 0 : 1);
 
         if (newPitchChannelCount <= Config.pitchChannelCountMax && newNoiseChannelCount <= Config.noiseChannelCountMax && newModChannelCount <= Config.modChannelCountMax) {
-            const addedChannelIndex: number = isMod ? doc.song.pitchChannelCount + doc.song.noiseChannelCount + doc.song.modChannelCount : (isNoise ? doc.song.pitchChannelCount + doc.song.noiseChannelCount : doc.song.pitchChannelCount);
+            const addedChannelIndex: number = doc.song.pitchChannelCount
+                + (isNoise || isMod ? doc.song.noiseChannelCount : 0)
+                + (isMod ? doc.song.modChannelCount : 0);
+
             this.append(new ChangeChannelCount(doc, newPitchChannelCount, newNoiseChannelCount, newModChannelCount));
             if (addedChannelIndex - 1 >= index) {
                 this.append(new ChangeChannelOrder(doc, index, addedChannelIndex - 1, 1));
@@ -4785,14 +4788,12 @@ export class ChangeChipWave extends Change {
         const instrument: Instrument = doc.song.channels[doc.channel].instruments[doc.getCurrentInstrument()];
         if (instrument.chipWave != newValue) {
             instrument.chipWave = newValue;
-						 // advloop addition
                 instrument.isUsingAdvancedLoopControls = false;
                 instrument.chipWaveLoopStart = 0;
                 instrument.chipWaveLoopEnd = Config.rawRawChipWaves[instrument.chipWave].samples.length - 1;
                 instrument.chipWaveLoopMode = 0;
                 instrument.chipWavePlayBackwards = false;
                 instrument.chipWaveStartOffset = 0;
-                // advloop addition
             instrument.preset = instrument.type;
             doc.notifier.changed();
             this._didSomething();
@@ -4800,7 +4801,6 @@ export class ChangeChipWave extends Change {
     }
 }
 
-	// advloop addition
     export class ChangeChipWaveUseAdvancedLoopControls extends Change {
         constructor(doc: SongDocument, newValue: boolean) {
             super();
@@ -4884,7 +4884,6 @@ export class ChangeChipWave extends Change {
             }
         }
     }
-    // advloop addition
 
 export class ChangeNoiseWave extends Change {
     constructor(doc: SongDocument, newValue: number) {

@@ -1269,7 +1269,7 @@ export class Config {
     public static readonly filterSimpleCutRange: number = 11;
     public static readonly filterSimplePeakRange: number = 8;
 
-    public static readonly fadeInRange: number = 20;
+    public static readonly fadeInRange: number = 10; //20
     public static readonly fadeOutTicks: ReadonlyArray<number> = [-24, -12, -6, -3, -1, 6, 12, 24, 48, 72, 96]; // new one - [-128, -96, -72, -48, -24, -12, -6, -3, -1, /* 0,  */1, 3, 6, 12, 24, 48, 72, 96, 128];
     public static readonly fadeOutNeutral: number = 4;//9 when divide by 0 fixed -- 4 standard
     public static readonly drumsetFadeOutTicks: number = 48;
@@ -1461,18 +1461,20 @@ export class Config {
         { name: "12×", mult: 12.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "13×", mult: 13.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         { name: "14×", mult: 14.0, hzOffset: 0.0, amplitudeSign: 1.0 },
-	    { name: "15×", mult: 15.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+	    		{ name: "15×", mult: 15.0, hzOffset: 0.0, amplitudeSign: 1.0 },
 		//ultrabox
         { name: "16×", mult: 16.0, hzOffset: 0.0, amplitudeSign: 1.0 },
-	    { name: "17×", mult: 17.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+	    		{ name: "17×", mult: 17.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+		//ultrabox
         { name: "18×", mult: 18.0, hzOffset: 0.0, amplitudeSign: 1.0 },
-	    { name: "19×", mult: 19.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+	    		{ name: "19×", mult: 19.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+		//ultrabox
         { name: "20×", mult: 20.0, hzOffset: 0.0, amplitudeSign: 1.0 },
-	    { name: "~20×", mult: 20.0, hzOffset: -5.0, amplitudeSign: -1.0 },
+	    	{ name: "~20×", mult: 20.0, hzOffset: -5.0, amplitudeSign: -1.0 },
 	    // dogebox (maybe another mod also adds this? I got it from dogebox 50 and 100)
 		{ name: "25×", mult: 25.0, hzOffset: 0.0, amplitudeSign: 1.0 },
-	    { name: "50×", mult: 50.0, hzOffset: 0.0, amplitudeSign: 1.0 },
-	    { name: "75×", mult: 75.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+	{ name: "50×", mult: 50.0, hzOffset: 0.0, amplitudeSign: 1.0 },
+	{ name: "75×", mult: 75.0, hzOffset: 0.0, amplitudeSign: 1.0 },
 	    { name: "100×", mult: 100.0, hzOffset: 0.0, amplitudeSign: 1.0 },
         //Unbox
         { name: "0.06×", mult: 0.0625, hzOffset: 0.0, amplitudeSign: 1.0 },

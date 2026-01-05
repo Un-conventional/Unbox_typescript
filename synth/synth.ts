@@ -1372,14 +1372,12 @@ export class Instrument {
     public type: InstrumentType = InstrumentType.chip;
     public preset: number = 0;
     public chipWave: number = 2;
-	// advloop addition
 	public isUsingAdvancedLoopControls: boolean = false;
 	public chipWaveLoopStart: number = 0;
 	public chipWaveLoopEnd = Config.rawRawChipWaves[this.chipWave].samples.length - 1;
 	public chipWaveLoopMode: number = 0; // 0: loop, 1: ping-pong, 2: once, 3: play loop once
 	public chipWavePlayBackwards: boolean = false;
         public chipWaveStartOffset: number = 0;
-        // advloop addition
     public chipNoise: number = 1;
     public eqFilter: FilterSettings = new FilterSettings();
     public eqFilterType: boolean = false;
@@ -1573,14 +1571,12 @@ export class Instrument {
                 this.chipWave = 2;
                 // TODO: enable the chord effect?
                 this.chord = Config.chords.dictionary["arpeggio"].index;
-								 // advloop addition
                     this.isUsingAdvancedLoopControls = false;
                     this.chipWaveLoopStart = 0;
                     this.chipWaveLoopEnd = Config.rawRawChipWaves[this.chipWave].samples.length - 1;
                     this.chipWaveLoopMode = 0;
                     this.chipWavePlayBackwards = false;
                     this.chipWaveStartOffset = 0;
-                    // advloop addition
                 break;
             case InstrumentType.customChipWave:
                 this.chipWave = 2;
@@ -1948,14 +1944,12 @@ export class Instrument {
                 instrumentObject["unisonSign"] = this.unisonSign;
             }
 
-						// advloop addition
                 instrumentObject["isUsingAdvancedLoopControls"] = this.isUsingAdvancedLoopControls;
                 instrumentObject["chipWaveLoopStart"] = this.chipWaveLoopStart;
                 instrumentObject["chipWaveLoopEnd"] = this.chipWaveLoopEnd;
                 instrumentObject["chipWaveLoopMode"] = this.chipWaveLoopMode;
                 instrumentObject["chipWavePlayBackwards"] = this.chipWavePlayBackwards;
                 instrumentObject["chipWaveStartOffset"] = this.chipWaveStartOffset;
-                // advloop addition
         } else if (this.type == InstrumentType.pwm) {
             instrumentObject["pulseWidth"] = this.pulseWidth;
             instrumentObject["decimalOffset"] = this.decimalOffset;
@@ -2751,7 +2745,6 @@ export class Instrument {
                 }
             }
         }
-   		 // advloop addition
             if (type === 0) {
                 if (instrumentObject["isUsingAdvancedLoopControls"] != undefined) {
                     this.isUsingAdvancedLoopControls = instrumentObject["isUsingAdvancedLoopControls"];
@@ -2770,7 +2763,6 @@ export class Instrument {
                 }
             }
 	}	
-           // advloop addition
 
         public getLargestControlPointCount(forNoteFilter: boolean) {
         let largest: number;
@@ -2948,7 +2940,7 @@ export class Song {
             if (this.channels[modChannel].instruments[modInstrument].modulators[modCount] == tempoIndex) {
                 vol = this.tempo - Config.modulators[tempoIndex].convertRealFactor;
             }
-            
+
             if (vol != undefined)
                 return vol;
             else
@@ -3471,7 +3463,7 @@ export class Song {
                     if (instrument.unison == Config.unisons.length) encodeUnisonSettings(buffer, instrument.unisonVoices, instrument.unisonSpread, instrument.unisonOffset, instrument.unisonExpression, instrument.unisonSign);
                 } else if (instrument.type == InstrumentType.pwm) {
                     buffer.push(SongTagCode.pulseWidth, base64IntToCharCode[instrument.pulseWidth >> 6], base64IntToCharCode[instrument.pulseWidth & 0x3f]);
-                    buffer.push(base64IntToCharCode[instrument.decimalOffset >> 6], base64IntToCharCode[instrument.decimalOffset & 0x3f]); 
+                    buffer.push(base64IntToCharCode[instrument.decimalOffset >> 6], base64IntToCharCode[instrument.decimalOffset & 0x3f]);
                     buffer.push(SongTagCode.unison, base64IntToCharCode[instrument.unison]);
                     if (instrument.unison == Config.unisons.length) encodeUnisonSettings(buffer, instrument.unisonVoices, instrument.unisonSpread, instrument.unisonOffset, instrument.unisonExpression, instrument.unisonSign);
                 /*} else if (instrument.type == InstrumentType.dutyCycle) {
@@ -4139,22 +4131,22 @@ export class Song {
                 if (!fromUltraBox && !fromUnbox) {
 			let newRhythm = base64CharCodeToInt[compressed.charCodeAt(charIndex++)];	
 			this.rhythm = clamp(0, Config.rhythms.length, newRhythm + 2);
-			if (fromJummBox && beforeThree || fromBeepBox) {
+                    if (fromJummBox && beforeThree || fromBeepBox) {
 				if (this.rhythm == Config.rhythms.dictionary["÷3 (triplets)"].index || this.rhythm == Config.rhythms.dictionary["÷6 (sextuplets)"].index) {
-					useSlowerArpSpeed = true;
-				}
+                            useSlowerArpSpeed = true;
+                        }
 				if (this.rhythm >= Config.rhythms.dictionary["÷6 (sextuplets)"].index) {
-					// @TODO: This assumes that 6 and 8 are in that order, but
-					// if someone reorders Config.rhythms that may not be true,
-					// so this check probably should instead look for those
-					// specific rhythms.
-					useFastTwoNoteArp = true;
-				}
-			}
+                            // @TODO: This assumes that 6 and 8 are in that order, but
+                            // if someone reorders Config.rhythms that may not be true,
+                            // so this check probably should instead look for those
+                            // specific rhythms.
+                            useFastTwoNoteArp = true;
+                        }
+                    }     
 			
-		} else {
-			this.rhythm = clamp(0, Config.rhythms.length, base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
-		}
+                } else {
+                    this.rhythm = clamp(0, Config.rhythms.length, base64CharCodeToInt[compressed.charCodeAt(charIndex++)]);
+                }
             } break;
             case SongTagCode.channelOctave: {
                 if (beforeThree && fromBeepBox) {
@@ -7560,12 +7552,10 @@ class Tone {
     public readonly phases: number[] = [];
     public readonly operatorWaves: OperatorWave[] = [];
     public readonly phaseDeltas: number[] = [];
-			// advloop addition
         public directions: number[] = [];
         public chipWaveCompletions: number[] = [];
         public chipWavePrevWaves: number[] = [];
         public chipWaveCompletionsLastWave: number[] = [];
-           // advloop addition
     public readonly phaseDeltaScales: number[] = [];
     public expression: number = 0.0;
     public expressionDelta: number = 0.0;
@@ -7623,12 +7613,10 @@ class Tone {
         this.noiseSampleB = 0.0;
         for (let i: number = 0; i < Config.maxPitchOrOperatorCount; i++) {
             this.phases[i] = 0.0;
-						// advloop addition
                 this.directions[i] = 1;
                 this.chipWaveCompletions[i] = 0;
                 this.chipWavePrevWaves[i] = 0;
                 this.chipWaveCompletionsLastWave[i] = 0;
-                // advloop addition
             this.operatorWaves[i] = Config.operatorWaves[0];
             this.feedbackOutputs[i] = 0.0;
             this.prevPitchExpressions[i] = null;
@@ -7668,14 +7656,12 @@ class InstrumentState {
     public type: InstrumentType = InstrumentType.chip;
     public synthesizer: Function | null = null;
     public wave: Float32Array | null = null;
-				 // advloop addition
             public isUsingAdvancedLoopControls = false;
             public chipWaveLoopStart = 0;
             public chipWaveLoopEnd = 0;
             public chipWaveLoopMode = 0;
             public chipWavePlayBackwards = false;
             public chipWaveStartOffset = 0;
-            // advloop addition
     public noisePitchFilterMult: number = 1.0;
     public unison: Unison | null = null;
     public unisonVoices: number = 1;
@@ -7782,6 +7768,7 @@ class InstrumentState {
     public reverbShelfPrevInput2: number = 0.0;
     public reverbShelfPrevInput3: number = 0.0;
 
+    //public readonly envelopeComputer: EnvelopeComputer = new EnvelopeComputer(false);
 
     public readonly spectrumWave: SpectrumWaveState = new SpectrumWaveState();
     public readonly harmonicsWave: HarmonicsWaveState = new HarmonicsWaveState();
@@ -7793,7 +7780,6 @@ class InstrumentState {
         }
     }
 
-    //public readonly envelopeComputer: EnvelopeComputer = new EnvelopeComputer();
 
     public allocateNecessaryBuffers(synth: Synth, instrument: Instrument, samplesPerTick: number): void {
         if (effectsIncludePanning(instrument.effects)) {
@@ -7953,8 +7939,8 @@ class InstrumentState {
                 useDistortionEnd = synth.getModValue(Config.modulators.dictionary["distortion"].index, channelIndex, instrumentIndex, true);
             }
 
-            const distortionSliderStart = Math.min(1.0, /*envelopeStarts[EnvelopeComputeIndex.distortion] **/ useDistortionStart / (Config.distortionRange - 1));
-            const distortionSliderEnd = Math.min(1.0, /*envelopeEnds[EnvelopeComputeIndex.distortion] **/ useDistortionEnd / (Config.distortionRange - 1));
+            const distortionSliderStart = Math.min(1.0, /*envelopeStarts[InstrumentAutomationIndex.distortion] **/ useDistortionStart / (Config.distortionRange - 1));
+            const distortionSliderEnd = Math.min(1.0, /*envelopeEnds[  InstrumentAutomationIndex.distortion] **/ useDistortionEnd / (Config.distortionRange - 1));
             const distortionStart: number = Math.pow(1.0 - 0.895 * (Math.pow(20.0, distortionSliderStart) - 1.0) / 19.0, 2.0);
             const distortionEnd: number = Math.pow(1.0 - 0.895 * (Math.pow(20.0, distortionSliderEnd) - 1.0) / 19.0, 2.0);
             const distortionDriveStart: number = (1.0 + 2.0 * distortionSliderStart) / Config.distortionBaseVolume;
@@ -7966,8 +7952,8 @@ class InstrumentState {
         }
 
         if (usesBitcrusher) {
-            let freqSettingStart: number = instrument.bitcrusherFreq /** Math.sqrt(envelopeStarts[EnvelopeComputeIndex.bitcrusherFrequency])*/;
-            let freqSettingEnd: number = instrument.bitcrusherFreq /** Math.sqrt(envelopeEnds[EnvelopeComputeIndex.bitcrusherFrequency])*/;
+            let freqSettingStart: number = instrument.bitcrusherFreq /** Math.sqrt(envelopeStarts[InstrumentAutomationIndex.bitcrusherFrequency])*/;
+            let freqSettingEnd: number = instrument.bitcrusherFreq /** Math.sqrt(envelopeEnds[  InstrumentAutomationIndex.bitcrusherFrequency])*/;
 
             // Check for freq crush mods
             if (synth.isModActive(Config.modulators.dictionary["freq crush"].index, channelIndex, instrumentIndex)) {
@@ -7975,8 +7961,8 @@ class InstrumentState {
                 freqSettingEnd = synth.getModValue(Config.modulators.dictionary["freq crush"].index, channelIndex, instrumentIndex, true);
             }
 
-            let quantizationSettingStart: number = instrument.bitcrusherQuantization /** Math.sqrt(envelopeStarts[EnvelopeComputeIndex.bitcrusherQuantization])*/;
-            let quantizationSettingEnd: number = instrument.bitcrusherQuantization /** Math.sqrt(envelopeEnds[EnvelopeComputeIndex.bitcrusherQuantization])*/;
+            let quantizationSettingStart: number = instrument.bitcrusherQuantization /** Math.sqrt(envelopeStarts[InstrumentAutomationIndex.bitcrusherQuantization])*/;
+            let quantizationSettingEnd: number = instrument.bitcrusherQuantization /** Math.sqrt(envelopeEnds[  InstrumentAutomationIndex.bitcrusherQuantization])*/;
 
             // Check for bitcrush mods
             if (synth.isModActive(Config.modulators.dictionary["bit crush"].index, channelIndex, instrumentIndex)) {
@@ -8117,8 +8103,8 @@ class InstrumentState {
         let delayInputMultEnd: number = 1.0;
 
         if (usesPanning) {
-            //const panEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.panning] * 2.0 - 1.0;
-            //const panEnvelopeEnd:   number = envelopeEnds[EnvelopeComputeIndex.panning] * 2.0 - 1.0;
+            //const panEnvelopeStart: number = envelopeStarts[InstrumentAutomationIndex.panning] * 2.0 - 1.0;
+            //const panEnvelopeEnd:   number = envelopeEnds[  InstrumentAutomationIndex.panning] * 2.0 - 1.0;
 
             let usePanStart: number = instrument.pan;
             let usePanEnd: number = instrument.pan;
@@ -8163,8 +8149,8 @@ class InstrumentState {
         }
 
         if (usesChorus) {
-            //const chorusEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.chorus];
-            //const chorusEnvelopeEnd:   number = envelopeEnds[EnvelopeComputeIndex.chorus];
+            //const chorusEnvelopeStart: number = envelopeStarts[InstrumentAutomationIndex.chorus];
+            //const chorusEnvelopeEnd:   number = envelopeEnds[  InstrumentAutomationIndex.chorus];
             let useChorusStart: number = instrument.chorus;
             let useChorusEnd: number = instrument.chorus;
             // Check for chorus mods
@@ -8188,8 +8174,8 @@ class InstrumentState {
         let maxEchoMult = 0.0;
         let averageEchoDelaySeconds: number = 0.0;
         if (usesEcho) {
-            //const echoSustainEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.echoSustain];
-            //const echoSustainEnvelopeEnd:   number = envelopeEnds[EnvelopeComputeIndex.echoSustain];
+            //const echoSustainEnvelopeStart: number = envelopeStarts[InstrumentAutomationIndex.echoSustain];
+            //const echoSustainEnvelopeEnd:   number = envelopeEnds[  InstrumentAutomationIndex.echoSustain];
             let useEchoSustainStart: number = instrument.echoSustain;
             let useEchoSustainEnd: number = instrument.echoSustain;
             // Check for echo mods
@@ -8206,8 +8192,8 @@ class InstrumentState {
             // TODO: After computing a tick's settings once for multiple run lengths (which is
             // good for audio worklet threads), compute the echo delay envelopes at tick (or
             // part) boundaries to interpolate between two delay taps.
-            //const echoDelayEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.echoDelay]; //??
-            //const echoDelayEnvelopeEnd: number = envelopeEnds[EnvelopeComputeIndex.echoDelay]; //??
+            //const echoDelayEnvelopeStart:   number = envelopeStarts[InstrumentAutomationIndex.echoDelay];
+            //const echoDelayEnvelopeEnd:     number = envelopeEnds[  InstrumentAutomationIndex.echoDelay];
             let useEchoDelayStart: number = instrument.echoDelay;
             let useEchoDelayEnd: number = instrument.echoDelay;
             let ignoreTicks: boolean = false;
@@ -8241,8 +8227,8 @@ class InstrumentState {
 
         let maxReverbMult = 0.0;
         if (usesReverb) {
-            //const reverbEnvelopeStart: number = envelopeStarts[EnvelopeComputeIndex.reverb];
-            //const reverbEnvelopeEnd:   number = envelopeEnds[EnvelopeComputeIndex.reverb];
+            //const reverbEnvelopeStart: number = envelopeStarts[InstrumentAutomationIndex.reverb];
+            //const reverbEnvelopeEnd:   number = envelopeEnds[  InstrumentAutomationIndex.reverb];
 
             let useReverbStart: number = instrument.reverb;
             let useReverbEnd: number = instrument.reverb;
@@ -8345,22 +8331,18 @@ class InstrumentState {
         this.eqFilterVolumeDelta = (eqFilterVolumeEnd - eqFilterVolumeStart) / roundedSamplesPerTick;
         this.delayInputMult = delayInputMultStart;
         this.delayInputMultDelta = (delayInputMultEnd - delayInputMultStart) / roundedSamplesPerTick;
-
-        //this.envelopeComputer.clearEnvelopes(); //not needed
     }
 
     public updateWaves(instrument: Instrument, samplesPerSecond: number): void {
         this.volumeScale = 1.0;
         if (instrument.type == InstrumentType.chip) {
             this.wave = (this.aliases) ? Config.rawChipWaves[instrument.chipWave].samples : Config.chipWaves[instrument.chipWave].samples;
-						 // advloop addition
                 this.isUsingAdvancedLoopControls = instrument.isUsingAdvancedLoopControls;
                 this.chipWaveLoopStart = instrument.chipWaveLoopStart;
                 this.chipWaveLoopEnd = instrument.chipWaveLoopEnd;
                 this.chipWaveLoopMode = instrument.chipWaveLoopMode;
                 this.chipWavePlayBackwards = instrument.chipWavePlayBackwards;
                 this.chipWaveStartOffset = instrument.chipWaveStartOffset;
-               // advloop addition
 
                this.unisonVoices = instrument.unisonVoices;
             this.unisonSpread = instrument.unisonSpread;
@@ -8797,6 +8779,7 @@ export class Synth {
     private tempDrumSetControlPoint: FilterControlPoint = new FilterControlPoint();
     public tempFrequencyResponse: FrequencyResponse = new FrequencyResponse();
     public loopBarStart: number = -1;
+    /** An *inclusive* bound. */
     public loopBarEnd: number = -1;
 
     private static readonly fmSynthFunctionCache: Dictionary<Function> = {};
@@ -9375,7 +9358,7 @@ export class Synth {
         this.tickSampleCountdown = samplesPerTick;
 	    this.isAtStartOfTick = true;
 
-        if (this.loopRepeatCount != 0 && this.bar == Math.max(this.song.loopStart + this.song.loopLength, this.loopBarEnd)) {
+        if (this.loopRepeatCount != 0 && this.bar == Math.max(this.song.loopStart + this.song.loopLength, this.loopBarEnd + 1)) {
             this.bar = this.song.loopStart;
             if (this.loopBarStart != -1)
                 this.bar = this.loopBarStart;
@@ -10689,7 +10672,6 @@ export class Synth {
 
         if ((tone.atNoteStart && !transition.isSeamless && !tone.forceContinueAtStart) || tone.freshlyAllocated) {
             tone.reset();
-			    // advloop addition
             if (instrument.type == InstrumentType.chip && instrument.isUsingAdvancedLoopControls) {
                 const chipWaveLength = Config.rawRawChipWaves[instrument.chipWave].samples.length - 1;
                 const firstOffset = instrument.chipWaveStartOffset / chipWaveLength;
@@ -10706,7 +10688,6 @@ export class Synth {
                     tone.chipWaveCompletionsLastWave[i] = 0;
                 }
             }
-                // advloop addition
         }
         tone.freshlyAllocated = false;
 
@@ -11441,8 +11422,8 @@ export class Synth {
                     useSpreadEnd = (this.getModValue(Config.modulators.dictionary["spread"].index, channelIndex, tone.instrumentIndex, true)) / Config.supersawSpreadMax;
                 }
 
-				const spreadSliderStart: number = useSpreadStart * envelopeStarts[EnvelopeComputeIndex.supersawSpread];
-				const spreadSliderEnd:   number = useSpreadEnd * envelopeEnds[  EnvelopeComputeIndex.supersawSpread];
+				const spreadSliderStart: number = Math.max(0, useSpreadStart) * envelopeStarts[EnvelopeComputeIndex.supersawSpread];//Math.max(0,   ) Remove this if broken?
+				const spreadSliderEnd:   number = Math.max(0, useSpreadEnd) * envelopeEnds[EnvelopeComputeIndex.supersawSpread];//
 				// Just use the average detune for the current tick in the below loop.
 				const averageSpreadSlider: number = (spreadSliderStart + spreadSliderEnd) * 0.5;
 				const curvedSpread: number = Math.pow(1.0 - Math.sqrt(Math.max(0.0, 1.0 - averageSpreadSlider)), 1.75);
@@ -11637,11 +11618,9 @@ export class Synth {
             }
             return Synth.fmSynthFunctionCache[fingerprint];
         } else if (instrument.type == InstrumentType.chip) {
-		                 // advloop addition
                 if (instrument.isUsingAdvancedLoopControls) {
                     return Synth.loopableChipSynth;
                 }
-                // advloop addition
             return Synth.chipSynth;
         } else if (instrument.type == InstrumentType.customChipWave) {
             return Synth.chipSynth;
@@ -11719,7 +11698,6 @@ export class Synth {
             throw new Error("Unrecognized instrument type: " + instrument.type);
         }
     }
-// advloop addition
         static wrap(x: number, b: number): number {
             return (x % b + b) % b;
         }
@@ -12054,7 +12032,6 @@ export class Synth {
             tone.initialNoteFilterInput1 = initialFilterInput1;
             tone.initialNoteFilterInput2 = initialFilterInput2;
         }
-        // advloop addition
     private static chipSynth(synth: Synth, bufferIndex: number, roundedSamplesPerTick: number, tone: Tone, instrumentState: InstrumentState): void {
         const aliases: boolean = (effectsIncludeDistortion(instrumentState.effects) && instrumentState.aliases);
         const data: Float32Array = synth.tempMonoInstrumentSampleBuffer!;

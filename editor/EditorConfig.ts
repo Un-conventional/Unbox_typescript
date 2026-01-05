@@ -52,7 +52,6 @@ export class EditorConfig {
                 { name: TypePresets[InstrumentType.fm6op], customType: InstrumentType.fm6op },
             ])
         },
-        //Add Mom's Waveforms future me
         {
             name: "Retro Presets", presets: <DictionaryArray<Preset>>toNameMap([
                 //Why no plain sawtooth??? - I added one anyway.

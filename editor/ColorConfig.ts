@@ -6320,7 +6320,7 @@ export class ColorConfig {
 		.promptContainerBG::before {
 			box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
 		}
-	}`,
+		}`,
 		//1bit mono - Would prefer if dither was a thing for this.
 	"1-bit mono": `
 	:root {
