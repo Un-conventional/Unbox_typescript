@@ -352,7 +352,50 @@
         // Randomize display of header
         // 1-in-9 chance to appear // maybe 1 in 3?
         // Might keep or remove non Unbox plants?
-        const plants = [" 🌵"," 🔔"," 🪨 🧻 ✂️"," 👁️ 🎯 🫵 🌵"," ⚠️"," 🛆 🏆"," 🪓"," 🌳 🪓 ⚠️"," - Team triangle wins!"," - 🐛⬅️SN63A07"," 🦆"," "," - It's Not UnBox!"," - Try BotB"," - Try NepBox!"," - Try UltraBox!"," - Try Slarmoo's Box!"," - Try Midbox!"," - Try AbyssBox!"," 5️⃣6️⃣"," - Here, have a Cookie 🍪"," 🍪"," - Try your Worst"," - Do your Best"," - Try your Best, Do your Worst - BotB"," - Did you save?"," - Be whelmed"," - Eat a Bamhurger!"," - Use the Buzzer"," - Check out the Wiki!"," - Did you check the Guide?"," - Insolitum"];
+        const plants = [
+        " 🌵",
+        " 🔔",
+        " 🪨 🧻 ✂️",
+        " 👁️ 🎯 🫵 🌵", // I will smack you with a Cactus
+        " ⚠️",
+        " 🛆 🏆",
+        " 🪓"
+        ," 🌳 🪓 ⚠️",
+        " - Team triangle wins!",
+        " - 🐛⬅️SN63A07",
+        " 🦆", // Quack
+        " - Make weird stuff!",
+        " - It's Not UnBox!",
+        " - No, It isn't UNBox either...",
+        " - Try BotB",
+        " - Try NepBox!",
+        " - Try UltraBox!",
+        " - Try Slarmoo's Box!",
+        " - Try Midbox!",
+        " - Try AbyssBox!",
+        " 5️⃣6️⃣",
+        " - Here, have a Cookie 🍪",
+        " 🍪",
+        " - Try your Worst",
+        " - Do your Best",
+        " - Try your Best, Do your Worst - BotB",
+        " - Did you save?",
+        " - Be whelmed",
+        " - Eat a Bamhurger!",
+        " - I'd love a Bamhurger ith Wheese",
+        " - Use the Buzzer",
+        " - Check out the Wiki!",
+        " - Did you check the Guide?",
+        " - Insolitum",
+        "╿ ╿╻ ╿╿ ╿╼",
+        "... Was that LOSS!?!?",
+        "|_ • )",
+        " = Infinity",
+        "xodnU ",
+        "‽",
+        " - What do you mean DutyCycle isn't working‽",
+        " - Evil Unbox is Rebox",
+        ];
 
         if (Math.floor(Math.random() * 1) == 0) { //Reset to 3 before release
             document.getElementById("goldboxPlant").innerHTML = "  " + plants[(Math.floor(Math.random() * plants.length))];  
@@ -375,16 +418,19 @@
             document.getElementById("goldboxPlant").innerHTML = " ☘️";
         }
         if ((date.getDate() == 1) && date.getMonth() == 3) { // April Fools
-            document.getElementById("goldboxPlant").innerHTML = "stole all of your beeps.";
+            document.getElementById("goldboxPlant").innerHTML = "Rebox has stole all of your beeps.", "The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start.";
         }
         if ((date.getDate() == 22) && date.getMonth() == 3) { // Earth day
             document.getElementById("goldboxPlant").innerHTML = " 🌎";
         }
         if ((date.getDate() == 2) && date.getMonth() == 9) { // Oct 2
-            document.getElementById("goldboxPlant").innerHTML = " 🎂";
+            document.getElementById("goldboxPlant").innerHTML = " 🎂","Unc's age + 1";
         }
         if ((date.getDate() == 31) && date.getMonth() == 9) { // Oct 31 Halloween
             document.getElementById("goldboxPlant").innerHTML = " 🌕"," 🦇"," 👻"," ⚰️"," 🧛"," 🐈‍⬛"," 🕸️"," 🎃"," 🍬"," 🍫"," 🍭";
+        }
+        if ((date.getDate() == 2) && date.getMonth() == 10) { // Bee
+            document.getElementById("goldboxPlant").innerHTML = "According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible.";
         }
         if ((date.getDate() == 24) && date.getMonth() == 11) { // Dec 24
             document.getElementById("goldboxPlant").innerHTML = " 🥛"," 🍪";  
