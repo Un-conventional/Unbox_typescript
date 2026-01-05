@@ -1726,6 +1726,8 @@ export class Config {
         */
 
         //Arp speed?
+        //noteFilterXpos
+        //noteFilterYpos
 
     ]);
     public static readonly operatorWaves: DictionaryArray<OperatorWave> = toNameMap([

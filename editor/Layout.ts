@@ -6,6 +6,7 @@ import { ColorConfig } from "./ColorConfig";
 export class Layout {
 	private static readonly _layoutMap: {[K: string]: string} = {
 		"small": "",
+		"normal": "",
 		"long": `\
 
 			/* long layout */
